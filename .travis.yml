@@ -1,12 +1,15 @@
-language: java
-install: true
+language: android
+dist: trusty
+android:
+  components:
+    - build-tools-29.0.1
+    - android-29
 
-jdk:
-  - oraclejdk8
+    # Additional components
+    - extra-google-google_play_services
+    - extra-google-m2repository
+    - extra-android-m2repository
 
-script:
-  - ./gradlew build
-  
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -15,3 +18,4 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+    - $HOME/.android/build-cache
