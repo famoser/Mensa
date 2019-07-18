@@ -22,7 +22,7 @@ class ItemDetailActivity : AppCompatActivity() {
 
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+                .setAction("Action", null).show()
         }
 
         // Show the Up button in the action bar.
@@ -42,29 +42,31 @@ class ItemDetailActivity : AppCompatActivity() {
             // using a fragment transaction.
             val fragment = ItemDetailFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ItemDetailFragment.ARG_ITEM_ID,
-                            intent.getStringExtra(ItemDetailFragment.ARG_ITEM_ID))
+                    putString(
+                        ItemDetailFragment.ARG_ITEM_ID,
+                        intent.getStringExtra(ItemDetailFragment.ARG_ITEM_ID)
+                    )
                 }
             }
 
             supportFragmentManager.beginTransaction()
-                    .add(R.id.item_detail_container, fragment)
-                    .commit()
+                .add(R.id.item_detail_container, fragment)
+                .commit()
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem) =
-            when (item.itemId) {
-                android.R.id.home -> {
-                    // This ID represents the Home or Up button. In the case of this
-                    // activity, the Up button is shown. For
-                    // more details, see the Navigation pattern on Android Design:
-                    //
-                    // http://developer.android.com/design/patterns/navigation.html#up-vs-back
+        when (item.itemId) {
+            android.R.id.home -> {
+                // This ID represents the Home or Up button. In the case of this
+                // activity, the Up button is shown. For
+                // more details, see the Navigation pattern on Android Design:
+                //
+                // http://developer.android.com/design/patterns/navigation.html#up-vs-back
 
-                    navigateUpTo(Intent(this, ItemListActivity::class.java))
-                    true
-                }
-                else -> super.onOptionsItemSelected(item)
+                navigateUpTo(Intent(this, ItemListActivity::class.java))
+                true
             }
+            else -> super.onOptionsItemSelected(item)
+        }
 }
