@@ -33,6 +33,6 @@ plugins {
 
 sonarqube {
   properties {
-    sonar.projectKey: famoser_Mensa
+    property "sonar.projectKey", "famoser_Mensa"
   }
 }
