@@ -26,3 +26,13 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+plugins {
+  id "org.sonarqube" version "2.7"
+}
+
+sonarqube {
+  properties {
+    sonar.projectKey: famoser_Mensa
+  }
+}

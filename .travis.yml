@@ -1,5 +1,15 @@
 language: android
 dist: trusty
+
+addons:
+  sonarcloud:
+    organization: "famoser-github"
+    token:
+      secure: "Ti5fuTMl+j23xVWDoqoeHMxfbDgvivlUZ4FdLvZH7LBhkvQ9tLvmhnzZksA3qUJxGcdK7NWWojHNEoDpw/riFuRb0dW4fCTkTaw9CfvspNkAiTWq/N5CYsPRThYFYzPzKTbTR9gTxJIJ9z/1ETmwecZRtkuCb+GpI5vuuvxlHsLBamnbvIP4xOF4hoI3xO0di1dVRmDDQTk9ke96QEaE2uLMsmyQOG7KXBvzGx0y0uwJQmwxdLhz3QL6qCbLaqKkR3XNq0mwGzbixblmVejbNlz7sn+UQovTTkPdcBVyXuBlhJqL8TWeNhUaW/9ZW4tVYyNVpUR0qywys1J1MaD+aHzAE0+Z93OtwofWyj24a6IgCSzOyvVP69/f/MnRrhDJj2nRVuBvuR5PsHqX5EJ6eUTglYKb2DvDD7DTMk5/Bxw/CWHYhaMiXPkzZ7PSJ5h2YRf64qdQGSGmAIl/6K2ckWiGbjYLAc92c15mm63xCouGpQ1ujjqVcyWbvGdrNeIQhBttfvtb/2UrRl8bjnEBUv8IAGEoMzBFXAJ6vAzJmWF5MnBNT4uPcoSRhq9RYTKJOUiSuFVyH/PCgPP0s2NO8ZXeLYDqQn2kWzWczJdxU25YZFn67Eg1A9dNv20hq6E7otoinP/jdZhlJk/BmznyfbWOcbGKGnAxOYvRY+yvsEM="
+
+  script:
+  - ./gradlew sonarqube
+  
 android:
   components:
     - build-tools-29.0.1
@@ -12,6 +22,7 @@ android:
  
 script:
   - ./gradlew build 
+  - ./gradlew sonarcube
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
