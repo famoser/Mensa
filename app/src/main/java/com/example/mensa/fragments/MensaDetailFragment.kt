@@ -44,7 +44,6 @@ class MensaDetailFragment : Fragment() {
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_mensa_detail, container, false)
 
-        // Show the dummy content as text in a TextView.
         item?.let {
             rootView.title.text = it.title
         }
