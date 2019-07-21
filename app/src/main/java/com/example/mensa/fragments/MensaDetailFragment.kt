@@ -1,13 +1,14 @@
-package com.example.mensa
+package com.example.mensa.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.mensa.R
 import com.example.mensa.dummy.DummyContent
-import kotlinx.android.synthetic.main.activity_item_detail.*
-import kotlinx.android.synthetic.main.item_detail.view.*
+import kotlinx.android.synthetic.main.activity_mensa.*
+import kotlinx.android.synthetic.main.fragment_mensa_detail.view.*
 import java.util.*
 
 /**
@@ -16,7 +17,7 @@ import java.util.*
  * in two-pane mode (on tablets) or a [ItemDetailActivity]
  * on handsets.
  */
-class ItemDetailFragment : Fragment() {
+class MensaDetailFragment : Fragment() {
 
     /**
      * The dummy content this fragment is presenting.
@@ -27,11 +28,11 @@ class ItemDetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            if (it.containsKey(ARG_ITEM_ID)) {
+            if (it.containsKey(MENSA_ID)) {
                 // Load the dummy content specified by the fragment
                 // arguments. In a real-world scenario, use a Loader
                 // to load content from a content provider.
-                item = DummyContent.MENSA_MAP[UUID.fromString(it.getString(ARG_ITEM_ID))]
+                item = DummyContent.MENSA_MAP[UUID.fromString(it.getString(MENSA_ID))]
                 activity?.toolbar_layout?.title = item?.title
             }
         }
@@ -41,11 +42,11 @@ class ItemDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.item_detail, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_mensa_detail, container, false)
 
         // Show the dummy content as text in a TextView.
         item?.let {
-            rootView.item_detail.text = it.description
+            rootView.title.text = it.title
         }
 
         return rootView
@@ -56,6 +57,6 @@ class ItemDetailFragment : Fragment() {
          * The fragment argument representing the item ID that this fragment
          * represents.
          */
-        const val ARG_ITEM_ID = "item_id"
+        const val MENSA_ID = "item_id"
     }
 }

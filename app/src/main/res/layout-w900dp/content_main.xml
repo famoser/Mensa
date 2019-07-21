@@ -10,7 +10,7 @@
               android:divider="?android:attr/dividerHorizontal"
               android:orientation="horizontal"
               android:showDividers="middle"
-              tools:context=".ItemListActivity">
+              tools:context=".activities.MainActivity">
 
     <!--
     This layout is a two-pane layout for the Items
@@ -27,11 +27,11 @@
                                                android:layout_marginLeft="16dp"
                                                android:layout_marginRight="16dp"
                                                app:layoutManager="LinearLayoutManager"
-                                               tools:context="com.example.mensa.ItemListActivity"
-                                               tools:listitem="@layout/item_list_content"/>
+                                               tools:context="com.example.mensa.activities.MainActivity"
+                                               tools:listitem="@layout/row_mensa"/>
 
     <FrameLayout
-            android:id="@+id/item_detail_container"
+            android:id="@+id/details_container"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"/>

@@ -5,7 +5,7 @@
                                                      android:layout_width="match_parent"
                                                      android:layout_height="match_parent"
                                                      android:fitsSystemWindows="true"
-                                                     tools:context=".ItemListActivity">
+                                                     tools:context=".activities.MainActivity">
 
     <FrameLayout
             android:id="@+id/frameLayout"
@@ -13,7 +13,7 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <include layout="@layout/item_list"/>
+        <include layout="@layout/content_main"/>
     </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
