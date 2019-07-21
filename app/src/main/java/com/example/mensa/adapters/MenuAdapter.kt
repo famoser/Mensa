@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mensa.R
 import com.example.mensa.dummy.DummyContent
+import kotlinx.android.synthetic.main.row_menu.view.*
 
 class MenuAdapter constructor(private val values: List<DummyContent.Menu>) :
     RecyclerView.Adapter<MenuAdapter.ViewHolder>() {

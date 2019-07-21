@@ -12,6 +12,7 @@ import com.example.mensa.fragments.MensaDetailFragment
 import com.example.mensa.activities.MainActivity
 import com.example.mensa.R
 import com.example.mensa.dummy.DummyContent
+import kotlinx.android.synthetic.main.row_mensa.view.*
 
 class MensaAdapter constructor(
     private val parentActivity: MainActivity,
@@ -52,7 +53,7 @@ class MensaAdapter constructor(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         holder.titleView.text = item.title
-        holder.menuView.adapter = MenuAdapter(DummyContent.MENSA_MAP.values.toList());
+        holder.menuView.adapter = MenuAdapter(item.menus);
 
         with(holder.itemView) {
             tag = item
