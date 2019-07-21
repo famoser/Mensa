@@ -53,6 +53,7 @@ class MensaAdapter constructor(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         holder.titleView.text = item.title
+        holder.openingTimesView.text = item.openingTimes
         holder.menuView.adapter = MenuAdapter(item.menus);
 
         with(holder.itemView) {
@@ -65,6 +66,7 @@ class MensaAdapter constructor(
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleView: TextView = view.title
+        val openingTimesView: TextView = view.opening_times
         val menuView: RecyclerView = view.menu_list
     }
 }

@@ -43,7 +43,7 @@ object DummyContent {
         override fun toString(): String = title + description
     }
 
-    data class Mensa(val id: UUID, val title: String, val mealTime: String, val isFavorite: Boolean, val menus: MutableList<Menu>) {
+    data class Mensa(val id: UUID, val title: String, val openingTimes: String, val isFavorite: Boolean, val menus: MutableList<Menu>) {
         override fun toString(): String = title
     }
 }
