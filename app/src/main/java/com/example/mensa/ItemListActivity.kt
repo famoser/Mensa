@@ -45,12 +45,12 @@ class ItemListActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.adapter = SimpleItemRecyclerViewAdapter(this, DummyContent.ITEMS, twoPane)
+        recyclerView.adapter = SimpleItemRecyclerViewAdapter(this, DummyContent.MENSA_MAP.values.toList(), twoPane)
     }
 
     class SimpleItemRecyclerViewAdapter(
         private val parentActivity: ItemListActivity,
-        private val values: List<DummyContent.Menu>,
+        private val values: List<DummyContent.Mensa>,
         private val twoPane: Boolean
     ) :
         RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder>() {
@@ -59,11 +59,11 @@ class ItemListActivity : AppCompatActivity() {
 
         init {
             onClickListener = View.OnClickListener { v ->
-                val item = v.tag as DummyContent.Menu
+                val item = v.tag as DummyContent.Mensa
                 if (twoPane) {
                     val fragment = ItemDetailFragment().apply {
                         arguments = Bundle().apply {
-                            putString(ItemDetailFragment.ARG_ITEM_ID, item.id)
+                            putString(ItemDetailFragment.ARG_ITEM_ID, item.id.toString())
                         }
                     }
                     parentActivity.supportFragmentManager
@@ -72,7 +72,7 @@ class ItemListActivity : AppCompatActivity() {
                         .commit()
                 } else {
                     val intent = Intent(v.context, ItemDetailActivity::class.java).apply {
-                        putExtra(ItemDetailFragment.ARG_ITEM_ID, item.id)
+                        putExtra(ItemDetailFragment.ARG_ITEM_ID, item.id.toString())
                     }
                     v.context.startActivity(intent)
                 }
@@ -87,8 +87,9 @@ class ItemListActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = values[position]
-            holder.idView.text = item.id
-            holder.contentView.text = item.content
+            holder.titleView.text = item.title
+            holder.descriptionView.text = item.description
+            holder.priceView.text = item.price.firstOrNull()
 
             with(holder.itemView) {
                 tag = item
@@ -99,9 +100,9 @@ class ItemListActivity : AppCompatActivity() {
         override fun getItemCount() = values.size
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val title: TextView = view.title
-            val description: TextView = view.description
-            val price: TextView = view.price
+            val titleView: TextView = view.title
+            val descriptionView: TextView = view.description
+            val priceView: TextView = view.price
         }
     }
 }
