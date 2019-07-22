@@ -9,7 +9,7 @@ import kotlin.collections.ArrayList
 object DummyContent {
     
     val MENSA_MAP: MutableMap<UUID, Mensa> = HashMap()
-
+    
     init {
         addDozentenfoyer()
         addMensaPolyterrasse()

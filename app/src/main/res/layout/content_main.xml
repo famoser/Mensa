@@ -6,8 +6,10 @@
                                            android:name="com.example.mensa.ItemListFragment"
                                            android:layout_width="match_parent"
                                            android:layout_height="match_parent"
-                                           android:layout_marginLeft="16dp"
-                                           android:layout_marginRight="16dp"
+                                           android:paddingLeft="@dimen/card_spacing"
+                                           android:paddingRight="@dimen/card_spacing"
+                                           android:paddingTop="@dimen/card_spacing_half"
+                                           android:paddingBottom="@dimen/card_spacing_half"
                                            app:layoutManager="LinearLayoutManager"
                                            tools:context=".activities.MainActivity"
                                            tools:listitem="@layout/row_mensa"/>
