@@ -38,8 +38,8 @@ class ETHMensaProvider(assetManager: AssetManager) : AbstractMensaProvider(asset
     override fun getLocations(): List<Location> {
         val ethLocations = super.readJsonAssetFileToListOfT("eth_mensa.json", EthLocation::class.java);
 
-        return ethLocations.map {
-            Location(it.title, it.mensas.map {
+        return ethLocations.map { ethLocation ->
+            Location(ethLocation.title, ethLocation.mensas.map {
                 val mensa = Mensa(
                     UUID.fromString(it.id),
                     it.title,
