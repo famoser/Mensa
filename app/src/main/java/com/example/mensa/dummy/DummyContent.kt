@@ -1,12 +1,14 @@
 package com.example.mensa.dummy
 
 import android.content.res.AssetManager
-import com.example.mensa.data.providers.ETHMensaProvider
+import com.example.mensa.services.RefreshMensaTask
+import com.example.mensa.services.providers.ETHMensaProvider
 import com.example.mensa.models.Location
 import com.example.mensa.models.Mensa
 import com.example.mensa.models.Menu
+import com.example.mensa.services.EventBus
+import java.time.LocalDate
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Helper class for providing sample content for user interfaces.
@@ -16,9 +18,9 @@ object DummyContent {
     val MENSA_MAP: MutableMap<UUID, Mensa> = HashMap()
     val LOCATIONS: MutableList<Location> = LinkedList()
 
-    fun initialize(assetManager: AssetManager) {
+    fun initialize(assetManager: AssetManager, eventBus: EventBus) {
         val ethProvider = ETHMensaProvider(assetManager);
-        val ethLocations = ethProvider.get();
+        val ethLocations = ethProvider.getLocations();
         for (location in ethLocations) {
             for (mensa in location.mensas) {
                 MENSA_MAP[mensa.id] = mensa
@@ -28,6 +30,9 @@ object DummyContent {
                     addMensaPolyterrasseMenus(mensa)
             }
         }
+
+        val today = LocalDate.now();
+        RefreshMensaTask(ethProvider, today, eventBus).execute(*MENSA_MAP.values.toTypedArray());
 
         LOCATIONS.addAll(ethLocations)
     }

@@ -13,6 +13,9 @@ import com.example.mensa.activities.MainActivity
 import com.example.mensa.R
 import com.example.mensa.models.Mensa
 import kotlinx.android.synthetic.main.row_mensa.view.*
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class MensaAdapter constructor(
     private val parentActivity: MainActivity,
@@ -50,8 +53,14 @@ class MensaAdapter constructor(
         return ViewHolder(view)
     }
 
+    private val menuAdapters: MutableMap<UUID, MenuAdapter> = HashMap()
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
+
+        val adapter = MenuAdapter(item.menus);
+        menuAdapters.put(item.id, adapter);
+
         holder.titleView.text = item.title
         holder.openingTimesView.text = item.mealTime
         holder.menuView.adapter = MenuAdapter(item.menus);
@@ -63,6 +72,13 @@ class MensaAdapter constructor(
     }
 
     override fun getItemCount() = values.size
+
+    fun mensaMenusRefreshed(mensaId: UUID) {
+        val menuAdapter = menuAdapters[mensaId];
+        if (menuAdapter != null) {
+            menuAdapter.notifyDataSetChanged()
+        }
+    }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleView: TextView = view.title

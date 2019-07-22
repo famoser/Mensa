@@ -9,6 +9,8 @@ import com.example.mensa.R
 import com.example.mensa.activities.MainActivity
 import com.example.mensa.models.Location
 import kotlinx.android.synthetic.main.row_location.view.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class LocationAdapter constructor(
     private val parentActivity: MainActivity,
@@ -22,10 +24,16 @@ class LocationAdapter constructor(
         return ViewHolder(view)
     }
 
+    private val mensaAdapters: MutableList<MensaAdapter> = ArrayList()
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
+
+        val adapter = MensaAdapter(parentActivity, item.mensas, twoPane)
+        mensaAdapters.add(adapter)
+
         holder.titleView.text = item.title
-        holder.mensaView.adapter = MensaAdapter(parentActivity, item.mensas, twoPane)
+        holder.mensaView.adapter = adapter
 
         with(holder.itemView) {
             tag = item
@@ -33,6 +41,12 @@ class LocationAdapter constructor(
     }
 
     override fun getItemCount() = values.size
+
+    fun mensaMenusRefreshed(mensaId: UUID) {
+        for (mensaAdapter in mensaAdapters) {
+            mensaAdapter.mensaMenusRefreshed(mensaId)
+        }
+    }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleView: TextView = view.title

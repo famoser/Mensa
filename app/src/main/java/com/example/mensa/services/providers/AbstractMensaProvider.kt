@@ -1,21 +1,37 @@
-package com.example.mensa.data.providers
+package com.example.mensa.services.providers
 
 import android.content.res.AssetManager
-import com.example.mensa.data.MensaProvider
+import com.example.mensa.models.Location
+import com.example.mensa.models.Mensa
+import com.example.mensa.models.Menu
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import java.io.IOException
 import java.nio.charset.Charset
+import java.time.LocalDate
 
 
-abstract class AbstractMensaProvider(private val assetManager: AssetManager): MensaProvider {
+abstract class AbstractMensaProvider(private val assetManager: AssetManager) {
+    abstract fun getLocations(): List<Location>
+
+    abstract fun getMenus(mensa: Mensa, date: LocalDate): List<Menu>
 
     protected fun <T> readJsonAssetFileToListOfT(rawFileName: String, classOfT: Class<T>): List<T> {
         val json: String = readStringAssetFile(rawFileName) ?: return ArrayList()
+        return jsonToListOfT(json, classOfT)
+    }
 
+    protected fun <T> jsonToListOfT(json: String, classOfT: Class<T>): List<T> {
         val moshi = Moshi.Builder().build()
         val listOfT = Types.newParameterizedType(List::class.java, classOfT)
         val jsonAdapter = moshi.adapter<List<T>>(listOfT)
+
+        return jsonAdapter.fromJson(json)!!
+    }
+
+    protected fun <T> jsonToT(json: String, classOfT: Class<T>): T {
+        val moshi = Moshi.Builder().build()
+        val jsonAdapter = moshi.adapter<T>(classOfT)
 
         return jsonAdapter.fromJson(json)!!
     }
