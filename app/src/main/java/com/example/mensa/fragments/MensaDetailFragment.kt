@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.mensa.R
 import com.example.mensa.models.Mensa
-import com.example.mensa.dummy.DummyContent
+import com.example.mensa.repositories.LocationRepository
 import kotlinx.android.synthetic.main.activity_mensa.*
 import kotlinx.android.synthetic.main.fragment_mensa_detail.view.*
 import java.util.*
@@ -33,7 +33,11 @@ class MensaDetailFragment : Fragment() {
                 // Load the dummy content specified by the fragment
                 // arguments. In a real-world scenario, use a Loader
                 // to load content from a content provider.
-                item = DummyContent.MENSA_MAP[UUID.fromString(it.getString(MENSA_ID))]
+                val mensaId = UUID.fromString(it.getString(MENSA_ID));
+
+                val locationRepository = LocationRepository.getInstance();
+                item = locationRepository.getMensa(mensaId);
+
                 activity?.toolbar_layout?.title = item?.title
             }
         }

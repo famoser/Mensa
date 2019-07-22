@@ -18,16 +18,23 @@
     
     -->
 
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/location_list"
-            android:name="com.example.mensa.ItemListFragment"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeContainer"
             android:layout_width="@dimen/item_width"
-            android:layout_height="match_parent"
-            android:paddingLeft="@dimen/card_spacing"
-            android:paddingRight="@dimen/card_spacing"
-            app:layoutManager="LinearLayoutManager"
-            tools:context="com.example.mensa.activities.MainActivity"
-            tools:listitem="@layout/row_location"/>
+            android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/location_list"
+                android:name="com.example.mensa.ItemListFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/card_spacing"
+                android:paddingRight="@dimen/card_spacing"
+                app:layoutManager="LinearLayoutManager"
+                tools:context="com.example.mensa.activities.MainActivity"
+                tools:listitem="@layout/row_location"/>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <FrameLayout
             android:id="@+id/details_container"

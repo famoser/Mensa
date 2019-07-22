@@ -1,17 +1,17 @@
 package com.example.mensa.activities
 
-import android.content.BroadcastReceiver
-import android.content.IntentFilter
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.mensa.adapters.LocationAdapter
-
-import com.example.mensa.dummy.DummyContent
+import com.example.mensa.events.MensaMenuUpdatedEvent
+import com.example.mensa.events.RefreshMensaFinishedEvent
+import com.example.mensa.repositories.LocationRepository
 import kotlinx.android.synthetic.main.content_main.*
-import android.content.Intent
-import android.content.Context
-import com.example.mensa.services.EventBus
-import java.util.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
+import java.time.LocalDate
 
 
 /**
@@ -42,35 +42,36 @@ class MainActivity : AppCompatActivity() {
             twoPane = true
         }
 
-        val locationAdapter = LocationAdapter(
-            this,
-            DummyContent.LOCATIONS,
-            twoPane
-        )
+
+        val locationRepository = LocationRepository.getInstance(assets);
+        val locations = locationRepository.getLocations();
+
+        val locationAdapter = LocationAdapter(this, locations, twoPane)
         location_list.adapter = locationAdapter
+        this.locationAdapter = locationAdapter
 
-        myReceiver = MyBroadcastReceiver(locationAdapter)
-        val mensaMenuFilter = IntentFilter(EventBus.MENSA_MENUS_REFRESHED);
-        registerReceiver(myReceiver, mensaMenuFilter);
+        EventBus.getDefault().register(this)
+        locationRepository.refresh(LocalDate.now());
 
-        val eventBus = EventBus { sendBroadcast(it) }
-        DummyContent.initialize(assets, eventBus)
+        swipeContainer.setOnRefreshListener {
+            locationRepository.refresh(LocalDate.now(), true)
+        };
     }
 
-    class MyBroadcastReceiver(private val locationAdapter: LocationAdapter) : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            val mensaId = intent.getStringExtra(EventBus.MENSA_MENUS_REFRESHED_MENSA_ID)
-            locationAdapter.mensaMenusRefreshed(UUID.fromString(mensaId));
-        }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onMensaMenuUpdatedEvent(event: MensaMenuUpdatedEvent) {
+        locationAdapter?.mensaMenusRefreshed(event.mensaId)
     }
 
-    private var myReceiver: BroadcastReceiver? = null
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onRefreshMensaFinishedEvent(event: RefreshMensaFinishedEvent) {
+        swipeContainer.isRefreshing = false
+    }
+
+    private var locationAdapter: LocationAdapter? = null
 
     public override fun onDestroy() {
         super.onDestroy()
-
-        if (myReceiver != null) {
-            unregisterReceiver(myReceiver)
-        }
+        EventBus.getDefault().unregister(this)
     }
 }
