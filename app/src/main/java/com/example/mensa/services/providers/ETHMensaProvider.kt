@@ -28,7 +28,7 @@ class ETHMensaProvider(assetManager: AssetManager) : AbstractMensaProvider(asset
             val response = URL(apiUrl).readText()
             val apiMensa = jsonToT(response, ApiMensa::class.java);
 
-            return apiMensa.menu.meals.map { Menu(it.label, it.description.joinToString { ". " }, it.prices.toArray()) }
+            return apiMensa.menu.meals.map { Menu(it.label, it.description.joinToString(separator = ". " ), it.prices.toArray()) }
         } catch (ex: Exception) {
             ex.printStackTrace()
             return ArrayList()

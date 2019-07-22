@@ -14,6 +14,17 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <include layout="@layout/content_main"/>
+
+
+        <ProgressBar
+                android:id="@+id/downloadProgress"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="2dp"
+                android:maxHeight="2dp"
+                android:visibility="gone"
+        />
     </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
