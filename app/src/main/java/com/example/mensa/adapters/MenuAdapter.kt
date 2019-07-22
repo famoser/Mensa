@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mensa.R
-import com.example.mensa.data.Menu
+import com.example.mensa.models.Menu
 import kotlinx.android.synthetic.main.row_menu.view.*
 
 class MenuAdapter constructor(private val values: List<Menu>) :

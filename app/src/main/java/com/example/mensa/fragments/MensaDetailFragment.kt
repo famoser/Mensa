@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.mensa.R
-import com.example.mensa.data.Mensa
+import com.example.mensa.models.Mensa
 import com.example.mensa.dummy.DummyContent
 import kotlinx.android.synthetic.main.activity_mensa.*
 import kotlinx.android.synthetic.main.fragment_mensa_detail.view.*

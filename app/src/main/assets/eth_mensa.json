@@ -1,0 +1,132 @@
+[
+  {
+    "title": "Zentrum",
+    "mensas": [
+      {
+        "id": "ca3bb693-22f6-4c87-8d4d-5a73a852668b",
+        "title": "Clausiusbar",
+        "mealTime": "11:00-14:00",
+        "idSlug": 4,
+        "timeSlug": "lunch",
+        "infoUrlSlug": "zentrum/clausiusbar"
+      },
+      {
+        "id": "cc422893-0cd5-4250-9cca-3d23044083ac",
+        "title": "Dozentenfoyer",
+        "mealTime": "11:00-14:00",
+        "idSlug": 6,
+        "timeSlug": "lunch",
+        "infoUrlSlug": "zentrum/dozentenfoyer"
+      },
+      {
+        "id": "dde6cb52-b9df-4244-b42f-6227ffd3fec8",
+        "title": "food&lap",
+        "mealTime": "11:30-13:30",
+        "idSlug": 28,
+        "timeSlug": "lunch",
+        "infoUrlSlug": "zentrum/foodlab"
+      },
+      {
+        "id": "d4a1f423-7731-4bb0-8805-e1763e36150e",
+        "title": "Foodtrailer",
+        "mealTime": "11:00-14:00",
+        "idSlug": 9,
+        "timeSlug": "lunch",
+        "infoUrlSlug": "zentrum/foodtrailer-etz"
+      },
+      {
+        "id": "146ba672-d2f1-4de3-8de6-e36b51422b87",
+        "title": "G-ESSbar",
+        "mealTime": "11:15-13:30",
+        "idSlug": 11,
+        "timeSlug": "lunch",
+        "infoUrlSlug": "zentrum/g-essbar"
+      },
+      {
+        "id": "24e3a71a-ff05-4d20-a8c3-fa24f342c1dc",
+        "title": "Mensa Polyterrasse",
+        "mealTime": "11:00-13:30",
+        "idSlug": 12,
+        "timeSlug": "lunch",
+        "infoUrlSlug": "zentrum/mensa-polyterrasse"
+      },
+      {
+        "id": "58c14697-c998-42f1-b6ac-2c0bc782af6d",
+        "title": "Mensa Polyterrasse - Abendessen",
+        "mealTime": "17:30-19:30",
+        "idSlug": 12,
+        "timeSlug": "dinner",
+        "infoUrlSlug": "zentrum/mensa-polyterrasse"
+      },
+      {
+        "id": "f7058f19-1c57-4dd4-9e3c-d3a80bcc8b35",
+        "title": "Polysnack",
+        "mealTime": "11:00-14:00",
+        "idSlug": 13,
+        "timeSlug": "lunch",
+        "infoUrlSlug": "zentrum/polysnack"
+      },
+      {
+        "id": "490c3c0d-3ff2-45ca-b89a-c2062724dfbe",
+        "title": "Tannenbar",
+        "mealTime": "11:00-13:30",
+        "idSlug": 14,
+        "timeSlug": "lunch",
+        "infoUrlSlug": "zentrum/tannenbar"
+      }
+    ]
+  },
+  {
+    "title": "Hönggerberg",
+    "mensas": [
+      {
+        "id": "0414ece7-d352-4495-99ec-51e9494c5d39",
+        "title": "Alumni quattro Lounge",
+        "mealTime": "11:00-21:00",
+        "idSlug": 15,
+        "timeSlug": "lunch",
+        "infoUrlSlug": "hoenggerberg/alumni-quattro-lounge"
+      },
+      {
+        "id": "c4e2a6fd-5c72-4f1c-8dcd-7d87f662f5f2",
+        "title": "food market - green day",
+        "mealTime": "11:00-16:00",
+        "idSlug": 19,
+        "timeSlug": "lunch",
+        "infoUrlSlug": "hoenggerberg/food-market-green-day"
+      },
+      {
+        "id": "e316e042-a99d-486e-872c-5e90b5092145",
+        "title": "food market - grill bbQ",
+        "mealTime": "11:00-16:00",
+        "idSlug": 20,
+        "timeSlug": "lunch",
+        "infoUrlSlug": "hoenggerberg/food-market-grill-bbq"
+      },
+      {
+        "id": "6bad9247-0c79-4423-9b16-33b8f74a87cd",
+        "title": "food market - pizza pasta day",
+        "mealTime": "11:00-16:00",
+        "idSlug": 18,
+        "timeSlug": "lunch",
+        "infoUrlSlug": "hoenggerberg/food-market-pizza-pasta"
+      },
+      {
+        "id": "ba70f3c8-073a-4b9c-b394-5576ec3fd834",
+        "title": "FUSION meal",
+        "mealTime": "11:00-14:00",
+        "idSlug": 21,
+        "timeSlug": "lunch",
+        "infoUrlSlug": "hoenggerberg/fusion-meal"
+      },
+      {
+        "id": "e01cded9-53aa-47c0-9ea5-3b5c85909e23",
+        "title": "FUSION coffee",
+        "mealTime": "17:30-19:00",
+        "idSlug": 22,
+        "timeSlug": "lunch",
+        "infoUrlSlug": "hoenggerberg/fusion-coffee"
+      }
+    ]
+  }
+]

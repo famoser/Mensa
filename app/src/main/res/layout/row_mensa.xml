@@ -35,7 +35,7 @@
                     tools:text="Polyterrasse"/>
 
             <TextView
-                    android:id="@+id/opening_times"
+                    android:id="@+id/meal_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"

@@ -11,7 +11,7 @@ import com.example.mensa.activities.MensaActivity
 import com.example.mensa.fragments.MensaDetailFragment
 import com.example.mensa.activities.MainActivity
 import com.example.mensa.R
-import com.example.mensa.data.Mensa
+import com.example.mensa.models.Mensa
 import kotlinx.android.synthetic.main.row_mensa.view.*
 
 class MensaAdapter constructor(
@@ -53,7 +53,7 @@ class MensaAdapter constructor(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         holder.titleView.text = item.title
-        holder.openingTimesView.text = item.openingTimes
+        holder.openingTimesView.text = item.mealTime
         holder.menuView.adapter = MenuAdapter(item.menus);
 
         with(holder.itemView) {
@@ -66,7 +66,7 @@ class MensaAdapter constructor(
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleView: TextView = view.title
-        val openingTimesView: TextView = view.opening_times
+        val openingTimesView: TextView = view.meal_time
         val menuView: RecyclerView = view.menu_list
     }
 }

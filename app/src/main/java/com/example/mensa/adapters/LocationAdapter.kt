@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mensa.R
 import com.example.mensa.activities.MainActivity
-import com.example.mensa.data.Location
+import com.example.mensa.models.Location
 import kotlinx.android.synthetic.main.row_location.view.*
 
 class LocationAdapter constructor(
