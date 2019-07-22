@@ -1,9 +1,10 @@
 package com.example.mensa.repositories
 
 import android.content.res.AssetManager
+import android.os.AsyncTask
 import com.example.mensa.models.Location
 import com.example.mensa.models.Mensa
-import com.example.mensa.services.RefreshMensaTask
+import com.example.mensa.repositories.tasks.RefreshMensaTask
 import com.example.mensa.services.providers.AbstractMensaProvider
 import com.example.mensa.services.providers.ETHMensaProvider
 import com.example.mensa.services.providers.UZHMensaProvider
@@ -80,7 +81,8 @@ class LocationRepository internal constructor(private val assetManager: AssetMan
             refreshed = true
 
             for ((provider, mensas) in mensaByProvider) {
-                RefreshMensaTask(provider, today).execute(*mensas.toTypedArray())
+                RefreshMensaTask(provider, today)
+                    .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, *mensas.toTypedArray())
             }
         }
     }
@@ -88,5 +90,4 @@ class LocationRepository internal constructor(private val assetManager: AssetMan
     fun getMensa(mensaId: UUID): Mensa? {
         return mensaMap[mensaId]
     }
-
 }

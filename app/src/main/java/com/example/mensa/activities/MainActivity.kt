@@ -2,11 +2,14 @@ package com.example.mensa.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.mensa.adapters.LocationAdapter
 import com.example.mensa.events.MensaMenuUpdatedEvent
 import com.example.mensa.events.RefreshMensaFinishedEvent
+import com.example.mensa.events.RefreshMensaProgressEvent
+import com.example.mensa.events.RefreshMensaStartedEvent
 import com.example.mensa.repositories.LocationRepository
+import com.example.mensa.services.ProgressCollector
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -42,20 +45,21 @@ class MainActivity : AppCompatActivity() {
             twoPane = true
         }
 
+        this.refreshMensaEventProcessor = ProgressCollector(swipeContainer, downloadProgress)
 
-        val locationRepository = LocationRepository.getInstance(assets);
-        val locations = locationRepository.getLocations();
+        val locationRepository = LocationRepository.getInstance(assets)
+        val locations = locationRepository.getLocations()
 
         val locationAdapter = LocationAdapter(this, locations, twoPane)
         location_list.adapter = locationAdapter
         this.locationAdapter = locationAdapter
 
         EventBus.getDefault().register(this)
-        locationRepository.refresh(LocalDate.now());
+        locationRepository.refresh(LocalDate.now())
 
         swipeContainer.setOnRefreshListener {
             locationRepository.refresh(LocalDate.now(), true)
-        };
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -64,11 +68,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onRefreshMensaStartedEvent(event: RefreshMensaStartedEvent) {
+        refreshMensaEventProcessor?.onStarted(event)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onRefreshMensaProgressEvent(event: RefreshMensaProgressEvent) {
+        refreshMensaEventProcessor?.onProgress(event)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
     fun onRefreshMensaFinishedEvent(event: RefreshMensaFinishedEvent) {
-        swipeContainer.isRefreshing = false
+        refreshMensaEventProcessor?.onFinished(event)
     }
 
     private var locationAdapter: LocationAdapter? = null
+    private var refreshMensaEventProcessor: ProgressCollector? = null
 
     public override fun onDestroy() {
         super.onDestroy()
