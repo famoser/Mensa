@@ -6,23 +6,26 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mensa.R
-import com.example.mensa.data.Menu
-import kotlinx.android.synthetic.main.row_menu.view.*
+import com.example.mensa.activities.MainActivity
+import com.example.mensa.data.Location
+import kotlinx.android.synthetic.main.row_location.view.*
 
-class MenuAdapter constructor(private val values: List<Menu>) :
-    RecyclerView.Adapter<MenuAdapter.ViewHolder>() {
+class LocationAdapter constructor(
+    private val parentActivity: MainActivity,
+    private val values: List<Location>,
+    private val twoPane: Boolean) :
+    RecyclerView.Adapter<LocationAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.row_menu, parent, false)
+            .inflate(R.layout.row_location, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         holder.titleView.text = item.title
-        holder.descriptionView.text = item.description
-        holder.priceView.text = item.price.firstOrNull()
+        holder.mensaView.adapter = MensaAdapter(parentActivity, item.mensas, twoPane)
 
         with(holder.itemView) {
             tag = item
@@ -33,7 +36,6 @@ class MenuAdapter constructor(private val values: List<Menu>) :
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleView: TextView = view.title
-        val descriptionView: TextView = view.description
-        val priceView: TextView = view.price
+        val mensaView: RecyclerView = view.mensa_list
     }
 }

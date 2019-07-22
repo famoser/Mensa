@@ -11,12 +11,12 @@ import com.example.mensa.activities.MensaActivity
 import com.example.mensa.fragments.MensaDetailFragment
 import com.example.mensa.activities.MainActivity
 import com.example.mensa.R
-import com.example.mensa.dummy.DummyContent
+import com.example.mensa.data.Mensa
 import kotlinx.android.synthetic.main.row_mensa.view.*
 
 class MensaAdapter constructor(
     private val parentActivity: MainActivity,
-    private val values: List<DummyContent.Mensa>,
+    private val values: List<Mensa>,
     private val twoPane: Boolean
 ) : RecyclerView.Adapter<MensaAdapter.ViewHolder>() {
 
@@ -24,7 +24,7 @@ class MensaAdapter constructor(
 
     init {
         onClickListener = View.OnClickListener { v ->
-            val item = v.tag as DummyContent.Mensa
+            val item = v.tag as Mensa
             if (twoPane) {
                 val fragment = MensaDetailFragment().apply {
                     arguments = Bundle().apply {

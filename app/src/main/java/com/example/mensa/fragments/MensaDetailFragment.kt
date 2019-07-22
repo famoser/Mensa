@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.mensa.R
+import com.example.mensa.data.Mensa
 import com.example.mensa.dummy.DummyContent
 import kotlinx.android.synthetic.main.activity_mensa.*
 import kotlinx.android.synthetic.main.fragment_mensa_detail.view.*
@@ -22,7 +23,7 @@ class MensaDetailFragment : Fragment() {
     /**
      * The dummy content this fragment is presenting.
      */
-    private var item: DummyContent.Mensa? = null
+    private var item: Mensa? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

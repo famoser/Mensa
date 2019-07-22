@@ -1,18 +1,12 @@
 package com.example.mensa.activities
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
 import com.example.mensa.R
-import com.example.mensa.adapters.MensaAdapter
+import com.example.mensa.adapters.LocationAdapter
 
 import com.example.mensa.dummy.DummyContent
-import com.example.mensa.fragments.MensaDetailFragment
 import kotlinx.android.synthetic.main.row_mensa.view.*
 import kotlinx.android.synthetic.main.content_main.*
 
@@ -44,13 +38,13 @@ class MainActivity : AppCompatActivity() {
             twoPane = true
         }
 
-        setupRecyclerView(item_list)
+        setupRecyclerView(location_list)
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.adapter = MensaAdapter(
+        recyclerView.adapter = LocationAdapter(
             this,
-            DummyContent.MENSA_MAP.values.toList(),
+            DummyContent.LOCATIONS,
             twoPane
         )
     }

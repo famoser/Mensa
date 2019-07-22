@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/card_spacing"
+        android:layout_marginBottom="@dimen/card_spacing"
+        android:orientation="vertical">
+
+    <TextView
+            android:id="@+id/title"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_margin="@dimen/text_margin"
+            tools:text="Polyterrasse"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/mensa_list"
+            android:name="com.example.mensa.ItemListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/row_mensa"
+            tools:itemCount="3"/>
+</LinearLayout>
