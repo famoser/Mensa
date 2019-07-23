@@ -1,5 +1,6 @@
 package com.example.mensa.adapters
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,6 +24,9 @@ class MensaAdapter constructor(
     private val values: List<Mensa>,
     private val twoPane: Boolean
 ) : RecyclerView.Adapter<MensaAdapter.ViewHolder>() {
+    companion object {
+        val MensaMenusVisibilitySettingPrefix = "MensaMenusVisibility"
+    }
 
     private val onClickListener: View.OnClickListener
 
@@ -74,13 +78,33 @@ class MensaAdapter constructor(
 
         holder.itemView.setOnClickListener {
             if (item.menus.isNotEmpty()) {
-                if (holder.menuView.visibility == View.GONE) {
-                    holder.menuView.visibility = View.VISIBLE
-                } else {
-                    holder.menuView.visibility = View.GONE
-                }
+                toggleMenuVisibility(item, holder)
             }
         }
+
+        val sharedPreferences = parentActivity.getPreferences(Context.MODE_PRIVATE) ?: return
+        val visibility = sharedPreferences.getBoolean(MensaMenusVisibilitySettingPrefix + "." + item.id, false)
+        if (visibility) {
+            holder.menuView.visibility = View.VISIBLE
+        }
+    }
+
+    private fun toggleMenuVisibility(mensa: Mensa, holder: ViewHolder) {
+        if (holder.menuView.visibility == View.GONE) {
+            holder.menuView.visibility = View.VISIBLE
+            saveVisibilityState(mensa , true)
+        } else {
+            holder.menuView.visibility = View.GONE
+            saveVisibilityState(mensa , false)
+        }
+    }
+
+    private fun saveVisibilityState(mensa: Mensa, visibilityState: Boolean) {
+        val sharedPreferences = parentActivity.getPreferences(Context.MODE_PRIVATE) ?: return
+        sharedPreferences
+            .edit()
+            .putBoolean(MensaMenusVisibilitySettingPrefix + "." + mensa.id, visibilityState)
+            .apply()
     }
 
     override fun getItemCount() = values.size
@@ -96,6 +120,5 @@ class MensaAdapter constructor(
         val titleView: TextView = view.title
         val openingTimesView: TextView = view.meal_time
         val menuView: RecyclerView = view.menu_list
-        val parentView: ViewGroup = view.mensa_wrapper
     }
 }
