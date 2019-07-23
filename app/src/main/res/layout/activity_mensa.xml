@@ -63,8 +63,9 @@
             android:id="@+id/details_action"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
-            android:src="@android:drawable/ic_menu_info_details" />
+            app:layout_anchor="@id/app_bar"
+            app:layout_anchorGravity="bottom|end"
+            app:srcCompat="@android:drawable/ic_menu_info_details" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
