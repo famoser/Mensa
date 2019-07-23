@@ -6,18 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mensa.R
+import com.example.mensa.activities.MainActivity
 import com.example.mensa.activities.MensaActivity
 import com.example.mensa.fragments.MensaDetailFragment
-import com.example.mensa.activities.MainActivity
-import com.example.mensa.R
 import com.example.mensa.models.Mensa
 import kotlinx.android.synthetic.main.row_mensa.view.*
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
-import androidx.recyclerview.widget.DividerItemDecoration
-import com.ramotion.foldingcell.FoldingCell
 
 
 class MensaAdapter constructor(
@@ -74,15 +72,14 @@ class MensaAdapter constructor(
             )
         )
 
-        holder.cellTitleView.setOnClickListener {
+        holder.itemView.setOnClickListener {
             if (item.menus.isNotEmpty()) {
-                holder.cellTitleView.toggle(false)
+                if (holder.menuView.visibility == View.GONE) {
+                    holder.menuView.visibility = View.VISIBLE
+                } else {
+                    holder.menuView.visibility = View.GONE
+                }
             }
-        }
-
-        with(holder.itemView) {
-            tag = item
-            setOnClickListener(onClickListener)
         }
     }
 
@@ -98,7 +95,7 @@ class MensaAdapter constructor(
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleView: TextView = view.title
         val openingTimesView: TextView = view.meal_time
-        val cellTitleView: FoldingCell = view.folding_cell
         val menuView: RecyclerView = view.menu_list
+        val parentView: ViewGroup = view.mensa_wrapper
     }
 }

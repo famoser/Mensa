@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         val locationRepository = LocationRepository.getInstance(assets)
         val locations = locationRepository.getLocations()
 
-        val locationAdapter = LocationAdapter(this, locations, twoPane)
+        val locationAdapter = LocationAdapter(this, twoPane, locations)
         location_list.adapter = locationAdapter
         this.locationAdapter = locationAdapter
 

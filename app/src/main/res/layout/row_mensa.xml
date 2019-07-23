@@ -3,7 +3,6 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:folding-cell="http://schemas.android.com/apk/res-auto"
         android:gravity="center"
         android:layout_gravity="center"
         android:layout_width="match_parent"
@@ -16,31 +15,25 @@
         android:clipToPadding="false"
         android:clickable="true">
 
-    <com.ramotion.foldingcell.FoldingCell
-            android:id="@+id/folding_cell"
+    <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            folding-cell:backSideColor="@android:color/transparent"
-            folding-cell:animationDuration="20"
             android:elevation="3dp">
 
         <LinearLayout
-                android:id="@+id/cell_content_view"
+                android:id="@+id/mensa_wrapper"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:orientation="vertical"
-                tools:visibility="visible">
+                android:orientation="vertical">
 
             <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:background="@color/colorPrimary"
-                    tools:visibility="visible">
+                    android:background="@color/colorPrimary">
 
                 <TextView
-                        android:id="@+id/title2"
+                        android:id="@+id/title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/text_margin"
@@ -50,7 +43,7 @@
                         tools:text="Polyterrasse"/>
 
                 <TextView
-                        android:id="@+id/meal_time2"
+                        android:id="@+id/meal_time"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/text_margin"
@@ -66,40 +59,12 @@
                     android:name="com.example.mensa.ItemListFragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     app:layoutManager="LinearLayoutManager"
                     tools:listitem="@layout/row_menu"
-                    tools:itemCount="3"/>
+                    tools:itemCount="3"
+                    tools:visibility="visible"/>
 
         </LinearLayout>
-
-        <FrameLayout
-                android:id="@+id/cell_title_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@color/colorPrimary"
-                tools:visibility="gone">
-
-            <TextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/text_margin"
-                    android:textAppearance="?attr/textAppearanceListItem"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/white"
-                    tools:text="Polyterrasse"/>
-
-            <TextView
-                    android:id="@+id/meal_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/text_margin"
-                    android:textAlignment="viewEnd"
-                    android:textAppearance="?attr/textAppearanceListItem"
-                    android:textColor="@android:color/white"
-                    tools:text="11:15 - 13:30"/>
-
-        </FrameLayout>
-    </com.ramotion.foldingcell.FoldingCell>
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>

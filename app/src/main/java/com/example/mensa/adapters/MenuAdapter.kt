@@ -61,6 +61,7 @@ class MenuAdapter constructor(
 
         with(holder.itemView) {
             tag = item
+            setOnClickListener(onClickListener)
         }
     }
 

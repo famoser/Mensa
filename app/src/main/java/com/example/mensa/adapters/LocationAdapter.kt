@@ -12,10 +12,11 @@ import kotlinx.android.synthetic.main.row_location.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class LocationAdapter constructor(
+class LocationAdapter(
     private val parentActivity: MainActivity,
-    private val values: List<Location>,
-    private val twoPane: Boolean) :
+    private val twoPane: Boolean,
+    private val values: List<Location>
+) :
     RecyclerView.Adapter<LocationAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
