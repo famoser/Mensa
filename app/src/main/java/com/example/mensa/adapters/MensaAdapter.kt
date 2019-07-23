@@ -124,7 +124,7 @@ class MensaAdapter constructor(
             viewHolder.headerWrapper.background = ContextCompat.getDrawable(parentActivity.applicationContext, R.color.colorPrimary)
         } else {
             viewHolder.openingTimesView.text = "closed"
-            viewHolder.headerWrapper.background = ContextCompat.getDrawable(parentActivity.applicationContext, R.color.colorPrimaryDark)
+            viewHolder.headerWrapper.background = ContextCompat.getDrawable(parentActivity.applicationContext, R.color.colorPrimaryLight)
         }
     }
 
