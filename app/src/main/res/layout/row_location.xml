@@ -24,15 +24,6 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 tools:text="Zentrum"/>
 
-        <ImageButton
-                android:layout_width="40sp"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_eye_slash"
-                android:contentDescription="@string/hide"
-                style="?android:attr/borderlessButtonStyle"
-        />
-
-
     </LinearLayout>
 
 

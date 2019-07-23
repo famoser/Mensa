@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mensa.R
@@ -58,17 +59,15 @@ class MensaAdapter constructor(
         return ViewHolder(view)
     }
 
-    private val menuAdapters: MutableMap<UUID, MenuAdapter> = HashMap()
+    private val viewHoldersByMensaId: MutableMap<UUID, ViewHolder> = HashMap()
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = values[position]
+        val mensa = values[position]
+        viewHoldersByMensaId.put(mensa.id, holder);
 
-        val adapter = MenuAdapter(parentActivity, item.menus, twoPane);
-        menuAdapters.put(item.id, adapter);
-
-        holder.titleView.text = item.title
-        holder.openingTimesView.text = item.mealTime
-        holder.menuView.adapter = adapter;
+        holder.titleView.text = mensa.title
+        setOpeningTimes(mensa, holder)
+        holder.menuView.adapter = MenuAdapter(parentActivity, mensa.menus, twoPane);
         holder.menuView.addItemDecoration(
             DividerItemDecoration(
                 parentActivity,
@@ -77,13 +76,13 @@ class MensaAdapter constructor(
         )
 
         holder.itemView.setOnClickListener {
-            if (item.menus.isNotEmpty()) {
-                toggleMenuVisibility(item, holder)
+            if (mensa.menus.isNotEmpty()) {
+                toggleMenuVisibility(mensa, holder)
             }
         }
 
         val sharedPreferences = parentActivity.getPreferences(Context.MODE_PRIVATE) ?: return
-        val visibility = sharedPreferences.getBoolean(MensaMenusVisibilitySettingPrefix + "." + item.id, false)
+        val visibility = sharedPreferences.getBoolean(MensaMenusVisibilitySettingPrefix + "." + mensa.id, false)
         if (visibility) {
             holder.menuView.visibility = View.VISIBLE
         }
@@ -92,10 +91,10 @@ class MensaAdapter constructor(
     private fun toggleMenuVisibility(mensa: Mensa, holder: ViewHolder) {
         if (holder.menuView.visibility == View.GONE) {
             holder.menuView.visibility = View.VISIBLE
-            saveVisibilityState(mensa , true)
+            saveVisibilityState(mensa, true)
         } else {
             holder.menuView.visibility = View.GONE
-            saveVisibilityState(mensa , false)
+            saveVisibilityState(mensa, false)
         }
     }
 
@@ -110,9 +109,22 @@ class MensaAdapter constructor(
     override fun getItemCount() = values.size
 
     fun mensaMenusRefreshed(mensaId: UUID) {
-        val menuAdapter = menuAdapters[mensaId];
-        if (menuAdapter != null) {
-            menuAdapter.notifyDataSetChanged()
+        val viewHolder = viewHoldersByMensaId[mensaId];
+        if (viewHolder != null) {
+            viewHolder.menuView.adapter?.notifyDataSetChanged()
+
+            val menu = values.first { it.id == mensaId }
+            setOpeningTimes(menu, viewHolder)
+        }
+    }
+
+    private fun setOpeningTimes(mensa: Mensa, viewHolder: ViewHolder) {
+        if (mensa.menus.isNotEmpty()) {
+            viewHolder.openingTimesView.text = mensa.mealTime
+            viewHolder.headerWrapper.background = ContextCompat.getDrawable(parentActivity.applicationContext, R.color.colorPrimary)
+        } else {
+            viewHolder.openingTimesView.text = "closed"
+            viewHolder.headerWrapper.background = ContextCompat.getDrawable(parentActivity.applicationContext, R.color.colorPrimaryDark)
         }
     }
 
@@ -120,5 +132,6 @@ class MensaAdapter constructor(
         val titleView: TextView = view.title
         val openingTimesView: TextView = view.meal_time
         val menuView: RecyclerView = view.menu_list
+        val headerWrapper: View = view.header_wrapper
     }
 }
