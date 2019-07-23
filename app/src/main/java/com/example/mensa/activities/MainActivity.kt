@@ -15,6 +15,9 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.time.LocalDate
+import android.os.Parcelable
+
+
 
 
 /**
@@ -26,6 +29,10 @@ import java.time.LocalDate
  * item details side-by-side using two vertical panes.
  */
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        var locationListScrollState: Parcelable? = null
+    }
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -52,7 +59,11 @@ class MainActivity : AppCompatActivity() {
 
         val locationAdapter = LocationAdapter(this, twoPane, locations)
         location_list.adapter = locationAdapter
-        this.locationAdapter = locationAdapter
+        this.locationListAdapter = locationAdapter
+
+        if (locationListScrollState != null) {
+            location_list.onRestoreInstanceState(locationListScrollState);
+        }
 
         EventBus.getDefault().register(this)
         locationRepository.refresh(LocalDate.now())
@@ -62,9 +73,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    public override fun onPause() {
+        // Save ListView locationListScrollState @ onPause
+        locationListScrollState = location_list.onSaveInstanceState()
+        super.onPause()
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMensaMenuUpdatedEvent(event: MensaMenuUpdatedEvent) {
-        locationAdapter?.mensaMenusRefreshed(event.mensaId)
+        locationListAdapter?.mensaMenusRefreshed(event.mensaId)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -82,7 +99,7 @@ class MainActivity : AppCompatActivity() {
         refreshMensaEventProcessor?.onFinished(event)
     }
 
-    private var locationAdapter: LocationAdapter? = null
+    private var locationListAdapter: LocationAdapter? = null
     private var refreshMensaEventProcessor: ProgressCollector? = null
 
     public override fun onDestroy() {

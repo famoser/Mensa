@@ -84,7 +84,7 @@ class UZHMensaProvider(assetManager: AssetManager) : AbstractMensaProvider(asset
     }
 
     override fun getLocations(): List<Location> {
-        val uzhLocations = super.readJsonAssetFileToListOfT("uzh_mensa.json", UzhLocation::class.java);
+        val uzhLocations = super.readJsonAssetFileToListOfT("uzh/inventory.json", UzhLocation::class.java);
 
         return uzhLocations.map { uzhLocation ->
             Location(uzhLocation.title, uzhLocation.mensas.map {

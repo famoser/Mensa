@@ -7,9 +7,9 @@ class Mensa(
     val id: UUID,
     val title: String,
     val mealTime: String,
-    val url: String
+    val url: String,
+    val imagePath: String? = null
 ) {
-    public val isFavorite: Boolean = false
     private val _menus: MutableList<Menu> = ArrayList()
 
     val menus: List<Menu>

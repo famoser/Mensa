@@ -35,16 +35,23 @@ class MensaActivity : AppCompatActivity() {
     }
 
     private fun initializeContent(mensa: Mensa, savedInstanceState: Bundle?) {
+        if (mensa.imagePath != null) {
+            loadMensaImage(mensa.imagePath)
+        }
+        
+        // load fragment if if first time (e.g. savedInstanceState == null
+        if (savedInstanceState == null) {
+            loadMensaDetailFragment(mensa.id)
+        }
+    }
+
+    private fun loadMensaImage(imagePath: String) {
         try {
-            val mensaImageFile = assets.open("images/mensa_" + mensa.id + ".jpg")
+            val mensaImageFile = assets.open(imagePath)
             val mensaImage = Drawable.createFromStream(mensaImageFile, null);
             image.setImageDrawable(mensaImage);
         } catch (exception: FileNotFoundException) {
             // no image is OK
-        }
-        // load fragment if if first time (e.g. savedInstanceState == null
-        if (savedInstanceState == null) {
-            loadMensaDetailFragment(mensa.id)
         }
     }
 

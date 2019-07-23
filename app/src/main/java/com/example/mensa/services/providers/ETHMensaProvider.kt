@@ -28,7 +28,13 @@ class ETHMensaProvider(assetManager: AssetManager) : AbstractMensaProvider(asset
             val response = URL(apiUrl).readText()
             val apiMensa = jsonToT(response, ApiMensa::class.java);
 
-            return apiMensa.menu.meals.map { Menu(it.label, it.description.joinToString(separator = ". " ), it.prices.toArray()) }
+            return apiMensa.menu.meals.map {
+                Menu(
+                    it.label,
+                    it.description.joinToString(separator = ". "),
+                    it.prices.toArray()
+                )
+            }
         } catch (ex: Exception) {
             ex.printStackTrace()
             return ArrayList()
@@ -36,15 +42,18 @@ class ETHMensaProvider(assetManager: AssetManager) : AbstractMensaProvider(asset
     }
 
     override fun getLocations(): List<Location> {
-        val ethLocations = super.readJsonAssetFileToListOfT("eth_mensa.json", EthLocation::class.java);
+        val ethLocations = super.readJsonAssetFileToListOfT("eth/inventory.json", EthLocation::class.java);
 
         return ethLocations.map { ethLocation ->
             Location(ethLocation.title, ethLocation.mensas.map {
+                val mensaId = UUID.fromString(it.id)
+                val imageName = it.infoUrlSlug.substring(it.infoUrlSlug.indexOf("/") + 1)
                 val mensa = Mensa(
-                    UUID.fromString(it.id),
+                    mensaId,
                     it.title,
                     it.mealTime,
-                    "https://www.ethz.ch/de/campus/gastronomie/restaurants-und-cafeterias/" + it.infoUrlSlug
+                    "https://www.ethz.ch/de/campus/gastronomie/restaurants-und-cafeterias/" + it.infoUrlSlug,
+                    "eth/images/$imageName.jpg"
                 )
                 mensaMap[mensa] = it
                 mensa
