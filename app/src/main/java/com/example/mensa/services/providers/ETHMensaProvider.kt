@@ -1,6 +1,7 @@
 package com.example.mensa.services.providers
 
 import android.content.res.AssetManager
+import android.net.Uri
 import com.example.mensa.models.Location
 import com.example.mensa.models.Mensa
 import java.net.URL
@@ -32,7 +33,10 @@ class ETHMensaProvider(assetManager: AssetManager) : AbstractMensaProvider(asset
                 Menu(
                     it.label,
                     it.description.joinToString(separator = ". "),
-                    it.prices.toArray()
+                    it.prices.toArray(),
+                    it.allergens
+                        .fold(ArrayList<String>(), { acc, apiAllergen -> acc.add(apiAllergen.label); acc })
+                        .joinToString(separator = ", ")
                 )
             }
         } catch (ex: Exception) {
@@ -52,7 +56,7 @@ class ETHMensaProvider(assetManager: AssetManager) : AbstractMensaProvider(asset
                     mensaId,
                     it.title,
                     it.mealTime,
-                    "https://www.ethz.ch/de/campus/gastronomie/restaurants-und-cafeterias/" + it.infoUrlSlug,
+                    Uri.parse("https://www.ethz.ch/de/campus/gastronomie/restaurants-und-cafeterias/" + it.infoUrlSlug),
                     "eth/images/$imageName.jpg"
                 )
                 mensaMap[mensa] = it

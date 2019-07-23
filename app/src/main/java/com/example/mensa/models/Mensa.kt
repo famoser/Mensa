@@ -1,5 +1,6 @@
 package com.example.mensa.models
 
+import android.net.Uri
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -7,7 +8,7 @@ class Mensa(
     val id: UUID,
     val title: String,
     val mealTime: String,
-    val url: String,
+    val url: Uri,
     val imagePath: String? = null
 ) {
     private val _menus: MutableList<Menu> = ArrayList()

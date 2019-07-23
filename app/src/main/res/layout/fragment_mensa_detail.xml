@@ -1,27 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+
+<FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         android:orientation="vertical">
 
-    <TextView
-            android:id="@+id/title"
-            style="?android:attr/textAppearanceLarge"
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/menu_details_list"
+            android:name="com.example.mensa.ItemListFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp"
-            tools:context=".fragments.MensaDetailFragment"
-            tools:text="Some Detail"/>
+            android:layout_height="wrap_content"
+            app:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/row_menu_details"
+            tools:itemCount="3"/>
 
-    <TextView
-            android:id="@+id/title2"
-            style="?android:attr/textAppearanceLarge"
-            android:layout_width="match_parent"
-            android:layout_height="1200dp"
-            android:padding="16dp"
-            tools:context=".fragments.MensaDetailFragment"
-            tools:text="Some Detail"/>
-
-</LinearLayout>
+</FrameLayout>

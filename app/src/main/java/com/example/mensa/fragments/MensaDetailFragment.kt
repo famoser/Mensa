@@ -1,11 +1,14 @@
 package com.example.mensa.fragments
 
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.mensa.R
+import com.example.mensa.adapters.MenuDetailsAdapter
 import com.example.mensa.models.Mensa
 import com.example.mensa.repositories.LocationRepository
 import kotlinx.android.synthetic.main.activity_mensa.*
@@ -40,9 +43,11 @@ class MensaDetailFragment : Fragment() {
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_mensa_detail, container, false)
 
-        item?.let {
-            rootView.title.text = it.title
-        }
+        val mensa = item ?: return rootView
+        val activity = activity ?: return rootView
+
+        val menuDetailsAdapter = MenuDetailsAdapter(mensa.menus, activity);
+        rootView.menu_details_list.adapter = menuDetailsAdapter
 
         return rootView
     }

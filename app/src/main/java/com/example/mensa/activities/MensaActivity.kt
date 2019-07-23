@@ -12,6 +12,8 @@ import com.example.mensa.repositories.LocationRepository
 import kotlinx.android.synthetic.main.activity_mensa.*
 import java.io.FileNotFoundException
 import java.util.*
+import android.net.Uri
+
 
 /**
  * An activity representing a single Item detail screen. This
@@ -26,19 +28,24 @@ class MensaActivity : AppCompatActivity() {
         setContentView(R.layout.activity_mensa)
         setSupportActionBar(toolbar)
 
+
         // Show the Up button in the action bar.
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val mensa = loadMensaFromIntent() ?: return
-
         initializeContent(mensa, savedInstanceState)
+
+        details_action.setOnClickListener {
+            val browserIntent = Intent(Intent.ACTION_VIEW, mensa.url)
+            startActivity(browserIntent)
+        }
     }
 
     private fun initializeContent(mensa: Mensa, savedInstanceState: Bundle?) {
         if (mensa.imagePath != null) {
             loadMensaImage(mensa.imagePath)
         }
-        
+
         // load fragment if if first time (e.g. savedInstanceState == null
         if (savedInstanceState == null) {
             loadMensaDetailFragment(mensa.id)

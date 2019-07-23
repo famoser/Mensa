@@ -1,6 +1,7 @@
 package com.example.mensa.services.providers
 
 import android.content.res.AssetManager
+import android.net.Uri
 import com.example.mensa.models.Location
 import com.example.mensa.models.Mensa
 import com.example.mensa.models.Menu
@@ -29,7 +30,7 @@ class UZHMensaProvider(assetManager: AssetManager) : AbstractMensaProvider(asset
             return htmlMenus.map {
                 val price = if (it.price != null) it.price!! else arrayOf()
                 val title = if (it.title != null) it.title!! else ""
-                Menu(title, it.description, price)
+                Menu(title, it.description, price, it.allergenInfo)
             }
         } catch (ex: Exception) {
             ex.printStackTrace()
@@ -92,7 +93,7 @@ class UZHMensaProvider(assetManager: AssetManager) : AbstractMensaProvider(asset
                     UUID.fromString(it.id),
                     it.title,
                     it.mealTime,
-                    "http://www.mensa.uzh.ch/de/standorte/${it.infoUrlSlug}.html"
+                    Uri.parse("http://www.mensa.uzh.ch/de/standorte/${it.infoUrlSlug}.html")
                 )
                 mensaMap[mensa] = it
                 mensa
