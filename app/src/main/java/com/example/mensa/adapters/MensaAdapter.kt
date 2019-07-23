@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mensa.R
 import com.example.mensa.activities.MainActivity
-import com.example.mensa.activities.MensaActivity
-import com.example.mensa.fragments.MensaDetailFragment
 import com.example.mensa.models.Mensa
 import kotlinx.android.synthetic.main.row_mensa.view.*
 import java.util.*
@@ -44,7 +42,7 @@ class MensaAdapter constructor(
 
         holder.titleView.text = mensa.title
         setOpeningTimes(mensa, holder)
-        holder.menuView.adapter = MenuAdapter(parentActivity, mensa.menus, twoPane, holder.titleView);
+        holder.menuView.adapter = MenuAdapter(parentActivity, mensa.menus, twoPane);
         holder.menuView.addItemDecoration(
             DividerItemDecoration(
                 parentActivity,

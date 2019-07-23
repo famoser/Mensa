@@ -1,12 +1,17 @@
 package com.example.mensa.activities
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
 import com.example.mensa.R
 import com.example.mensa.fragments.MensaDetailFragment
+import com.example.mensa.models.Mensa
+import com.example.mensa.repositories.LocationRepository
 import kotlinx.android.synthetic.main.activity_mensa.*
+import java.io.FileNotFoundException
+import java.util.*
 
 /**
  * An activity representing a single Item detail screen. This
@@ -24,37 +29,52 @@ class MensaActivity : AppCompatActivity() {
         // Show the Up button in the action bar.
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        // savedInstanceState is non-null when there is fragment state
-        // saved from previous configurations of this activity
-        // (e.g. when rotating the screen from portrait to landscape).
-        // In this case, the fragment will automatically be re-added
-        // to its container so we don't need to manually add it.
-        // For more information, see the Fragments API guide at:
-        //
-        // http://developer.android.com/guide/components/fragments.html
-        //
-        if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
-            val fragment = MensaDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putString(
-                        MensaDetailFragment.MENSA_ID,
-                        intent.getStringExtra(MensaDetailFragment.MENSA_ID)
-                    )
-                }
-            }
+        val mensa = loadMensaFromIntent() ?: return
 
-            supportFragmentManager.beginTransaction()
-                .add(R.id.item_detail_container, fragment)
-                .commit()
+        initializeContent(mensa, savedInstanceState)
+    }
+
+    private fun initializeContent(mensa: Mensa, savedInstanceState: Bundle?) {
+        try {
+            val mensaImageFile = assets.open("images/mensa_" + mensa.id + ".jpg")
+            val mensaImage = Drawable.createFromStream(mensaImageFile, null);
+            image.setImageDrawable(mensaImage);
+        } catch (exception: FileNotFoundException) {
+            // no image is OK
         }
+        // load fragment if if first time (e.g. savedInstanceState == null
+        if (savedInstanceState == null) {
+            loadMensaDetailFragment(mensa.id)
+        }
+    }
+
+    private fun loadMensaFromIntent(): Mensa? {
+        val mensaId = UUID.fromString(intent.getStringExtra(MensaDetailFragment.MENSA_ID));
+
+        val locationRepository = LocationRepository.getInstance();
+        val mensa = locationRepository.getMensa(mensaId);
+
+        return mensa
+    }
+
+    private fun loadMensaDetailFragment(mensaId: UUID) {
+        val fragment = MensaDetailFragment().apply {
+            arguments = Bundle().apply {
+                putString(
+                    MensaDetailFragment.MENSA_ID,
+                    mensaId.toString()
+                )
+            }
+        }
+
+        supportFragmentManager.beginTransaction()
+            .add(R.id.item_detail_container, fragment)
+            .commit()
     }
 
     override fun onOptionsItemSelected(item: MenuItem) =
         when (item.itemId) {
             android.R.id.home -> {
-                supportFinishAfterTransition();
                 navigateUpTo(Intent(this, MainActivity::class.java))
                 true
             }

@@ -19,8 +19,7 @@ import kotlinx.android.synthetic.main.row_menu.view.*
 class MenuAdapter constructor(
     private val parentActivity: MainActivity,
     private val values: List<Menu>,
-    private val twoPane: Boolean,
-    private val titleView: View
+    private val twoPane: Boolean
 ) :
     RecyclerView.Adapter<MenuAdapter.ViewHolder>() {
 
@@ -44,8 +43,7 @@ class MenuAdapter constructor(
                     putExtra(MensaDetailFragment.MENSA_ID, item.mensa!!.id.toString())
                 }
 
-                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(parentActivity, titleView, "mensa_title")
-                view.context.startActivity(intent, options.toBundle())
+                view.context.startActivity(intent)
             }
         }
     }

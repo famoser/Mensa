@@ -24,9 +24,6 @@ class MensaDetailFragment : Fragment() {
 
         arguments?.let {
             if (it.containsKey(MENSA_ID)) {
-                // Load the dummy content specified by the fragment
-                // arguments. In a real-world scenario, use a Loader
-                // to load content from a content provider.
                 val mensaId = UUID.fromString(it.getString(MENSA_ID));
 
                 val locationRepository = LocationRepository.getInstance();
