@@ -19,8 +19,7 @@ class RefreshMensaTask(private val mensaProvider: AbstractMensaProvider, private
     override fun doInBackground(vararg mensas: Mensa) {
         for ((current, mensa) in mensas.withIndex()) {
             val menus = mensaProvider.getMenus(mensa, date);
-            mensa.menus.clear()
-            mensa.menus.addAll(menus)
+            mensa.replaceMenus(menus)
 
             if (isCancelled) return
             publishProgress(mensas.size, current)

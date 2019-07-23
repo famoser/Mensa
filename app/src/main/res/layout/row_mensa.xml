@@ -3,6 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:folding-cell="http://schemas.android.com/apk/res-auto"
         android:gravity="center"
         android:layout_gravity="center"
         android:layout_width="match_parent"
@@ -11,31 +12,35 @@
         android:paddingRight="@dimen/card_spacing"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
+        android:clipChildren="false"
         android:clipToPadding="false"
         android:clickable="true">
 
-    <com.example.mensa.views.InterceptTouchCardView
+    <com.ramotion.foldingcell.FoldingCell
+            android:id="@+id/folding_cell"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="3dp"
-            android:layout_gravity="center"
-            android:orientation="vertical">
+            folding-cell:backSideColor="@android:color/transparent"
+            folding-cell:animationDuration="20"
+            android:elevation="3dp">
 
         <LinearLayout
+                android:id="@+id/cell_content_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:orientation="vertical"
-                android:gravity="center"
-                android:background="?android:attr/selectableItemBackground">
+                tools:visibility="visible">
 
-            <LinearLayout
+            <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:background="@color/colorPrimary">
+                    android:background="@color/colorPrimary"
+                    tools:visibility="visible">
 
                 <TextView
-                        android:id="@+id/title"
+                        android:id="@+id/title2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/text_margin"
@@ -45,7 +50,7 @@
                         tools:text="Polyterrasse"/>
 
                 <TextView
-                        android:id="@+id/meal_time"
+                        android:id="@+id/meal_time2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/text_margin"
@@ -54,7 +59,7 @@
                         android:textColor="@android:color/white"
                         tools:text="11:15 - 13:30"/>
 
-            </LinearLayout>
+            </FrameLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/menu_list"
@@ -64,6 +69,37 @@
                     app:layoutManager="LinearLayoutManager"
                     tools:listitem="@layout/row_menu"
                     tools:itemCount="3"/>
+
         </LinearLayout>
-    </com.example.mensa.views.InterceptTouchCardView>
+
+        <FrameLayout
+                android:id="@+id/cell_title_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/colorPrimary"
+                tools:visibility="gone">
+
+            <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/text_margin"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    tools:text="Polyterrasse"/>
+
+            <TextView
+                    android:id="@+id/meal_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/text_margin"
+                    android:textAlignment="viewEnd"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="@android:color/white"
+                    tools:text="11:15 - 13:30"/>
+
+        </FrameLayout>
+    </com.ramotion.foldingcell.FoldingCell>
 </RelativeLayout>

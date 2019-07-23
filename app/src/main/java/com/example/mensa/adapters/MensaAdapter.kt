@@ -17,7 +17,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import androidx.recyclerview.widget.DividerItemDecoration
-import java.security.AccessController.getContext
+import com.ramotion.foldingcell.FoldingCell
 
 
 class MensaAdapter constructor(
@@ -61,18 +61,24 @@ class MensaAdapter constructor(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
 
-        val adapter = MenuAdapter(item.menus);
+        val adapter = MenuAdapter(parentActivity, item.menus, twoPane);
         menuAdapters.put(item.id, adapter);
 
         holder.titleView.text = item.title
         holder.openingTimesView.text = item.mealTime
-        holder.menuView.adapter = MenuAdapter(item.menus);
+        holder.menuView.adapter = adapter;
         holder.menuView.addItemDecoration(
             DividerItemDecoration(
                 parentActivity,
                 DividerItemDecoration.VERTICAL
             )
         )
+
+        holder.cellTitleView.setOnClickListener {
+            if (item.menus.isNotEmpty()) {
+                holder.cellTitleView.toggle(false)
+            }
+        }
 
         with(holder.itemView) {
             tag = item
@@ -92,6 +98,7 @@ class MensaAdapter constructor(
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleView: TextView = view.title
         val openingTimesView: TextView = view.meal_time
+        val cellTitleView: FoldingCell = view.folding_cell
         val menuView: RecyclerView = view.menu_list
     }
 }
