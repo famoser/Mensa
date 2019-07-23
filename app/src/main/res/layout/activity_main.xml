@@ -24,6 +24,15 @@
                 android:minHeight="2dp"
                 android:maxHeight="2dp"
                 android:visibility="gone"
+                android:progressTint="@color/colorPrimary"
+                android:progressBackgroundTint="@android:color/white"
+                android:indeterminateTintMode="src_atop"
+                android:foregroundTint="@color/colorPrimaryDark"
+                tools:max="100"
+                tools:progress="40"
+                tools:visibility="visible"
+                tools:minHeight="5dp"
+                tools:maxHeight="5dp"
         />
     </FrameLayout>
 

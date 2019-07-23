@@ -12,8 +12,6 @@
             android:name="com.example.mensa.ItemListFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="@dimen/card_spacing"
-            android:paddingRight="@dimen/card_spacing"
             app:layoutManager="LinearLayoutManager"
             tools:context=".activities.MainActivity"
             tools:listitem="@layout/row_location"/>

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Mensa</string>
     <string name="title_item_detail">Item Detail</string>
+    <string name="hide">hide</string>
 </resources>

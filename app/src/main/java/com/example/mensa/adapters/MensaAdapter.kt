@@ -16,6 +16,9 @@ import kotlinx.android.synthetic.main.row_mensa.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import androidx.recyclerview.widget.DividerItemDecoration
+import java.security.AccessController.getContext
+
 
 class MensaAdapter constructor(
     private val parentActivity: MainActivity,
@@ -64,6 +67,12 @@ class MensaAdapter constructor(
         holder.titleView.text = item.title
         holder.openingTimesView.text = item.mealTime
         holder.menuView.adapter = MenuAdapter(item.menus);
+        holder.menuView.addItemDecoration(
+            DividerItemDecoration(
+                parentActivity,
+                DividerItemDecoration.VERTICAL
+            )
+        )
 
         with(holder.itemView) {
             tag = item
