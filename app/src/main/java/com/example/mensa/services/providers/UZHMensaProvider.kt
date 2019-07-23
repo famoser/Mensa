@@ -30,7 +30,7 @@ class UZHMensaProvider(assetManager: AssetManager) : AbstractMensaProvider(asset
             return htmlMenus.map {
                 val price = if (it.price != null) it.price!! else arrayOf()
                 val title = if (it.title != null) it.title!! else ""
-                Menu(title, it.description, price, it.allergenInfo)
+                Menu(title, normalizeText(it.description), price, it.allergenInfo)
             }
         } catch (ex: Exception) {
             ex.printStackTrace()
@@ -67,12 +67,21 @@ class UZHMensaProvider(assetManager: AssetManager) : AbstractMensaProvider(asset
             }
 
             if (activeChild.`is`("p") && currentMenu != null) {
-                val paragraphContent = activeChild.text()
+                var paragraphContent = activeChild.textNodes()
+                    .joinToString(separator = "\n", transform = { node -> node.wholeText.trim() }).trim()
 
                 if (paragraphContent.startsWith("Allergikerinformationen: ")) {
                     currentMenu.allergenInfo = paragraphContent.substring("Allergikerinformationen: ".length)
                 } else {
-                    currentMenu.description += paragraphContent.trim()
+                    if (currentMenu.description.isNotEmpty()) {
+                        currentMenu.description += "\n\n";
+                    }
+
+                    if (paragraphContent.contains("Fleisch:")) {
+                        paragraphContent = paragraphContent.replace("Fleisch:", "\nFleisch:")
+                    }
+
+                    currentMenu.description += paragraphContent
                 }
             }
         }

@@ -11,9 +11,10 @@
             android:id="@+id/location_list"
             android:name="com.example.mensa.ItemListFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:layoutManager="LinearLayoutManager"
             tools:context=".activities.MainActivity"
-            tools:listitem="@layout/row_location"/>
+            tools:listitem="@layout/row_location"
+            tools:itemCount="1"/>
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

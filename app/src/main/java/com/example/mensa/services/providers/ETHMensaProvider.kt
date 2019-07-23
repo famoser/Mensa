@@ -29,12 +29,12 @@ class ETHMensaProvider(assetManager: AssetManager) : AbstractMensaProvider(asset
             val response = URL(apiUrl).readText()
             val apiMensa = jsonToT(response, ApiMensa::class.java);
 
-            return apiMensa.menu.meals.map {
+            return apiMensa.menu.meals.map { apiMeal ->
                 Menu(
-                    it.label,
-                    it.description.joinToString(separator = ". "),
-                    it.prices.toArray(),
-                    it.allergens
+                    apiMeal.label,
+                    normalizeText(apiMeal.description.joinToString(separator = "\n")),
+                    apiMeal.prices.run { arrayOf<String?>(student, staff, extern) }.filterNotNull().toTypedArray(),
+                    apiMeal.allergens
                         .fold(ArrayList<String>(), { acc, apiAllergen -> acc.add(apiAllergen.label); acc })
                         .joinToString(separator = ", ")
                 )
@@ -56,7 +56,7 @@ class ETHMensaProvider(assetManager: AssetManager) : AbstractMensaProvider(asset
                     mensaId,
                     it.title,
                     it.mealTime,
-                    Uri.parse("https://www.ethz.ch/de/campus/gastronomie/restaurants-und-cafeterias/" + it.infoUrlSlug),
+                    Uri.parse("https://ethz.ch/de/campus/erleben/gastronomie-und-einkaufen/gastronomie/restaurants-und-cafeterias/" + it.infoUrlSlug),
                     "eth/images/$imageName.jpg"
                 )
                 mensaMap[mensa] = it
@@ -82,12 +82,7 @@ class ETHMensaProvider(assetManager: AssetManager) : AbstractMensaProvider(asset
         val origins: List<ApiOrigin>
     )
 
-    data class ApiPrices(val student: String, val staff: String, val extern: String) {
-        fun toArray(): Array<String> {
-            return arrayOf(student, staff, extern)
-        }
-    }
-
+    data class ApiPrices(val student: String, val staff: String, val extern: String)
     data class ApiAllergen(val allergen_id: Int, val label: String)
     data class ApiOrigin(val origin_id: Int, val label: String)
 

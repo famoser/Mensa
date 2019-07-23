@@ -36,6 +36,15 @@ abstract class AbstractMensaProvider(private val assetManager: AssetManager) {
         return jsonAdapter.fromJson(json)!!
     }
 
+    protected fun normalizeText(text: String): String {
+        // remove too much whitespace
+        var normalized = text.replace("  ", " ")
+        normalized = normalized.replace(" \n", "\n")
+        normalized = normalized.replace("\n ", "\n")
+
+        return normalized;
+    }
+
     private fun readStringAssetFile(rawFileName: String): String? {
         var json: String? = null
         try {
