@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mensa.R
 import com.example.mensa.activities.MainActivity
 import com.example.mensa.activities.MensaActivity
 import com.example.mensa.fragments.MensaDetailFragment
-import com.example.mensa.models.Mensa
 import com.example.mensa.models.Menu
 import kotlinx.android.synthetic.main.row_menu.view.*
 
@@ -19,15 +19,16 @@ import kotlinx.android.synthetic.main.row_menu.view.*
 class MenuAdapter constructor(
     private val parentActivity: MainActivity,
     private val values: List<Menu>,
-    private val twoPane: Boolean
+    private val twoPane: Boolean,
+    private val titleView: View
 ) :
     RecyclerView.Adapter<MenuAdapter.ViewHolder>() {
 
     private val onClickListener: View.OnClickListener
 
     init {
-        onClickListener = View.OnClickListener { v ->
-            val item = v.tag as Menu
+        onClickListener = View.OnClickListener { view ->
+            val item = view.tag as Menu
             if (twoPane) {
                 val fragment = MensaDetailFragment().apply {
                     arguments = Bundle().apply {
@@ -39,10 +40,12 @@ class MenuAdapter constructor(
                     .replace(R.id.details_container, fragment)
                     .commit()
             } else {
-                val intent = Intent(v.context, MensaActivity::class.java).apply {
+                val intent = Intent(view.context, MensaActivity::class.java).apply {
                     putExtra(MensaDetailFragment.MENSA_ID, item.mensa!!.id.toString())
                 }
-                v.context.startActivity(intent)
+
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(parentActivity, titleView, "mensa_title")
+                view.context.startActivity(intent, options.toBundle())
             }
         }
     }

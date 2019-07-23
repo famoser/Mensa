@@ -18,6 +18,7 @@ import com.example.mensa.models.Mensa
 import kotlinx.android.synthetic.main.row_mensa.view.*
 import java.util.*
 import kotlin.collections.HashMap
+import androidx.core.app.ActivityOptionsCompat
 
 
 class MensaAdapter constructor(
@@ -27,30 +28,6 @@ class MensaAdapter constructor(
 ) : RecyclerView.Adapter<MensaAdapter.ViewHolder>() {
     companion object {
         val MensaMenusVisibilitySettingPrefix = "MensaMenusVisibility"
-    }
-
-    private val onClickListener: View.OnClickListener
-
-    init {
-        onClickListener = View.OnClickListener { v ->
-            val item = v.tag as Mensa
-            if (twoPane) {
-                val fragment = MensaDetailFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(MensaDetailFragment.MENSA_ID, item.id.toString())
-                    }
-                }
-                parentActivity.supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.details_container, fragment)
-                    .commit()
-            } else {
-                val intent = Intent(v.context, MensaActivity::class.java).apply {
-                    putExtra(MensaDetailFragment.MENSA_ID, item.id.toString())
-                }
-                v.context.startActivity(intent)
-            }
-        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -67,7 +44,7 @@ class MensaAdapter constructor(
 
         holder.titleView.text = mensa.title
         setOpeningTimes(mensa, holder)
-        holder.menuView.adapter = MenuAdapter(parentActivity, mensa.menus, twoPane);
+        holder.menuView.adapter = MenuAdapter(parentActivity, mensa.menus, twoPane, holder.titleView);
         holder.menuView.addItemDecoration(
             DividerItemDecoration(
                 parentActivity,
@@ -121,10 +98,12 @@ class MensaAdapter constructor(
     private fun setOpeningTimes(mensa: Mensa, viewHolder: ViewHolder) {
         if (mensa.menus.isNotEmpty()) {
             viewHolder.openingTimesView.text = mensa.mealTime
-            viewHolder.headerWrapper.background = ContextCompat.getDrawable(parentActivity.applicationContext, R.color.colorPrimary)
+            viewHolder.headerWrapper.background =
+                ContextCompat.getDrawable(parentActivity.applicationContext, R.color.colorPrimary)
         } else {
             viewHolder.openingTimesView.text = "closed"
-            viewHolder.headerWrapper.background = ContextCompat.getDrawable(parentActivity.applicationContext, R.color.colorPrimaryLight)
+            viewHolder.headerWrapper.background =
+                ContextCompat.getDrawable(parentActivity.applicationContext, R.color.colorPrimaryLight)
         }
     }
 
