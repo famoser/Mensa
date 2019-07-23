@@ -56,7 +56,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/menu_list"
-                    android:name="com.example.mensa.ItemListFragment"
+                    android:name="ch.famoser.mensa.ItemListFragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"

@@ -23,13 +23,13 @@
             android:layout_width="@dimen/item_width"
             android:layout_height="match_parent">
 
-        <com.example.mensa.views.SaveScrollRecyclerView
+        <ch.famoser.mensa.views.SaveScrollRecyclerView
                 android:id="@+id/location_list"
-                android:name="com.example.mensa.ItemListFragment"
+                android:name="ch.famoser.mensa.ItemListFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layoutManager="LinearLayoutManager"
-                tools:context="com.example.mensa.activities.MainActivity"
+                tools:context="ch.famoser.mensa.activities.MainActivity"
                 tools:listitem="@layout/row_location"/>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
@@ -39,6 +39,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            tools:context="com.example.mensa.activities.MainActivity"/>
+            tools:context="ch.famoser.mensa.activities.MainActivity"/>
 
 </LinearLayout>
