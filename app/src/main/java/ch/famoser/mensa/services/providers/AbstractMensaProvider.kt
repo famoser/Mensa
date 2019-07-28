@@ -14,10 +14,9 @@ import java.time.LocalDate
 abstract class AbstractMensaProvider(private val assetManager: AssetManager) {
     abstract fun getLocations(): List<Location>
 
-    abstract fun getMenus(mensa: Mensa, date: LocalDate): List<Menu>
-
     protected fun <T> readJsonAssetFileToListOfT(rawFileName: String, classOfT: Class<T>): List<T> {
         val json: String = readStringAssetFile(rawFileName) ?: return ArrayList()
+
         return jsonToListOfT(json, classOfT)
     }
 

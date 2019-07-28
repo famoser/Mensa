@@ -4,7 +4,8 @@ import android.content.res.AssetManager
 import android.os.AsyncTask
 import ch.famoser.mensa.models.Location
 import ch.famoser.mensa.models.Mensa
-import ch.famoser.mensa.repositories.tasks.RefreshMensaTask
+import ch.famoser.mensa.repositories.tasks.RefreshETHMensaTask
+import ch.famoser.mensa.repositories.tasks.RefreshUZHMensaTask
 import ch.famoser.mensa.services.providers.AbstractMensaProvider
 import ch.famoser.mensa.services.providers.ETHMensaProvider
 import ch.famoser.mensa.services.providers.UZHMensaProvider
@@ -43,26 +44,22 @@ class LocationRepository internal constructor(private val assetManager: AssetMan
     private var refreshed = false
     private val locations: MutableList<Location> = LinkedList()
 
-    private val mensaByProvider: MutableMap<AbstractMensaProvider, ArrayList<Mensa>> = HashMap()
+    private var uzhMensas: List<Mensa> = ArrayList()
+    private val ethMensaProvider = ETHMensaProvider(assetManager)
+    private val uzhMensaProvider = UZHMensaProvider(assetManager)
 
     fun getLocations(): MutableList<Location> {
         if (!initialized) {
             initialized = true
-            initialize()
+
+            loadLocations(ethMensaProvider)
+            uzhMensas = loadLocations(uzhMensaProvider)
         }
 
         return locations
     }
 
-    private fun initialize() {
-        val ethProvider = ETHMensaProvider(assetManager)
-        loadLocations(ethProvider)
-
-        val uzhProvider = UZHMensaProvider(assetManager)
-        loadLocations(uzhProvider)
-    }
-
-    private fun loadLocations(mensaProvider: AbstractMensaProvider) {
+    private fun loadLocations(mensaProvider: AbstractMensaProvider) : List<Mensa> {
         val locations = mensaProvider.getLocations()
         val mensas = ArrayList<Mensa>()
         for (location in locations) {
@@ -72,18 +69,20 @@ class LocationRepository internal constructor(private val assetManager: AssetMan
             }
         }
 
-        mensaByProvider[mensaProvider] = mensas
         this.locations.addAll(locations)
+
+        return mensas;
     }
 
-    fun refresh(today: LocalDate, force: Boolean = false) {
+    fun refresh(today: Date, force: Boolean = false) {
         if (!refreshed || force) {
             refreshed = true
 
-            for ((provider, mensas) in mensaByProvider) {
-                RefreshMensaTask(provider, today)
-                    .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, *mensas.toTypedArray())
-            }
+            RefreshETHMensaTask(ethMensaProvider, today, "de")
+                .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "lunch", "dinner")
+
+            RefreshUZHMensaTask(uzhMensaProvider, today, "de")
+                .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, *uzhMensas.toTypedArray())
         }
     }
 

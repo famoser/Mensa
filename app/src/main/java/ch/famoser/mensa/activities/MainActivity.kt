@@ -16,8 +16,8 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.time.LocalDate
 import android.os.Parcelable
-
-
+import java.time.Instant
+import java.util.*
 
 
 /**
@@ -66,10 +66,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         EventBus.getDefault().register(this)
-        locationRepository.refresh(LocalDate.now())
+        locationRepository.refresh(Date(System.currentTimeMillis()))
 
         swipeContainer.setOnRefreshListener {
-            locationRepository.refresh(LocalDate.now(), true)
+            locationRepository.refresh(Date(System.currentTimeMillis()), true)
         }
     }
 

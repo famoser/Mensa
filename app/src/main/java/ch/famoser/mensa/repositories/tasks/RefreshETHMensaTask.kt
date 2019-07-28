@@ -7,24 +7,31 @@ import ch.famoser.mensa.events.RefreshMensaFinishedEvent
 import ch.famoser.mensa.events.RefreshMensaStartedEvent
 import ch.famoser.mensa.services.providers.AbstractMensaProvider
 import ch.famoser.mensa.models.Mensa
+import ch.famoser.mensa.services.providers.ETHMensaProvider
+import ch.famoser.mensa.services.providers.UZHMensaProvider
 import org.greenrobot.eventbus.EventBus
 import java.time.LocalDate
 import java.util.*
 
-class RefreshMensaTask(private val mensaProvider: AbstractMensaProvider, private val date: LocalDate) :
-    AsyncTask<Mensa, Int, Unit>() {
+class RefreshETHMensaTask(
+    private val mensaProvider: ETHMensaProvider,
+    private val date: Date,
+    private val language: String
+) :
+    AsyncTask<String, Int, Unit>() {
 
     private val asyncTaskId = UUID.randomUUID()
 
-    override fun doInBackground(vararg mensas: Mensa) {
-        for ((current, mensa) in mensas.withIndex()) {
-            val menus = mensaProvider.getMenus(mensa, date);
-            mensa.replaceMenus(menus)
+    override fun doInBackground(vararg sources: String) {
+        for ((index, source) in sources.withIndex()) {
+            val refreshedMensas = mensaProvider.getMenus(source, date, language);
 
             if (isCancelled) return
-            publishProgress(mensas.size, current)
+            publishProgress(sources.size, index)
 
-            EventBus.getDefault().post(MensaMenuUpdatedEvent(mensa.id))
+            for (mensa in refreshedMensas) {
+                EventBus.getDefault().post(MensaMenuUpdatedEvent(mensa.id))
+            }
         }
     }
 
