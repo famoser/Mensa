@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
 
         this.refreshMensaEventProcessor = ProgressCollector(swipeContainer, downloadProgress)
 
-        this.locationRepository = LocationRepository.getInstance(assets)
+        this.locationRepository = LocationRepository.getInstance(this.applicationContext)
         val locations = locationRepository.getLocations()
 
         val locationAdapter = LocationAdapter(this, twoPane, locations)

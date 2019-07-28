@@ -12,20 +12,26 @@ import org.greenrobot.eventbus.EventBus
 import java.time.LocalDate
 import java.util.*
 
-class RefreshUZHMensaTask(private val mensaProvider: UZHMensaProvider, private val date: Date, private val language: String) :
+class RefreshUZHMensaTask(
+    private val mensaProvider: UZHMensaProvider,
+    private val date: Date,
+    private val language: String,
+    private val ignoreCache: Boolean
+) :
     AsyncTask<Mensa, Int, Unit>() {
 
     private val asyncTaskId = UUID.randomUUID()
 
     override fun doInBackground(vararg mensas: Mensa) {
         for ((current, mensa) in mensas.withIndex()) {
-            val menus = mensaProvider.getMenus(mensa, date, language);
-            mensa.replaceMenus(menus)
+            val refreshSuccessful = mensaProvider.getMenus(mensa, date, language, ignoreCache);
 
             if (isCancelled) return
             publishProgress(mensas.size, current)
 
-            EventBus.getDefault().post(MensaMenuUpdatedEvent(mensa.id))
+            if (refreshSuccessful) {
+                EventBus.getDefault().post(MensaMenuUpdatedEvent(mensa.id))
+            }
         }
     }
 

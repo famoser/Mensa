@@ -16,7 +16,8 @@ import java.util.*
 class RefreshETHMensaTask(
     private val mensaProvider: ETHMensaProvider,
     private val date: Date,
-    private val language: String
+    private val language: String,
+    private val ignoreCache: Boolean
 ) :
     AsyncTask<String, Int, Unit>() {
 
@@ -24,7 +25,7 @@ class RefreshETHMensaTask(
 
     override fun doInBackground(vararg sources: String) {
         for ((index, source) in sources.withIndex()) {
-            val refreshedMensas = mensaProvider.getMenus(source, date, language);
+            val refreshedMensas = mensaProvider.getMenus(source, date, language, ignoreCache);
 
             if (isCancelled) return
             publishProgress(sources.size, index)

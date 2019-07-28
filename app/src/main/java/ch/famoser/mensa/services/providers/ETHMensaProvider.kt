@@ -3,33 +3,44 @@ package ch.famoser.mensa.services.providers
 import android.annotation.SuppressLint
 import android.content.res.AssetManager
 import android.net.Uri
-import android.util.SparseArray
 import ch.famoser.mensa.models.Location
 import ch.famoser.mensa.models.Mensa
 import java.net.URL
 import java.util.*
 import kotlin.collections.HashMap
 import ch.famoser.mensa.models.Menu
-import java.text.SimpleDateFormat
+import ch.famoser.mensa.services.CacheService
+import ch.famoser.mensa.services.SerializationService
 import kotlin.collections.ArrayList
 
 
-class ETHMensaProvider(assetManager: AssetManager) : AbstractMensaProvider(assetManager) {
+class ETHMensaProvider(
+    private val cacheService: CacheService,
+    assetManager: AssetManager,
+    private val serializationService: SerializationService
+) :
+    AbstractMensaProvider(cacheService, assetManager, serializationService) {
+    companion object {
+        const val CACHE_PROVIDER_PREFIX = "eth"
+    }
+
     private val mensaMap: MutableMap<Mensa, EthMensa> = HashMap()
 
-    fun getMenus(source: String, date: Date, language: String)
+    fun getMenus(source: String, date: Date, language: String, ignoreCache: Boolean)
             : List<Mensa> {
         try {
-            val dateSlug = getDateTimeString(date);
-            val json = URL("https://www.webservices.ethz.ch/gastro/v1/RVRI/Q1E1/meals/$language/$dateSlug/$source")
-                .readText()
+            val menuByMensaIds = getMenuByMensaId(date, ignoreCache, source, language)
 
-            val apiMensas = jsonToListOfT(json, ApiMensa::class.java);
+            val refreshedMensas = ArrayList<Mensa>()
+            for ((mensa, ethzMensa) in mensaMap) {
+                val menus = menuByMensaIds[ethzMensa.idSlug]
+                if (menus != null) {
+                    mensa.replaceMenus(menus)
+                    refreshedMensas.add(mensa)
+                }
+            }
 
-            val mensaLookup = SparseArray<Mensa>()
-            mensaMap.map { mensa -> mensaLookup.put(mensa.value.idSlug, mensa.key) }
-
-            return replaceMenus(apiMensas, mensaLookup)
+            return refreshedMensas
         } catch (ex: Exception) {
             ex.printStackTrace()
 
@@ -37,18 +48,65 @@ class ETHMensaProvider(assetManager: AssetManager) : AbstractMensaProvider(asset
         }
     }
 
-    private fun replaceMenus(
-        apiMensas: List<ApiMensa>,
-        mensaLookup: SparseArray<Mensa>
-    ): List<Mensa> {
-        val refreshedMensas = ArrayList<Mensa>()
-
-        for (apiMensa in apiMensas) {
-            val mensa = mensaLookup[apiMensa.id]
-            if (mensa === null) {
-                continue
+    private fun getMenuByMensaId(
+        date: Date,
+        ignoreCache: Boolean,
+        source: String,
+        language: String
+    ): Map<Int, List<Menu>> {
+        if (!ignoreCache) {
+            val menuByMensaIds = getMenuByMensaIdFromCache(date, source, language)
+            if (menuByMensaIds != null) {
+                return menuByMensaIds
             }
+        }
 
+        val menuByMensaIds = getMenuByMensaIdFromApi(language, date, source)
+
+        val cacheKey = getMensaIdCacheKey(date, source, language)
+        cacheService.saveMensaIds(cacheKey, menuByMensaIds.keys.toList())
+
+        for ((mensaId, menus) in menuByMensaIds) {
+            cacheMenus(CACHE_PROVIDER_PREFIX, mensaId.toString(), date, language, menus)
+        }
+
+        return menuByMensaIds
+    }
+
+    private fun getMenuByMensaIdFromCache(date: Date, source: String, language: String): Map<Int, List<Menu>>? {
+        val cacheKey = getMensaIdCacheKey(date, source, language)
+        val impactedMensas = cacheService.readMensaIds(cacheKey) ?: return null
+
+        val menuByMensaId = HashMap<Int, List<Menu>>()
+        for (mensaId in impactedMensas) {
+            val menus = tryGetMenusFromCache(CACHE_PROVIDER_PREFIX, mensaId.toString(), date, language)
+            if (menus != null) {
+                menuByMensaId[mensaId] = menus
+            }
+        }
+
+        return menuByMensaId
+    }
+
+    private fun getMensaIdCacheKey(date: Date, source: String, language: String): String {
+        val dateSlug = getDateTimeString(date);
+        return "$CACHE_PROVIDER_PREFIX.$source.$dateSlug.$language"
+    }
+
+    @SuppressLint("UseSparseArrays")
+    private fun getMenuByMensaIdFromApi(
+        language: String,
+        date: Date,
+        source: String
+    ): Map<Int, List<Menu>> {
+        val dateSlug = getDateTimeString(date);
+        val json = URL("https://www.webservices.ethz.ch/gastro/v1/RVRI/Q1E1/meals/$language/$dateSlug/$source")
+            .readText()
+
+        val apiMensas = serializationService.deserializeList(json, ApiMensa::class.java);
+
+        val menuByMensaIds = HashMap<Int, List<Menu>>()
+        for (apiMensa in apiMensas) {
             val menus = apiMensa.menu.meals.map { apiMeal ->
                 Menu(
                     apiMeal.label,
@@ -60,11 +118,10 @@ class ETHMensaProvider(assetManager: AssetManager) : AbstractMensaProvider(asset
                 )
             }
 
-            mensa.replaceMenus(menus)
-            refreshedMensas.add(mensa)
+            menuByMensaIds[apiMensa.id] = menus
         }
 
-        return refreshedMensas
+        return menuByMensaIds
     }
 
     override fun getLocations(): List<Location> {
@@ -85,15 +142,6 @@ class ETHMensaProvider(assetManager: AssetManager) : AbstractMensaProvider(asset
                 mensa
             })
         }
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    private fun getDateTimeString(date: Date): String {
-        val calender = Calendar.getInstance()
-        calender.time = date
-
-        val format1 = SimpleDateFormat("yyyy-MM-dd")
-        return format1.format(calender.time)
     }
 
     data class ApiMensa(val id: Int, val mensa: String, val daytime: String, val hours: ApiHours, val menu: ApiMenu)

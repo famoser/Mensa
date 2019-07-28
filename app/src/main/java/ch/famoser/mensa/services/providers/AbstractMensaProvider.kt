@@ -1,38 +1,62 @@
 package ch.famoser.mensa.services.providers
 
+import android.annotation.SuppressLint
 import android.content.res.AssetManager
 import ch.famoser.mensa.models.Location
 import ch.famoser.mensa.models.Mensa
 import ch.famoser.mensa.models.Menu
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
+import ch.famoser.mensa.services.CacheService
+import ch.famoser.mensa.services.SerializationService
 import java.io.IOException
 import java.nio.charset.Charset
-import java.time.LocalDate
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
-abstract class AbstractMensaProvider(private val assetManager: AssetManager) {
+abstract class AbstractMensaProvider(
+    private val cacheService: CacheService,
+    private val assetManager: AssetManager,
+    private val serializationService: SerializationService
+) {
     abstract fun getLocations(): List<Location>
 
     protected fun <T> readJsonAssetFileToListOfT(rawFileName: String, classOfT: Class<T>): List<T> {
         val json: String = readStringAssetFile(rawFileName) ?: return ArrayList()
 
-        return jsonToListOfT(json, classOfT)
+        return serializationService.deserializeList(json, classOfT)
     }
 
-    protected fun <T> jsonToListOfT(json: String, classOfT: Class<T>): List<T> {
-        val moshi = Moshi.Builder().build()
-        val listOfT = Types.newParameterizedType(List::class.java, classOfT)
-        val jsonAdapter = moshi.adapter<List<T>>(listOfT)
+    protected fun tryGetMenusFromCache(providerPrefix: String, mensaId: String, date: Date, language: String): List<Menu>? {
+        val cacheKey = getCacheKey(providerPrefix, mensaId, date, language)
 
-        return jsonAdapter.fromJson(json)!!
+        return cacheService.readMenus(cacheKey)
     }
 
-    protected fun <T> jsonToT(json: String, classOfT: Class<T>): T {
-        val moshi = Moshi.Builder().build()
-        val jsonAdapter = moshi.adapter<T>(classOfT)
+    protected fun cacheMenus(providerPrefix: String, mensaId: String, date: Date, language: String, menus: List<Menu>) {
+        val cacheKey = getCacheKey(providerPrefix, mensaId, date, language)
 
-        return jsonAdapter.fromJson(json)!!
+        cacheService.saveMenus(cacheKey, menus)
+    }
+
+    private fun getCacheKey(
+        providerPrefix: String,
+        mensaId: String,
+        date: Date,
+        language: String
+    ): String {
+        val dateSlug = getDateTimeString(date);
+        val cacheKey = "$providerPrefix.$mensaId.$dateSlug.$language"
+        return cacheKey
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    protected fun getDateTimeString(date: Date): String {
+        val calender = Calendar.getInstance()
+        calender.time = date
+
+        val format1 = SimpleDateFormat("yyyy-MM-dd")
+        return format1.format(calender.time)
     }
 
     protected fun normalizeText(text: String): String {

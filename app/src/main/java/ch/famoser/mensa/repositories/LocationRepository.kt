@@ -1,27 +1,38 @@
 package ch.famoser.mensa.repositories
 
+import android.content.Context
 import android.content.res.AssetManager
 import android.os.AsyncTask
 import ch.famoser.mensa.models.Location
 import ch.famoser.mensa.models.Mensa
 import ch.famoser.mensa.repositories.tasks.RefreshETHMensaTask
 import ch.famoser.mensa.repositories.tasks.RefreshUZHMensaTask
+import ch.famoser.mensa.services.CacheService
+import ch.famoser.mensa.services.SerializationService
 import ch.famoser.mensa.services.providers.AbstractMensaProvider
 import ch.famoser.mensa.services.providers.ETHMensaProvider
 import ch.famoser.mensa.services.providers.UZHMensaProvider
-import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class LocationRepository internal constructor(private val assetManager: AssetManager) {
+class LocationRepository internal constructor(
+    private val cacheService: CacheService,
+    assetManager: AssetManager,
+    serializationService: SerializationService
+) {
     companion object {
         private var defaultInstance: LocationRepository? = null
 
-        fun getInstance(assetManager: AssetManager): LocationRepository {
+        fun getInstance(context: Context): LocationRepository {
             synchronized(this) {
                 if (defaultInstance == null) {
-                    defaultInstance = LocationRepository(assetManager)
+                    val sharedPreferences = context.getSharedPreferences("io.mangel.issuemanager", Context.MODE_PRIVATE)
+                    val serializationService = SerializationService()
+                    val cacheService = CacheService(sharedPreferences, serializationService)
+                    val assetManager = context.assets
+
+                    defaultInstance = LocationRepository(cacheService, assetManager, serializationService)
                 }
 
                 return defaultInstance!!
@@ -45,8 +56,8 @@ class LocationRepository internal constructor(private val assetManager: AssetMan
     private val locations: MutableList<Location> = LinkedList()
 
     private var uzhMensas: List<Mensa> = ArrayList()
-    private val ethMensaProvider = ETHMensaProvider(assetManager)
-    private val uzhMensaProvider = UZHMensaProvider(assetManager)
+    private val ethMensaProvider = ETHMensaProvider(cacheService, assetManager, serializationService)
+    private val uzhMensaProvider = UZHMensaProvider(cacheService, assetManager, serializationService)
 
     fun getLocations(): MutableList<Location> {
         if (!initialized) {
@@ -63,7 +74,7 @@ class LocationRepository internal constructor(private val assetManager: AssetMan
         return mensaMap.values.filter { m -> m.menus.isNotEmpty() }.any()
     }
 
-    private fun loadLocations(mensaProvider: AbstractMensaProvider) : List<Mensa> {
+    private fun loadLocations(mensaProvider: AbstractMensaProvider): List<Mensa> {
         val locations = mensaProvider.getLocations()
         val mensas = ArrayList<Mensa>()
         for (location in locations) {
@@ -78,15 +89,19 @@ class LocationRepository internal constructor(private val assetManager: AssetMan
         return mensas;
     }
 
-    fun refresh(today: Date, force: Boolean = false) {
-        if (!refreshed || force) {
+    fun refresh(today: Date, ignoreCache: Boolean = false) {
+        if (!refreshed || ignoreCache) {
             refreshed = true
 
-            RefreshETHMensaTask(ethMensaProvider, today, "de")
+            cacheService.startObserveUsedCacheUsage()
+
+            RefreshETHMensaTask(ethMensaProvider, today, "de", ignoreCache)
                 .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "lunch", "dinner")
 
-            RefreshUZHMensaTask(uzhMensaProvider, today, "de")
+            RefreshUZHMensaTask(uzhMensaProvider, today, "de", ignoreCache)
                 .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, *uzhMensas.toTypedArray())
+
+            cacheService.removeAllUntouchedCacheEntries()
         }
     }
 
