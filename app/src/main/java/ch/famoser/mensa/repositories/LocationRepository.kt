@@ -59,6 +59,10 @@ class LocationRepository internal constructor(private val assetManager: AssetMan
         return locations
     }
 
+    fun someMenusLoaded(): Boolean {
+        return mensaMap.values.filter { m -> m.menus.isNotEmpty() }.any()
+    }
+
     private fun loadLocations(mensaProvider: AbstractMensaProvider) : List<Mensa> {
         val locations = mensaProvider.getLocations()
         val mensas = ArrayList<Mensa>()

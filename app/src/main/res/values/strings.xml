@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Mensa</string>
     <string name="title_item_detail">Mensa Detail</string>
-    <string name="hide">hide</string>
     <string name="mensa">mensa</string>
     <string name="share">share</string>
+    <string name="no_menus_loaded">Keine Internetverbindung oder keine Menus heute.</string>
 </resources>

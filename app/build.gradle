@@ -32,10 +32,11 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation "androidx.cardview:cardview:1.0.0"
-    implementation "com.squareup.moshi:moshi:1.8.0"
-    implementation 'org.greenrobot:eventbus:3.1.1'
+    implementation "com.squareup.moshi:moshi:1.8.0" // json deserialize
+    implementation 'org.greenrobot:eventbus:3.1.1' // events
+    implementation "org.jetbrains.anko:anko-commons:$anko_version" // easy notifications
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
-    implementation "org.jsoup:jsoup:1.11.3"
+    implementation "org.jsoup:jsoup:1.11.3" // html parser
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

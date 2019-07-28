@@ -16,6 +16,9 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.time.LocalDate
 import android.os.Parcelable
+import android.view.View
+import ch.famoser.mensa.R
+import org.jetbrains.anko.toast
 import java.time.Instant
 import java.util.*
 
@@ -40,6 +43,10 @@ class MainActivity : AppCompatActivity() {
      */
     private var twoPane: Boolean = false
 
+    private lateinit var refreshMensaEventProcessor: ProgressCollector
+    private lateinit var locationRepository: LocationRepository
+    private lateinit var locationListAdapter: LocationAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(ch.famoser.mensa.R.layout.activity_main)
@@ -54,7 +61,7 @@ class MainActivity : AppCompatActivity() {
 
         this.refreshMensaEventProcessor = ProgressCollector(swipeContainer, downloadProgress)
 
-        val locationRepository = LocationRepository.getInstance(assets)
+        this.locationRepository = LocationRepository.getInstance(assets)
         val locations = locationRepository.getLocations()
 
         val locationAdapter = LocationAdapter(this, twoPane, locations)
@@ -81,26 +88,28 @@ class MainActivity : AppCompatActivity() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMensaMenuUpdatedEvent(event: MensaMenuUpdatedEvent) {
-        locationListAdapter?.mensaMenusRefreshed(event.mensaId)
+        locationListAdapter.mensaMenusRefreshed(event.mensaId)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onRefreshMensaStartedEvent(event: RefreshMensaStartedEvent) {
-        refreshMensaEventProcessor?.onStarted(event)
+        refreshMensaEventProcessor.onStarted(event)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onRefreshMensaProgressEvent(event: RefreshMensaProgressEvent) {
-        refreshMensaEventProcessor?.onProgress(event)
+        refreshMensaEventProcessor.onProgress(event)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onRefreshMensaFinishedEvent(event: RefreshMensaFinishedEvent) {
-        refreshMensaEventProcessor?.onFinished(event)
-    }
+        refreshMensaEventProcessor.onFinished(event)
 
-    private var locationListAdapter: LocationAdapter? = null
-    private var refreshMensaEventProcessor: ProgressCollector? = null
+        // if progress hidden then refresh finished
+        if (downloadProgress.visibility == View.GONE && !locationRepository.someMenusLoaded()) {
+            toast(R.string.no_menus_loaded)
+        }
+    }
 
     public override fun onDestroy() {
         super.onDestroy()
