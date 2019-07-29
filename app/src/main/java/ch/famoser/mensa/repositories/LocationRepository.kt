@@ -20,6 +20,7 @@ import org.greenrobot.eventbus.ThreadMode
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import kotlin.math.sign
 
 class LocationRepository internal constructor(
     private val cacheService: CacheService,
@@ -89,23 +90,33 @@ class LocationRepository internal constructor(
         return mensas;
     }
 
-    fun refresh(today: Date, ignoreCache: Boolean = false) {
+    fun refresh(today: Date, language: String, ignoreCache: Boolean = false) {
         synchronized(this) {
             if (activeRefreshingTasks > 0 || (refreshed && !ignoreCache)) {
                 return
             }
 
-            activeRefreshingTasks = 2
             refreshed = true
+
+            // how many tasks are launched
+            // 3 because one ETH and two UZH tasks
+            activeRefreshingTasks = 3
         }
 
         cacheService.startObserveCacheUsage()
 
-        RefreshETHMensaTask(ethMensaProvider, today, "de", ignoreCache)
+        RefreshETHMensaTask(ethMensaProvider, today, language, ignoreCache)
             .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "lunch", "dinner")
 
-        RefreshUZHMensaTask(uzhMensaProvider, today, "de", ignoreCache)
-            .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, *uzhMensas.toTypedArray())
+        val half = uzhMensas.size / 2
+        val batch1 = uzhMensas.subList(0, half)
+        val batch2 = uzhMensas.subList(half, uzhMensas.size)
+
+        RefreshUZHMensaTask(uzhMensaProvider, today, language, ignoreCache)
+            .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, *batch1.toTypedArray())
+
+        RefreshUZHMensaTask(uzhMensaProvider, today, language, ignoreCache)
+            .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, *batch2.toTypedArray())
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

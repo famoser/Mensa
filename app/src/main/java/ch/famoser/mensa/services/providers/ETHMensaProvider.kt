@@ -29,7 +29,8 @@ class ETHMensaProvider(
     fun getMenus(time: String, date: Date, language: String, ignoreCache: Boolean)
             : List<Mensa> {
         try {
-            val menuByMensaIds = getMenuByMensaId(date, ignoreCache, time, language)
+            val normalizedLanguage = normalizeLanguage(language)
+            val menuByMensaIds = getMenuByMensaId(date, ignoreCache, time, normalizedLanguage)
 
             val refreshedMensas = ArrayList<Mensa>()
             for ((mensa, ethzMensa) in mensaMap) {
@@ -45,6 +46,13 @@ class ETHMensaProvider(
             ex.printStackTrace()
 
             return ArrayList()
+        }
+    }
+
+    private fun normalizeLanguage(language: String): String {
+        return when (language) {
+            "de" -> "de"
+            else -> "en"
         }
     }
 
@@ -144,7 +152,14 @@ class ETHMensaProvider(
         }
     }
 
-    data class ApiMensa(val id: Int, val mensa: String, val daytime: String, val hours: ApiHours, val meals: List<ApiMeal>)
+    data class ApiMensa(
+        val id: Int,
+        val mensa: String,
+        val daytime: String,
+        val hours: ApiHours,
+        val meals: List<ApiMeal>
+    )
+
     data class ApiHours(val opening: List<ApiOpening>, val mealtime: List<ApiMealtime>)
     data class ApiOpening(val from: String, val to: String, val type: String)
     data class ApiMealtime(val from: String, val to: String, val type: String)

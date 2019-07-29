@@ -73,10 +73,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         EventBus.getDefault().register(this)
-        locationRepository.refresh(Date(System.currentTimeMillis()))
+
+        val language = Locale.getDefault().getLanguage()
+        locationRepository.refresh(Date(System.currentTimeMillis()), language)
 
         swipeContainer.setOnRefreshListener {
-            locationRepository.refresh(Date(System.currentTimeMillis()), true)
+            locationRepository.refresh(Date(System.currentTimeMillis()), language, true)
         }
     }
 
