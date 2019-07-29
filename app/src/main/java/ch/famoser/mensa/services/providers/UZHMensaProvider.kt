@@ -123,7 +123,14 @@ class UZHMensaProvider(
                     currentMenu.title = headerParts.get(0).trim()
                     currentMenu.price = headerParts.get(1)
                         .split("/")
-                        .map { it.trim('C', 'H', 'F').trim() }
+                        .map { it.trim() }
+                        .map {
+                            if (it.startsWith("CHF")) {
+                                it.substring(3).trim()
+                            } else {
+                                it
+                            }
+                        }
                         .toTypedArray()
                 }
             }

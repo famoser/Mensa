@@ -26,7 +26,7 @@ class MenuDetailsAdapter constructor(
     init {
         onClickListener = View.OnClickListener { view ->
             val item = view.tag as Menu
-            val clip = ClipData.newPlainText("menu content", item.title + ": " + item.description)
+            val clip = ClipData.newPlainText("meals content", item.title + ": " + item.description)
 
             val clipboardManager = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             clipboardManager.setPrimaryClip(clip)

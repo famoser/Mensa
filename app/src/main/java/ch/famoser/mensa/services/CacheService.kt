@@ -15,7 +15,7 @@ class CacheService(
 
     fun saveMenus(key: String, menus: List<Menu>) {
         val cacheKey = getCacheKey(key, CacheType.Menu)
-        val json = serializationService.serialize(menus)
+        val json = serializationService.serialize(menus.toTypedArray())
 
         preferences.edit().putString(cacheKey, json).apply()
     }
@@ -29,7 +29,7 @@ class CacheService(
 
     fun saveMensaIds(key: String, mensaIds: List<Int>) {
         val cacheKey = getCacheKey(key, CacheType.MensaIds)
-        val json = serializationService.serialize(mensaIds)
+        val json = serializationService.serialize(mensaIds.toTypedArray())
 
         preferences.edit().putString(cacheKey, json).apply()
     }

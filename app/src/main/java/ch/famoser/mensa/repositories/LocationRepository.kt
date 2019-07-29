@@ -3,6 +3,7 @@ package ch.famoser.mensa.repositories
 import android.content.Context
 import android.content.res.AssetManager
 import android.os.AsyncTask
+import android.preference.PreferenceManager
 import ch.famoser.mensa.models.Location
 import ch.famoser.mensa.models.Mensa
 import ch.famoser.mensa.repositories.tasks.RefreshETHMensaTask
@@ -27,7 +28,7 @@ class LocationRepository internal constructor(
         fun getInstance(context: Context): LocationRepository {
             synchronized(this) {
                 if (defaultInstance == null) {
-                    val sharedPreferences = context.getSharedPreferences("io.mangel.issuemanager", Context.MODE_PRIVATE)
+                    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
                     val serializationService = SerializationService()
                     val cacheService = CacheService(sharedPreferences, serializationService)
                     val assetManager = context.assets
@@ -95,10 +96,10 @@ class LocationRepository internal constructor(
 
             cacheService.startObserveUsedCacheUsage()
 
-            RefreshETHMensaTask(ethMensaProvider, today, "de", ignoreCache)
+            RefreshETHMensaTask(ethMensaProvider, today, "de", false)
                 .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "lunch", "dinner")
 
-            RefreshUZHMensaTask(uzhMensaProvider, today, "de", ignoreCache)
+            RefreshUZHMensaTask(uzhMensaProvider, today, "de", false)
                 .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, *uzhMensas.toTypedArray())
 
             cacheService.removeAllUntouchedCacheEntries()

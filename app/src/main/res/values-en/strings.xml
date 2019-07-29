@@ -5,4 +5,5 @@
     <string name="mensa">mensa</string>
     <string name="share">share</string>
     <string name="no_menus_loaded">No internet connection or no menus today.</string>
+    <string name="currency">CHF</string>
 </resources>

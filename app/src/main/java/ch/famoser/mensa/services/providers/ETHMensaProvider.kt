@@ -107,7 +107,7 @@ class ETHMensaProvider(
 
         val menuByMensaIds = HashMap<Int, List<Menu>>()
         for (apiMensa in apiMensas) {
-            val menus = apiMensa.menu.meals.map { apiMeal ->
+            val menus = apiMensa.meals.map { apiMeal ->
                 Menu(
                     apiMeal.label,
                     normalizeText(apiMeal.description.joinToString(separator = "\n")),
@@ -144,11 +144,10 @@ class ETHMensaProvider(
         }
     }
 
-    data class ApiMensa(val id: Int, val mensa: String, val daytime: String, val hours: ApiHours, val menu: ApiMenu)
+    data class ApiMensa(val id: Int, val mensa: String, val daytime: String, val hours: ApiHours, val meals: List<ApiMeal>)
     data class ApiHours(val opening: List<ApiOpening>, val mealtime: List<ApiMealtime>)
     data class ApiOpening(val from: String, val to: String, val type: String)
     data class ApiMealtime(val from: String, val to: String, val type: String)
-    data class ApiMenu(val date: String, val day: String, val meals: List<ApiMeal>)
     data class ApiMeal(
         val id: Int,
         val type: String,

@@ -31,12 +31,28 @@
                 android:textStyle="bold"
                 tools:text="vitality"/>
 
-        <TextView
-                android:id="@+id/price"
-                android:layout_width="match_parent"
+        <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAlignment="viewEnd"
-                android:textAppearance="?attr/textAppearanceListItem"
-                tools:text="14.50"/>
+                android:orientation="horizontal"
+        >
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="viewEnd"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:text="@string/currency"
+                    android:layout_marginEnd="3sp"/>
+
+            <TextView
+                    android:id="@+id/price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="viewEnd"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    tools:text="14.50"/>
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>
