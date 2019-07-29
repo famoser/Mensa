@@ -7,9 +7,13 @@ class CacheService(
     private val preferences: SharedPreferences,
     private val serializationService: SerializationService
 ) {
+    companion object {
+        const val CACHE_PREFIX = "cache"
+    }
+
     private val touchedCacheKeys = HashSet<String>()
 
-    fun startObserveUsedCacheUsage() {
+    fun startObserveCacheUsage() {
         touchedCacheKeys.clear()
     }
 
@@ -27,22 +31,22 @@ class CacheService(
         return serializationService.deserializeList(json, Menu::class.java)
     }
 
-    fun saveMensaIds(key: String, mensaIds: List<Int>) {
+    fun saveMensaIds(key: String, mensaIds: List<String>) {
         val cacheKey = getCacheKey(key, CacheType.MensaIds)
         val json = serializationService.serialize(mensaIds.toTypedArray())
 
         preferences.edit().putString(cacheKey, json).apply()
     }
 
-    fun readMensaIds(key: String): List<Int>? {
+    fun readMensaIds(key: String): List<String>? {
         val cacheKey = getCacheKey(key, CacheType.MensaIds)
         val json = preferences.getString(cacheKey, null) ?: return null
 
-        return serializationService.deserializeList(json, Int::class.java)
+        return serializationService.deserializeList(json, String::class.java)
     }
 
     fun removeAllUntouchedCacheEntries() {
-        val obsoleteKeys = preferences.all.keys.filter { k -> !touchedCacheKeys.contains(k) }
+        val obsoleteKeys = preferences.all.keys.filter { k -> k.startsWith(CACHE_PREFIX) && !touchedCacheKeys.contains(k) }
 
         val editor = preferences.edit()
         for (key in obsoleteKeys) {
@@ -52,7 +56,7 @@ class CacheService(
     }
 
     private fun getCacheKey(key: String, cacheType: CacheType): String {
-        val cacheKey = "cache.$cacheType.$key"
+        val cacheKey = "$CACHE_PREFIX.$cacheType.$key"
         touchedCacheKeys.add(cacheKey)
 
         return cacheKey

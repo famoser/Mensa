@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity() {
         refreshMensaEventProcessor.onFinished(event)
 
         // if progress hidden then refresh finished
-        if (downloadProgress.visibility == View.GONE && !locationRepository.someMenusLoaded()) {
+        if (!locationRepository.refreshActive() && !locationRepository.someMenusLoaded()) {
             toast(R.string.no_menus_loaded)
         }
     }

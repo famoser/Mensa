@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.AssetManager
 import android.os.AsyncTask
 import android.preference.PreferenceManager
+import ch.famoser.mensa.events.RefreshMensaFinishedEvent
 import ch.famoser.mensa.models.Location
 import ch.famoser.mensa.models.Mensa
 import ch.famoser.mensa.repositories.tasks.RefreshETHMensaTask
@@ -13,6 +14,9 @@ import ch.famoser.mensa.services.SerializationService
 import ch.famoser.mensa.services.providers.AbstractMensaProvider
 import ch.famoser.mensa.services.providers.ETHMensaProvider
 import ch.famoser.mensa.services.providers.UZHMensaProvider
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -39,21 +43,16 @@ class LocationRepository internal constructor(
                 return defaultInstance!!
             }
         }
+    }
 
-        fun getInstance(): LocationRepository {
-            synchronized(this) {
-                if (defaultInstance == null) {
-                    throw NotImplementedError("You need to supply the asset manager if the repository has not been constructed yet.")
-                }
-
-                return defaultInstance!!
-            }
-        }
+    init {
+        EventBus.getDefault().register(this)
     }
 
     private val mensaMap: MutableMap<UUID, Mensa> = HashMap()
     private var initialized = false
     private var refreshed = false
+    private var activeRefreshingTasks = 0
     private val locations: MutableList<Location> = LinkedList()
 
     private var uzhMensas: List<Mensa> = ArrayList()
@@ -91,22 +90,38 @@ class LocationRepository internal constructor(
     }
 
     fun refresh(today: Date, ignoreCache: Boolean = false) {
-        if (!refreshed || ignoreCache) {
+        synchronized(this) {
+            if (activeRefreshingTasks > 0 || (refreshed && !ignoreCache)) {
+                return
+            }
+
+            activeRefreshingTasks = 2
             refreshed = true
+        }
 
-            cacheService.startObserveUsedCacheUsage()
+        cacheService.startObserveCacheUsage()
 
-            RefreshETHMensaTask(ethMensaProvider, today, "de", false)
-                .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "lunch", "dinner")
+        RefreshETHMensaTask(ethMensaProvider, today, "de", ignoreCache)
+            .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "lunch", "dinner")
 
-            RefreshUZHMensaTask(uzhMensaProvider, today, "de", false)
-                .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, *uzhMensas.toTypedArray())
+        RefreshUZHMensaTask(uzhMensaProvider, today, "de", ignoreCache)
+            .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, *uzhMensas.toTypedArray())
+    }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onRefreshMensaFinishedEvent(event: RefreshMensaFinishedEvent) {
+        activeRefreshingTasks--
+
+        if (activeRefreshingTasks == 0) {
             cacheService.removeAllUntouchedCacheEntries()
         }
     }
 
     fun getMensa(mensaId: UUID): Mensa? {
         return mensaMap[mensaId]
+    }
+
+    fun refreshActive(): Boolean {
+        return activeRefreshingTasks > 0
     }
 }

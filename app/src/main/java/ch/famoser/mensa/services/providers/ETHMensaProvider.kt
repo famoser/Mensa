@@ -26,14 +26,14 @@ class ETHMensaProvider(
 
     private val mensaMap: MutableMap<Mensa, EthMensa> = HashMap()
 
-    fun getMenus(source: String, date: Date, language: String, ignoreCache: Boolean)
+    fun getMenus(time: String, date: Date, language: String, ignoreCache: Boolean)
             : List<Mensa> {
         try {
-            val menuByMensaIds = getMenuByMensaId(date, ignoreCache, source, language)
+            val menuByMensaIds = getMenuByMensaId(date, ignoreCache, time, language)
 
             val refreshedMensas = ArrayList<Mensa>()
             for ((mensa, ethzMensa) in mensaMap) {
-                val menus = menuByMensaIds[ethzMensa.idSlug]
+                val menus = menuByMensaIds[ethzMensa.idSlug.toString() + "_" + ethzMensa.timeSlug]
                 if (menus != null) {
                     mensa.replaceMenus(menus)
                     refreshedMensas.add(mensa)
@@ -51,35 +51,35 @@ class ETHMensaProvider(
     private fun getMenuByMensaId(
         date: Date,
         ignoreCache: Boolean,
-        source: String,
+        time: String,
         language: String
-    ): Map<Int, List<Menu>> {
+    ): Map<String, List<Menu>> {
         if (!ignoreCache) {
-            val menuByMensaIds = getMenuByMensaIdFromCache(date, source, language)
+            val menuByMensaIds = getMenuByMensaIdFromCache(date, time, language)
             if (menuByMensaIds != null) {
                 return menuByMensaIds
             }
         }
 
-        val menuByMensaIds = getMenuByMensaIdFromApi(language, date, source)
+        val menuByMensaIds = getMenuByMensaIdFromApi(language, date, time)
 
-        val cacheKey = getMensaIdCacheKey(date, source, language)
+        val cacheKey = getMensaIdCacheKey(date, time, language)
         cacheService.saveMensaIds(cacheKey, menuByMensaIds.keys.toList())
 
         for ((mensaId, menus) in menuByMensaIds) {
-            cacheMenus(CACHE_PROVIDER_PREFIX, mensaId.toString(), date, language, menus)
+            cacheMenus(CACHE_PROVIDER_PREFIX, mensaId, date, language, menus)
         }
 
         return menuByMensaIds
     }
 
-    private fun getMenuByMensaIdFromCache(date: Date, source: String, language: String): Map<Int, List<Menu>>? {
+    private fun getMenuByMensaIdFromCache(date: Date, source: String, language: String): Map<String, List<Menu>>? {
         val cacheKey = getMensaIdCacheKey(date, source, language)
         val impactedMensas = cacheService.readMensaIds(cacheKey) ?: return null
 
-        val menuByMensaId = HashMap<Int, List<Menu>>()
+        val menuByMensaId = HashMap<String, List<Menu>>()
         for (mensaId in impactedMensas) {
-            val menus = tryGetMenusFromCache(CACHE_PROVIDER_PREFIX, mensaId.toString(), date, language)
+            val menus = tryGetMenusFromCache(CACHE_PROVIDER_PREFIX, mensaId, date, language)
             if (menus != null) {
                 menuByMensaId[mensaId] = menus
             }
@@ -97,15 +97,15 @@ class ETHMensaProvider(
     private fun getMenuByMensaIdFromApi(
         language: String,
         date: Date,
-        source: String
-    ): Map<Int, List<Menu>> {
+        time: String
+    ): Map<String, List<Menu>> {
         val dateSlug = getDateTimeString(date);
-        val json = URL("https://www.webservices.ethz.ch/gastro/v1/RVRI/Q1E1/meals/$language/$dateSlug/$source")
+        val json = URL("https://www.webservices.ethz.ch/gastro/v1/RVRI/Q1E1/meals/$language/$dateSlug/$time")
             .readText()
 
         val apiMensas = serializationService.deserializeList(json, ApiMensa::class.java);
 
-        val menuByMensaIds = HashMap<Int, List<Menu>>()
+        val menuByMensaIds = HashMap<String, List<Menu>>()
         for (apiMensa in apiMensas) {
             val menus = apiMensa.meals.map { apiMeal ->
                 Menu(
@@ -118,7 +118,7 @@ class ETHMensaProvider(
                 )
             }
 
-            menuByMensaIds[apiMensa.id] = menus
+            menuByMensaIds[apiMensa.id.toString() + "_" + time] = menus
         }
 
         return menuByMensaIds

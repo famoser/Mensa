@@ -5,12 +5,8 @@ import ch.famoser.mensa.events.MensaMenuUpdatedEvent
 import ch.famoser.mensa.events.RefreshMensaProgressEvent
 import ch.famoser.mensa.events.RefreshMensaFinishedEvent
 import ch.famoser.mensa.events.RefreshMensaStartedEvent
-import ch.famoser.mensa.services.providers.AbstractMensaProvider
-import ch.famoser.mensa.models.Mensa
 import ch.famoser.mensa.services.providers.ETHMensaProvider
-import ch.famoser.mensa.services.providers.UZHMensaProvider
 import org.greenrobot.eventbus.EventBus
-import java.time.LocalDate
 import java.util.*
 
 class RefreshETHMensaTask(
@@ -23,12 +19,12 @@ class RefreshETHMensaTask(
 
     private val asyncTaskId = UUID.randomUUID()
 
-    override fun doInBackground(vararg sources: String) {
-        for ((index, source) in sources.withIndex()) {
+    override fun doInBackground(vararg times: String) {
+        for ((index, source) in times.withIndex()) {
             val refreshedMensas = mensaProvider.getMenus(source, date, language, ignoreCache);
 
             if (isCancelled) return
-            publishProgress(sources.size, index)
+            publishProgress(times.size, index)
 
             for (mensa in refreshedMensas) {
                 EventBus.getDefault().post(MensaMenuUpdatedEvent(mensa.id))
