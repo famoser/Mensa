@@ -47,7 +47,7 @@ class UZHMensaProvider(
         }
     }
 
-    
+
     private fun normalizeLanguage(language: String): String {
         return when (language) {
             "de" -> "de"
