@@ -17,8 +17,8 @@ class UZHMensaProvider(
     cacheService: CacheService,
     assetManager: AssetManager,
     serializationService: SerializationService
-) :
-    AbstractMensaProvider(cacheService, assetManager, serializationService) {
+) : AbstractMensaProvider(cacheService, assetManager, serializationService) {
+
     companion object {
         const val CACHE_PROVIDER_PREFIX = "uzh"
     }

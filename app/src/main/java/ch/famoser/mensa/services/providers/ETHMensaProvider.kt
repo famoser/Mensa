@@ -18,8 +18,8 @@ class ETHMensaProvider(
     private val cacheService: CacheService,
     assetManager: AssetManager,
     private val serializationService: SerializationService
-) :
-    AbstractMensaProvider(cacheService, assetManager, serializationService) {
+) : AbstractMensaProvider(cacheService, assetManager, serializationService) {
+
     companion object {
         const val CACHE_PROVIDER_PREFIX = "eth"
     }
