@@ -2,6 +2,7 @@ package ch.famoser.mensa.activities
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.text.method.LinkMovementMethod
 import androidx.appcompat.app.AppCompatActivity
 import ch.famoser.mensa.R
 import ch.famoser.mensa.adapters.LocationAdapter
@@ -55,6 +56,9 @@ class MainActivity : AppCompatActivity() {
             // activity should be in two-pane mode.
             twoPane = true
         }
+
+        made_by.movementMethod = LinkMovementMethod.getInstance()
+        source.movementMethod = LinkMovementMethod.getInstance()
 
         this.refreshMensaEventProcessor = ProgressCollector(swipeContainer, downloadProgress)
 

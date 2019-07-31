@@ -1,26 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeContainer"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/swipeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <ch.famoser.mensa.views.SaveScrollRecyclerView
-                android:id="@+id/location_list"
-                android:name="ch.famoser.mensa.ItemListFragment"
+        <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layoutManager="LinearLayoutManager"
-                tools:context=".activities.MainActivity"
-                tools:listitem="@layout/row_location"
-                tools:itemCount="1"/>
+                android:layout_height="wrap_content">
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-</LinearLayout>
+            <ch.famoser.mensa.views.SaveScrollRecyclerView
+                    android:id="@+id/location_list"
+                    android:name="ch.famoser.mensa.ItemListFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    app:layoutManager="LinearLayoutManager"
+                    tools:context=".activities.MainActivity"
+                    tools:listitem="@layout/row_location"
+                    tools:itemCount="1"
+                    tools:layout_height="200sp"/>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:orientation="horizontal"
+            >
+
+                <TextView
+                        android:id="@+id/made_by"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:text="@string/made_by"
+                />
+
+                <TextView
+                        android:id="@+id/source"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:text="@string/source"
+                />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

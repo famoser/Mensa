@@ -7,4 +7,6 @@
     <string name="no_menus_loaded">No internet connection or no menus today.</string>
     <string name="currency">CHF</string>
     <string name="closed">closed</string>
+    <string name="made_by">made with ♡ by <a href="https://famoser.ch">famoser</a></string>
+    <string name="source">source code on <a href="https://github.com/famoser/Mensa">github</a></string>
 </resources>
