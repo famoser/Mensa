@@ -13,6 +13,7 @@ import ch.famoser.mensa.repositories.LocationRepository
 import ch.famoser.mensa.services.ProgressCollector
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.frame_location_list.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -21,11 +22,10 @@ import java.util.*
 
 
 /**
- * An activity representing a list of Pings. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a [MensaActivity] representing
- * item details. On tablets, the activity presents the list of items and
+ * On phones, the activity presents a list of items, which when touched,
+ * lead to a [MensaActivity] representing mensa details.
+ *
+ * On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
 class MainActivity : AppCompatActivity() {

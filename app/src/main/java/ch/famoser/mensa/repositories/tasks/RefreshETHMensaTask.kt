@@ -11,7 +11,7 @@ class RefreshETHMensaTask(
     private val language: String,
     private val ignoreCache: Boolean
 ) : AbstractRefreshMensaTask<String>() {
-    
+
     override fun doInBackground(vararg times: String) {
         for ((index, source) in times.withIndex()) {
             val refreshedMensas = mensaProvider.getMenus(source, date, language, ignoreCache)

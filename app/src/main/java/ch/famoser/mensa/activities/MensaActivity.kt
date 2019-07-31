@@ -28,7 +28,6 @@ class MensaActivity : AppCompatActivity() {
         setContentView(R.layout.activity_mensa)
         setSupportActionBar(toolbar)
 
-
         // Show the Up button in the action bar.
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 

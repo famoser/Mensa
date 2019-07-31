@@ -1,20 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+<FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <ch.famoser.mensa.views.SaveScrollRecyclerView
-            android:id="@+id/location_list"
-            android:name="ch.famoser.mensa.ItemListFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layoutManager="LinearLayoutManager"
-            tools:context=".activities.MainActivity"
-            tools:listitem="@layout/row_location"
-            tools:itemCount="1"/>
+    <include layout="@layout/frame_location_list"/>
 
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</FrameLayout>

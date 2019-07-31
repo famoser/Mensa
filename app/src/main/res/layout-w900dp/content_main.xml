@@ -18,21 +18,13 @@
     
     -->
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeContainer"
+    <FrameLayout
             android:layout_width="@dimen/item_width"
             android:layout_height="match_parent">
 
-        <ch.famoser.mensa.views.SaveScrollRecyclerView
-                android:id="@+id/location_list"
-                android:name="ch.famoser.mensa.ItemListFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layoutManager="LinearLayoutManager"
-                tools:context="ch.famoser.mensa.activities.MainActivity"
-                tools:listitem="@layout/row_location"/>
+        <include layout="@layout/frame_location_list"/>
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </FrameLayout>
 
     <FrameLayout
             android:id="@+id/details_container"

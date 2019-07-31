@@ -15,7 +15,6 @@
 
         <include layout="@layout/content_main"/>
 
-
         <ProgressBar
                 android:id="@+id/downloadProgress"
                 style="@android:style/Widget.ProgressBar.Horizontal"
