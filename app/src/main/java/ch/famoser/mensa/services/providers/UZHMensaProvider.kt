@@ -142,20 +142,22 @@ class UZHMensaProvider(
     ) {
         if (activeChild.`is`("p") && htmlMenu != null) {
             var paragraphContent = activeChild.textNodes()
-                .joinToString(separator = "\n", transform = { node -> node.wholeText.trim() }).trim()
+                .joinToString(separator = "\n", transform = { node -> node.wholeText.trim() })
 
-            if (paragraphContent.startsWith("Allergikerinformationen: ")) {
-                htmlMenu.allergenInfo = paragraphContent.substring("Allergikerinformationen: ".length)
+            val allergyPrefixes = arrayOf("Allergikerinformationen:", "Allergy information:")
+            val matchingPrefix = allergyPrefixes.firstOrNull { paragraphContent.startsWith(it) }
+            if (matchingPrefix != null) {
+                htmlMenu.allergenInfo = paragraphContent.substring(matchingPrefix.length).trim()
             } else {
                 if (htmlMenu.description.isNotEmpty()) {
                     htmlMenu.description += "\n\n"
                 }
 
-                if (paragraphContent.contains("Fleisch:")) {
-                    paragraphContent = paragraphContent.replace("Fleisch:", "\nFleisch:")
-                }
+                // normalize fleisch
+                paragraphContent = paragraphContent.replace("Fleisch:", "\nFleisch:")
+                paragraphContent = paragraphContent.replace("Fleisch :", "\nFleisch:")
 
-                htmlMenu.description += paragraphContent
+                htmlMenu.description += paragraphContent.trim()
             }
         }
     }
