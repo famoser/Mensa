@@ -1,6 +1,7 @@
 package ch.famoser.mensa.models
 
 import android.net.Uri
+import java.net.URI
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -8,7 +9,7 @@ class Mensa(
     val id: UUID,
     val title: String,
     val mealTime: String,
-    val url: Uri,
+    val url: URI,
     val imagePath: String? = null
 ) {
     private val _menus: MutableList<Menu> = ArrayList()

@@ -13,7 +13,8 @@
         android:paddingBottom="4dp"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true">
 
     <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -43,7 +44,7 @@
                         android:textColor="@android:color/white"
                         android:ellipsize="end"
                         android:maxLines="1"
-                        tools:text="very long text which overlaps wutPolyterrasse"/>
+                        tools:text="very long text which overlaps Polyterrasse"/>
 
                 <TextView
                         android:id="@+id/meal_time"

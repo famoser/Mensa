@@ -9,16 +9,16 @@ import java.net.URL
 import java.util.*
 import kotlin.collections.HashMap
 import ch.famoser.mensa.models.Menu
-import ch.famoser.mensa.services.CacheService
-import ch.famoser.mensa.services.SerializationService
+import ch.famoser.mensa.services.*
+import java.net.URI
 import kotlin.collections.ArrayList
 
 
 class ETHMensaProvider(
-    private val cacheService: CacheService,
-    assetManager: AssetManager,
-    private val serializationService: SerializationService
-) : AbstractMensaProvider(cacheService, assetManager, serializationService) {
+    private val cacheService: ICacheService,
+    assetService: IAssetService,
+    private val serializationService: ISerializationService
+) : AbstractMensaProvider(cacheService, assetService, serializationService) {
 
     companion object {
         const val CACHE_PROVIDER_PREFIX = "eth"
@@ -133,7 +133,7 @@ class ETHMensaProvider(
     }
 
     override fun getLocations(): List<Location> {
-        val ethLocations = super.readJsonAssetFileToListOfT("eth/inventory.json", EthLocation::class.java);
+        val ethLocations = super.readJsonAssetFileToListOfT("eth/locations.json", EthLocation::class.java);
 
         return ethLocations.map { ethLocation ->
             Location(ethLocation.title, ethLocation.mensas.map {
@@ -143,7 +143,7 @@ class ETHMensaProvider(
                     mensaId,
                     it.title,
                     it.mealTime,
-                    Uri.parse("https://ethz.ch/de/campus/erleben/gastronomie-und-einkaufen/gastronomie/restaurants-und-cafeterias/" + it.infoUrlSlug),
+                    URI("https://ethz.ch/de/campus/erleben/gastronomie-und-einkaufen/gastronomie/restaurants-und-cafeterias/" + it.infoUrlSlug),
                     "eth/images/$imageName.jpg"
                 )
                 mensaMap[mensa] = it

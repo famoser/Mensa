@@ -1,23 +1,22 @@
 package ch.famoser.mensa.services.providers
 
-import android.content.res.AssetManager
-import android.net.Uri
 import ch.famoser.mensa.models.Location
 import ch.famoser.mensa.models.Mensa
 import ch.famoser.mensa.models.Menu
-import ch.famoser.mensa.services.SerializationService
-import ch.famoser.mensa.services.CacheService
+import ch.famoser.mensa.services.*
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Element
+import java.net.URI
 
 
 class UZHMensaProvider(
-    cacheService: CacheService,
-    assetManager: AssetManager,
-    serializationService: SerializationService
-) : AbstractMensaProvider(cacheService, assetManager, serializationService) {
+    cacheService: ICacheService,
+    assetService: IAssetService,
+    serializationService: ISerializationService
+) : AbstractMensaProvider(cacheService, assetService, serializationService) {
 
     companion object {
         const val CACHE_PROVIDER_PREFIX = "uzh"
@@ -118,50 +117,16 @@ class UZHMensaProvider(
         val menus = ArrayList<HtmlMenu>()
         for (i in 0 until contentDiv.children().size) {
             val activeChild = contentDiv.child(i);
-            if (activeChild.`is`("h3")) {
-                val headerText = activeChild.text()
-                if (headerText.contains("|")) {
-                    if (currentMenu != null) {
-                        menus.add(currentMenu)
-                    }
-
-                    currentMenu = HtmlMenu()
-
-                    //parse header of the form einfach gut | CHF 5.40 / 7.00 / 10.50
-                    val headerParts = headerText.split("|");
-                    currentMenu.title = headerParts.get(0).trim()
-                    currentMenu.price = headerParts.get(1)
-                        .split("/")
-                        .map { it.trim() }
-                        .map {
-                            if (it.startsWith("CHF")) {
-                                it.substring(3).trim()
-                            } else {
-                                it
-                            }
-                        }
-                        .toTypedArray()
+            val newMenu = tryCreateMenuFromHeader(activeChild)
+            if (newMenu != null) {
+                if (currentMenu != null) {
+                    menus.add(currentMenu)
                 }
+
+                currentMenu = newMenu
             }
 
-            if (activeChild.`is`("p") && currentMenu != null) {
-                var paragraphContent = activeChild.textNodes()
-                    .joinToString(separator = "\n", transform = { node -> node.wholeText.trim() }).trim()
-
-                if (paragraphContent.startsWith("Allergikerinformationen: ")) {
-                    currentMenu.allergenInfo = paragraphContent.substring("Allergikerinformationen: ".length)
-                } else {
-                    if (currentMenu.description.isNotEmpty()) {
-                        currentMenu.description += "\n\n";
-                    }
-
-                    if (paragraphContent.contains("Fleisch:")) {
-                        paragraphContent = paragraphContent.replace("Fleisch:", "\nFleisch:")
-                    }
-
-                    currentMenu.description += paragraphContent
-                }
-            }
+            tryFillContent(activeChild, currentMenu)
         }
 
         if (currentMenu != null) {
@@ -171,8 +136,58 @@ class UZHMensaProvider(
         return menus;
     }
 
+    private fun tryFillContent(
+        activeChild: Element,
+        htmlMenu: HtmlMenu?
+    ) {
+        if (activeChild.`is`("p") && htmlMenu != null) {
+            var paragraphContent = activeChild.textNodes()
+                .joinToString(separator = "\n", transform = { node -> node.wholeText.trim() }).trim()
+
+            if (paragraphContent.startsWith("Allergikerinformationen: ")) {
+                htmlMenu.allergenInfo = paragraphContent.substring("Allergikerinformationen: ".length)
+            } else {
+                if (htmlMenu.description.isNotEmpty()) {
+                    htmlMenu.description += "\n\n";
+                }
+
+                if (paragraphContent.contains("Fleisch:")) {
+                    paragraphContent = paragraphContent.replace("Fleisch:", "\nFleisch:")
+                }
+
+                htmlMenu.description += paragraphContent
+            }
+        }
+    }
+
+    private fun tryCreateMenuFromHeader(activeChild: Element): HtmlMenu? {
+        if (activeChild.`is`("h3")) {
+            val headerText = activeChild.text()
+            if (headerText.contains("|")) {
+                val htmlMenu = HtmlMenu()
+
+                //parse header of the form einfach gut | CHF 5.40 / 7.00 / 10.50
+                val headerParts = headerText.split("|");
+                htmlMenu.title = headerParts.get(0).trim()
+                htmlMenu.price = headerParts.get(1)
+                    .split("/")
+                    .map { it.trim() }
+                    .map {
+                        if (it.startsWith("CHF")) {
+                            it.substring(3).trim()
+                        } else {
+                            it
+                        }
+                    }
+                    .toTypedArray()
+
+                return htmlMenu
+            }
+        }
+    }
+
     override fun getLocations(): List<Location> {
-        val uzhLocations = super.readJsonAssetFileToListOfT("uzh/inventory.json", UzhLocation::class.java);
+        val uzhLocations = super.readJsonAssetFileToListOfT("uzh/locations.json", UzhLocation::class.java);
 
         return uzhLocations.map { uzhLocation ->
             Location(uzhLocation.title, uzhLocation.mensas.map {
@@ -180,7 +195,7 @@ class UZHMensaProvider(
                     UUID.fromString(it.id),
                     it.title,
                     it.mealTime,
-                    Uri.parse("http://www.mensa.uzh.ch/de/standorte/${it.infoUrlSlug}.html")
+                    URI("http://www.mensa.uzh.ch/de/standorte/${it.infoUrlSlug}.html")
                 )
                 mensaMap[mensa] = it
                 mensa

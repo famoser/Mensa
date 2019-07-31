@@ -5,8 +5,7 @@ import android.content.res.AssetManager
 import ch.famoser.mensa.models.Location
 import ch.famoser.mensa.models.Mensa
 import ch.famoser.mensa.models.Menu
-import ch.famoser.mensa.services.CacheService
-import ch.famoser.mensa.services.SerializationService
+import ch.famoser.mensa.services.*
 import java.io.IOException
 import java.nio.charset.Charset
 import java.text.SimpleDateFormat
@@ -15,14 +14,14 @@ import kotlin.collections.ArrayList
 
 
 abstract class AbstractMensaProvider(
-    private val cacheService: CacheService,
-    private val assetManager: AssetManager,
-    private val serializationService: SerializationService
+    private val cacheService: ICacheService,
+    private val assetService: IAssetService,
+    private val serializationService: ISerializationService
 ) {
     abstract fun getLocations(): List<Location>
 
     protected fun <T> readJsonAssetFileToListOfT(rawFileName: String, classOfT: Class<T>): List<T> {
-        val json: String = readStringAssetFile(rawFileName) ?: return ArrayList()
+        val json: String = assetService.readStringFile(rawFileName) ?: return ArrayList()
 
         return serializationService.deserializeList(json, classOfT)
     }
@@ -66,21 +65,5 @@ abstract class AbstractMensaProvider(
         normalized = normalized.replace("\n ", "\n")
 
         return normalized;
-    }
-
-    private fun readStringAssetFile(rawFileName: String): String? {
-        var json: String? = null
-        try {
-            val inputStream = assetManager.open(rawFileName)
-            val size = inputStream.available()
-            val buffer = ByteArray(size)
-            inputStream.read(buffer)
-            inputStream.close()
-            json = String(buffer, Charset.forName("UTF-8"))
-        } catch (ex: IOException) {
-            ex.printStackTrace()
-        }
-
-        return json;
     }
 }

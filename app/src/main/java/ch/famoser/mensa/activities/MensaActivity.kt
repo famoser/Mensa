@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.activity_mensa.*
 import java.io.FileNotFoundException
 import java.util.*
 import android.net.Uri
+import org.jetbrains.anko.browse
 
 
 /**
@@ -36,8 +37,7 @@ class MensaActivity : AppCompatActivity() {
         initializeContent(mensa, savedInstanceState)
 
         details_action.setOnClickListener {
-            val browserIntent = Intent(Intent.ACTION_VIEW, mensa.url)
-            startActivity(browserIntent)
+            browse(mensa.url.toString())
         }
     }
 

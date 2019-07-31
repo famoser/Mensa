@@ -1,7 +1,6 @@
 package ch.famoser.mensa.repositories
 
 import android.content.Context
-import android.content.res.AssetManager
 import android.os.AsyncTask
 import android.preference.PreferenceManager
 import ch.famoser.mensa.events.RefreshMensaFinishedEvent
@@ -9,23 +8,22 @@ import ch.famoser.mensa.models.Location
 import ch.famoser.mensa.models.Mensa
 import ch.famoser.mensa.repositories.tasks.RefreshETHMensaTask
 import ch.famoser.mensa.repositories.tasks.RefreshUZHMensaTask
-import ch.famoser.mensa.services.CacheService
-import ch.famoser.mensa.services.SerializationService
+import ch.famoser.mensa.services.*
 import ch.famoser.mensa.services.providers.AbstractMensaProvider
 import ch.famoser.mensa.services.providers.ETHMensaProvider
 import ch.famoser.mensa.services.providers.UZHMensaProvider
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import org.jetbrains.anko.defaultSharedPreferences
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
-import kotlin.math.sign
 
 class LocationRepository internal constructor(
-    private val cacheService: CacheService,
-    assetManager: AssetManager,
-    serializationService: SerializationService
+    private val cacheService: ICacheService,
+    assetService: IAssetService,
+    serializationService: ISerializationService
 ) {
     companion object {
         private var defaultInstance: LocationRepository? = null
@@ -33,12 +31,12 @@ class LocationRepository internal constructor(
         fun getInstance(context: Context): LocationRepository {
             synchronized(this) {
                 if (defaultInstance == null) {
-                    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+                    val sharedPreferences = context.applicationContext.defaultSharedPreferences
                     val serializationService = SerializationService()
                     val cacheService = CacheService(sharedPreferences, serializationService)
-                    val assetManager = context.assets
+                    val assetService = AssetService(context.assets)
 
-                    defaultInstance = LocationRepository(cacheService, assetManager, serializationService)
+                    defaultInstance = LocationRepository(cacheService, assetService, serializationService)
                 }
 
                 return defaultInstance!!
@@ -57,8 +55,8 @@ class LocationRepository internal constructor(
     private val locations: MutableList<Location> = LinkedList()
 
     private var uzhMensas: List<Mensa> = ArrayList()
-    private val ethMensaProvider = ETHMensaProvider(cacheService, assetManager, serializationService)
-    private val uzhMensaProvider = UZHMensaProvider(cacheService, assetManager, serializationService)
+    private val ethMensaProvider = ETHMensaProvider(cacheService, assetService, serializationService)
+    private val uzhMensaProvider = UZHMensaProvider(cacheService, assetService, serializationService)
 
     fun getLocations(): MutableList<Location> {
         if (!initialized) {
