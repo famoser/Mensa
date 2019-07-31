@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-            <FrameLayout
+            <LinearLayout
                     android:id="@+id/header_wrapper"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -34,17 +34,20 @@
 
                 <TextView
                         android:id="@+id/title"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/text_margin"
                         android:textAppearance="?attr/textAppearanceListItem"
                         android:textStyle="bold"
                         android:textColor="@android:color/white"
-                        tools:text="Polyterrasse"/>
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        tools:text="very long text which overlaps wutPolyterrasse"/>
 
                 <TextView
                         android:id="@+id/meal_time"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/text_margin"
                         android:textAlignment="viewEnd"
@@ -52,7 +55,7 @@
                         android:textColor="@android:color/white"
                         tools:text="11:15 - 13:30"/>
 
-            </FrameLayout>
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/menu_list"
