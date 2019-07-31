@@ -7,7 +7,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -31,7 +30,7 @@ class MenuDetailsAdapter constructor(
             val clipboardManager = activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             clipboardManager.setPrimaryClip(clip)
 
-            Toast.makeText(activity, "Copied to clipboard", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "Copied to clipboard", Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -23,6 +23,6 @@ class AssetService(private val assetManager: AssetManager) : IAssetService {
             ex.printStackTrace()
         }
 
-        return json;
+        return json
     }
 }

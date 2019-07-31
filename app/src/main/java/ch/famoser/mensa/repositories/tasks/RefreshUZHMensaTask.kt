@@ -2,14 +2,12 @@ package ch.famoser.mensa.repositories.tasks
 
 import android.os.AsyncTask
 import ch.famoser.mensa.events.MensaMenuUpdatedEvent
-import ch.famoser.mensa.events.RefreshMensaProgressEvent
 import ch.famoser.mensa.events.RefreshMensaFinishedEvent
+import ch.famoser.mensa.events.RefreshMensaProgressEvent
 import ch.famoser.mensa.events.RefreshMensaStartedEvent
-import ch.famoser.mensa.services.providers.AbstractMensaProvider
 import ch.famoser.mensa.models.Mensa
 import ch.famoser.mensa.services.providers.UZHMensaProvider
 import org.greenrobot.eventbus.EventBus
-import java.time.LocalDate
 import java.util.*
 
 class RefreshUZHMensaTask(
@@ -24,7 +22,7 @@ class RefreshUZHMensaTask(
 
     override fun doInBackground(vararg mensas: Mensa) {
         for ((current, mensa) in mensas.withIndex()) {
-            val refreshSuccessful = mensaProvider.getMenus(mensa, date, language, ignoreCache);
+            val refreshSuccessful = mensaProvider.getMenus(mensa, date, language, ignoreCache)
 
             if (isCancelled) return
             publishProgress(mensas.size, current)
@@ -47,6 +45,6 @@ class RefreshUZHMensaTask(
 
     override fun onProgressUpdate(vararg values: Int?) {
         super.onProgressUpdate(*values)
-        EventBus.getDefault().post(RefreshMensaProgressEvent(asyncTaskId, values.get(0)!!, values.get(1)!!))
+        EventBus.getDefault().post(RefreshMensaProgressEvent(asyncTaskId, values[0]!!, values[1]!!))
     }
 }

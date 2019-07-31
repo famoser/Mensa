@@ -73,9 +73,9 @@ class CacheService(
         return cacheKey
     }
 
-    private enum class CacheType(private val value: String) {
-        Menu("menu"),
-        MensaIds("mensaIds")
+    private enum class CacheType {
+        Menu,
+        MensaIds
     }
 
 }

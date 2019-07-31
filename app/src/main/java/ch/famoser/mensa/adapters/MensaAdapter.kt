@@ -1,8 +1,6 @@
 package ch.famoser.mensa.adapters
 
 import android.content.Context
-import android.content.Intent
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +14,6 @@ import ch.famoser.mensa.models.Mensa
 import kotlinx.android.synthetic.main.row_mensa.view.*
 import java.util.*
 import kotlin.collections.HashMap
-import androidx.core.app.ActivityOptionsCompat
 
 
 class MensaAdapter constructor(
@@ -25,7 +22,7 @@ class MensaAdapter constructor(
     private val twoPane: Boolean
 ) : RecyclerView.Adapter<MensaAdapter.ViewHolder>() {
     companion object {
-        val MensaMenusVisibilitySettingPrefix = "MensaMenusVisibility"
+        const val MensaMenusVisibilitySettingPrefix = "MensaMenusVisibility"
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -38,11 +35,11 @@ class MensaAdapter constructor(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val mensa = values[position]
-        viewHoldersByMensaId.put(mensa.id, holder);
+        viewHoldersByMensaId[mensa.id] = holder
 
         holder.titleView.text = mensa.title
         setOpeningTimes(mensa, holder)
-        holder.menuView.adapter = MenuAdapter(parentActivity, mensa.menus, twoPane);
+        holder.menuView.adapter = MenuAdapter(parentActivity, mensa.menus, twoPane)
         holder.menuView.addItemDecoration(
             DividerItemDecoration(
                 parentActivity,
@@ -84,7 +81,7 @@ class MensaAdapter constructor(
     override fun getItemCount() = values.size
 
     fun mensaMenusRefreshed(mensaId: UUID) {
-        val viewHolder = viewHoldersByMensaId[mensaId];
+        val viewHolder = viewHoldersByMensaId[mensaId]
         if (viewHolder != null) {
             viewHolder.menuView.adapter?.notifyDataSetChanged()
 
@@ -99,7 +96,7 @@ class MensaAdapter constructor(
             viewHolder.headerWrapper.background =
                 ContextCompat.getDrawable(parentActivity.applicationContext, R.color.colorPrimary)
         } else {
-            viewHolder.openingTimesView.text = "closed"
+            viewHolder.openingTimesView.text = parentActivity.getString(R.string.closed)
             viewHolder.headerWrapper.background =
                 ContextCompat.getDrawable(parentActivity.applicationContext, R.color.colorPrimaryLight)
         }

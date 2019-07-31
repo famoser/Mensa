@@ -3,17 +3,16 @@ package ch.famoser.mensa.activities
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import ch.famoser.mensa.R
 import ch.famoser.mensa.fragments.MensaDetailFragment
 import ch.famoser.mensa.models.Mensa
 import ch.famoser.mensa.repositories.LocationRepository
 import kotlinx.android.synthetic.main.activity_mensa.*
+import org.jetbrains.anko.browse
 import java.io.FileNotFoundException
 import java.util.*
-import android.net.Uri
-import org.jetbrains.anko.browse
 
 
 /**
@@ -55,18 +54,18 @@ class MensaActivity : AppCompatActivity() {
     private fun loadMensaImage(imagePath: String) {
         try {
             val mensaImageFile = assets.open(imagePath)
-            val mensaImage = Drawable.createFromStream(mensaImageFile, null);
-            image.setImageDrawable(mensaImage);
+            val mensaImage = Drawable.createFromStream(mensaImageFile, null)
+            image.setImageDrawable(mensaImage)
         } catch (exception: FileNotFoundException) {
             // no image is OK
         }
     }
 
     private fun loadMensaFromIntent(): Mensa? {
-        val mensaId = UUID.fromString(intent.getStringExtra(MensaDetailFragment.MENSA_ID));
+        val mensaId = UUID.fromString(intent.getStringExtra(MensaDetailFragment.MENSA_ID))
 
-        val locationRepository = LocationRepository.getInstance(this);
-        val mensa = locationRepository.getMensa(mensaId);
+        val locationRepository = LocationRepository.getInstance(this)
+        val mensa = locationRepository.getMensa(mensaId)
 
         return mensa
     }

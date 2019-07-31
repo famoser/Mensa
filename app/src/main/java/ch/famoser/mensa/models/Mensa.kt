@@ -1,6 +1,5 @@
 package ch.famoser.mensa.models
 
-import android.net.Uri
 import java.net.URI
 import java.util.*
 import kotlin.collections.ArrayList

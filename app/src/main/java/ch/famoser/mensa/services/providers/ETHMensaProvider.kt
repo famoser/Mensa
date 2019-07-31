@@ -1,17 +1,17 @@
 package ch.famoser.mensa.services.providers
 
 import android.annotation.SuppressLint
-import android.content.res.AssetManager
-import android.net.Uri
 import ch.famoser.mensa.models.Location
 import ch.famoser.mensa.models.Mensa
+import ch.famoser.mensa.models.Menu
+import ch.famoser.mensa.services.IAssetService
+import ch.famoser.mensa.services.ICacheService
+import ch.famoser.mensa.services.ISerializationService
+import java.net.URI
 import java.net.URL
 import java.util.*
-import kotlin.collections.HashMap
-import ch.famoser.mensa.models.Menu
-import ch.famoser.mensa.services.*
-import java.net.URI
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class ETHMensaProvider(
@@ -97,7 +97,7 @@ class ETHMensaProvider(
     }
 
     private fun getMensaIdCacheKey(date: Date, source: String, language: String): String {
-        val dateSlug = getDateTimeString(date);
+        val dateSlug = getDateTimeString(date)
         return "$CACHE_PROVIDER_PREFIX.$source.$dateSlug.$language"
     }
 
@@ -107,11 +107,11 @@ class ETHMensaProvider(
         date: Date,
         time: String
     ): Map<String, List<Menu>> {
-        val dateSlug = getDateTimeString(date);
+        val dateSlug = getDateTimeString(date)
         val json = URL("https://www.webservices.ethz.ch/gastro/v1/RVRI/Q1E1/meals/$language/$dateSlug/$time")
             .readText()
 
-        val apiMensas = serializationService.deserializeList(json, ApiMensa::class.java);
+        val apiMensas = serializationService.deserializeList(json, ApiMensa::class.java)
 
         val menuByMensaIds = HashMap<String, List<Menu>>()
         for (apiMensa in apiMensas) {
@@ -133,7 +133,7 @@ class ETHMensaProvider(
     }
 
     override fun getLocations(): List<Location> {
-        val ethLocations = super.readJsonAssetFileToListOfT("eth/locations.json", EthLocation::class.java);
+        val ethLocations = super.readJsonAssetFileToListOfT("eth/locations.json", EthLocation::class.java)
 
         return ethLocations.map { ethLocation ->
             Location(ethLocation.title, ethLocation.mensas.map {

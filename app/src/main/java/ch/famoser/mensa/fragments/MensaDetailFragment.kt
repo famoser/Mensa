@@ -1,7 +1,5 @@
 package ch.famoser.mensa.fragments
 
-import android.content.ClipboardManager
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -27,10 +25,10 @@ class MensaDetailFragment : Fragment() {
 
         arguments?.let {
             if (it.containsKey(MENSA_ID)) {
-                val mensaId = UUID.fromString(it.getString(MENSA_ID));
+                val mensaId = UUID.fromString(it.getString(MENSA_ID))
 
-                val locationRepository = LocationRepository.getInstance(context!!);
-                item = locationRepository.getMensa(mensaId);
+                val locationRepository = LocationRepository.getInstance(context!!)
+                item = locationRepository.getMensa(mensaId)
 
                 activity?.toolbar_layout?.title = item?.title
             }
@@ -46,7 +44,7 @@ class MensaDetailFragment : Fragment() {
         val mensa = item ?: return rootView
         val activity = activity ?: return rootView
 
-        val menuDetailsAdapter = MenuDetailsAdapter(mensa.menus, activity);
+        val menuDetailsAdapter = MenuDetailsAdapter(mensa.menus, activity)
         rootView.menu_details_list.adapter = menuDetailsAdapter
 
         return rootView

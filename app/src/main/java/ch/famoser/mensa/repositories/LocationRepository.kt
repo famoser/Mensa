@@ -2,7 +2,6 @@ package ch.famoser.mensa.repositories
 
 import android.content.Context
 import android.os.AsyncTask
-import android.preference.PreferenceManager
 import ch.famoser.mensa.events.RefreshMensaFinishedEvent
 import ch.famoser.mensa.models.Location
 import ch.famoser.mensa.models.Mensa
@@ -85,7 +84,7 @@ class LocationRepository internal constructor(
 
         this.locations.addAll(locations)
 
-        return mensas;
+        return mensas
     }
 
     fun refresh(today: Date, language: String, ignoreCache: Boolean = false) {

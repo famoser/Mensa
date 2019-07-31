@@ -1,13 +1,11 @@
 package ch.famoser.mensa.services.providers
 
 import android.annotation.SuppressLint
-import android.content.res.AssetManager
 import ch.famoser.mensa.models.Location
-import ch.famoser.mensa.models.Mensa
 import ch.famoser.mensa.models.Menu
-import ch.famoser.mensa.services.*
-import java.io.IOException
-import java.nio.charset.Charset
+import ch.famoser.mensa.services.IAssetService
+import ch.famoser.mensa.services.ICacheService
+import ch.famoser.mensa.services.ISerializationService
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -44,9 +42,9 @@ abstract class AbstractMensaProvider(
         date: Date,
         language: String
     ): String {
-        val dateSlug = getDateTimeString(date);
-        val cacheKey = "$providerPrefix.$mensaId.$dateSlug.$language"
-        return cacheKey
+        val dateSlug = getDateTimeString(date)
+
+        return "$providerPrefix.$mensaId.$dateSlug.$language"
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -64,6 +62,6 @@ abstract class AbstractMensaProvider(
         normalized = normalized.replace(" \n", "\n")
         normalized = normalized.replace("\n ", "\n")
 
-        return normalized;
+        return normalized
     }
 }

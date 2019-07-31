@@ -5,4 +5,5 @@
     <string name="share">teilen</string>
     <string name="no_menus_loaded">Keine Internetverbindung oder keine Menus heute.</string>
     <string name="currency">CHF</string>
+    <string name="closed">geschlossen</string>
 </resources>

@@ -1,7 +1,9 @@
 package ch.famoser.mensa.activities
 
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
+import ch.famoser.mensa.R
 import ch.famoser.mensa.adapters.LocationAdapter
 import ch.famoser.mensa.events.MensaMenuUpdatedEvent
 import ch.famoser.mensa.events.RefreshMensaFinishedEvent
@@ -14,12 +16,7 @@ import kotlinx.android.synthetic.main.content_main.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.time.LocalDate
-import android.os.Parcelable
-import android.view.View
-import ch.famoser.mensa.R
 import org.jetbrains.anko.toast
-import java.time.Instant
 import java.util.*
 
 
@@ -49,7 +46,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(ch.famoser.mensa.R.layout.activity_main)
+        setContentView(R.layout.activity_main)
 
         if (details_container != null) {
             // The detail container view will be present only in the
@@ -69,12 +66,12 @@ class MainActivity : AppCompatActivity() {
         this.locationListAdapter = locationAdapter
 
         if (locationListScrollState != null) {
-            location_list.onRestoreInstanceState(locationListScrollState);
+            location_list.onRestoreInstanceState(locationListScrollState)
         }
 
         EventBus.getDefault().register(this)
 
-        val language = Locale.getDefault().getLanguage()
+        val language = Locale.getDefault().language
         locationRepository.refresh(Date(System.currentTimeMillis()), language)
 
         swipeContainer.setOnRefreshListener {

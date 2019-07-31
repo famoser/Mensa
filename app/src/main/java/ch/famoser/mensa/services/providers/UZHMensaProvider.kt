@@ -3,13 +3,15 @@ package ch.famoser.mensa.services.providers
 import ch.famoser.mensa.models.Location
 import ch.famoser.mensa.models.Mensa
 import ch.famoser.mensa.models.Menu
-import ch.famoser.mensa.services.*
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
+import ch.famoser.mensa.services.IAssetService
+import ch.famoser.mensa.services.ICacheService
+import ch.famoser.mensa.services.ISerializationService
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import java.net.URI
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class UZHMensaProvider(
@@ -83,7 +85,7 @@ class UZHMensaProvider(
     ): List<Menu>? {
         val dayOfWeek = getDayOfWeekForApi(date) ?: return null
         val apiUrl = "https://www.mensa.uzh.ch/$language/menueplaene/${uzhMensa.apiUrlSlug}/$dayOfWeek.html"
-        val htmlMenus = parseMensaHtml(apiUrl);
+        val htmlMenus = parseMensaHtml(apiUrl)
 
         return htmlMenus.map {
             val price = if (it.price != null) it.price!! else arrayOf()
@@ -96,16 +98,14 @@ class UZHMensaProvider(
         val calender = Calendar.getInstance()
         calender.time = date
 
-        val dayOfWeek = calender.get(Calendar.DAY_OF_WEEK)
-
-        return when (dayOfWeek) {
+        return when (calender.get(Calendar.DAY_OF_WEEK)) {
             Calendar.MONDAY -> "montag"
             Calendar.TUESDAY -> "dienstag"
             Calendar.WEDNESDAY -> "mittwoch"
             Calendar.THURSDAY -> "donnerstag"
             Calendar.FRIDAY -> "freitag"
             else -> null
-        };
+        }
     }
 
     private fun parseMensaHtml(url: String): List<HtmlMenu> {
@@ -116,7 +116,7 @@ class UZHMensaProvider(
         var currentMenu: HtmlMenu? = null
         val menus = ArrayList<HtmlMenu>()
         for (i in 0 until contentDiv.children().size) {
-            val activeChild = contentDiv.child(i);
+            val activeChild = contentDiv.child(i)
             val newMenu = tryCreateMenuFromHeader(activeChild)
             if (newMenu != null) {
                 if (currentMenu != null) {
@@ -133,7 +133,7 @@ class UZHMensaProvider(
             menus.add(currentMenu)
         }
 
-        return menus;
+        return menus
     }
 
     private fun tryFillContent(
@@ -148,7 +148,7 @@ class UZHMensaProvider(
                 htmlMenu.allergenInfo = paragraphContent.substring("Allergikerinformationen: ".length)
             } else {
                 if (htmlMenu.description.isNotEmpty()) {
-                    htmlMenu.description += "\n\n";
+                    htmlMenu.description += "\n\n"
                 }
 
                 if (paragraphContent.contains("Fleisch:")) {
@@ -167,9 +167,9 @@ class UZHMensaProvider(
                 val htmlMenu = HtmlMenu()
 
                 //parse header of the form einfach gut | CHF 5.40 / 7.00 / 10.50
-                val headerParts = headerText.split("|");
-                htmlMenu.title = headerParts.get(0).trim()
-                htmlMenu.price = headerParts.get(1)
+                val headerParts = headerText.split("|")
+                htmlMenu.title = headerParts[0].trim()
+                htmlMenu.price = headerParts[1]
                     .split("/")
                     .map { it.trim() }
                     .map {
@@ -184,10 +184,12 @@ class UZHMensaProvider(
                 return htmlMenu
             }
         }
+
+        return null
     }
 
     override fun getLocations(): List<Location> {
-        val uzhLocations = super.readJsonAssetFileToListOfT("uzh/locations.json", UzhLocation::class.java);
+        val uzhLocations = super.readJsonAssetFileToListOfT("uzh/locations.json", UzhLocation::class.java)
 
         return uzhLocations.map { uzhLocation ->
             Location(uzhLocation.title, uzhLocation.mensas.map {
