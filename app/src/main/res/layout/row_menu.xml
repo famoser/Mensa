@@ -20,11 +20,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:gravity="end"
             android:layout_margin="@dimen/text_margin">
 
         <TextView
                 android:id="@+id/title"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="viewEnd"
                 android:textAppearance="?attr/textAppearanceListItem"

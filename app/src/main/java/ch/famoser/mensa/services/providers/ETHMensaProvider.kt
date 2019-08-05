@@ -116,13 +116,30 @@ class ETHMensaProvider(
         val menuByMensaIds = HashMap<String, List<Menu>>()
         for (apiMensa in apiMensas) {
             val menus = apiMensa.meals.map { apiMeal ->
+                var label = apiMeal.label
+                var descriptionLines = apiMeal.description
+                if (label.isEmpty() && apiMeal.description.isNotEmpty()) {
+                    label = apiMeal.description.first()
+                    descriptionLines = descriptionLines.subList(1, descriptionLines.size - 1)
+                }
+
+                val description = normalizeText(descriptionLines.joinToString(separator = "\n").trim())
+
+                val prices = apiMeal.prices
+                    .run { arrayOf<String?>(student, staff, extern) }
+                    .filterNot { it.isNullOrEmpty() }
+                    .filterNotNull()
+                    .toTypedArray()
+
+                val allergens = apiMeal.allergens
+                    .fold(ArrayList<String>(), { acc, apiAllergen -> acc.add(apiAllergen.label); acc })
+                    .joinToString(separator = ", ")
+                
                 Menu(
-                    apiMeal.label,
-                    normalizeText(apiMeal.description.joinToString(separator = "\n").trim()),
-                    apiMeal.prices.run { arrayOf<String?>(student, staff, extern) }.filterNot { it.isNullOrEmpty() }.filterNotNull().toTypedArray(),
-                    apiMeal.allergens
-                        .fold(ArrayList<String>(), { acc, apiAllergen -> acc.add(apiAllergen.label); acc })
-                        .joinToString(separator = ", ")
+                    label,
+                    description,
+                    prices,
+                    allergens
                 )
             }
 
