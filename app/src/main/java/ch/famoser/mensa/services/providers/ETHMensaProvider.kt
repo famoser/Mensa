@@ -134,7 +134,7 @@ class ETHMensaProvider(
                 val allergens = apiMeal.allergens
                     .fold(ArrayList<String>(), { acc, apiAllergen -> acc.add(apiAllergen.label); acc })
                     .joinToString(separator = ", ")
-                
+
                 Menu(
                     label,
                     description,
