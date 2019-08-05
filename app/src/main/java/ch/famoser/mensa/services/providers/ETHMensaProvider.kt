@@ -118,8 +118,8 @@ class ETHMensaProvider(
             val menus = apiMensa.meals.map { apiMeal ->
                 Menu(
                     apiMeal.label,
-                    normalizeText(apiMeal.description.joinToString(separator = "\n")),
-                    apiMeal.prices.run { arrayOf<String?>(student, staff, extern) }.filterNotNull().toTypedArray(),
+                    normalizeText(apiMeal.description.joinToString(separator = "\n").trim()),
+                    apiMeal.prices.run { arrayOf<String?>(student, staff, extern) }.filterNot { it.isNullOrEmpty() }.filterNotNull().toTypedArray(),
                     apiMeal.allergens
                         .fold(ArrayList<String>(), { acc, apiAllergen -> acc.add(apiAllergen.label); acc })
                         .joinToString(separator = ", ")
