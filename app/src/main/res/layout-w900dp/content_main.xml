@@ -4,8 +4,6 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:layout_marginLeft="16dp"
-              android:layout_marginRight="16dp"
               android:baselineAligned="false"
               android:divider="?android:attr/dividerHorizontal"
               android:orientation="horizontal"
@@ -31,6 +29,6 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            tools:context="ch.famoser.mensa.activities.MainActivity"/>
+            tools:context="ch.famoser.mensa.activities.MainActivity" />
 
 </LinearLayout>

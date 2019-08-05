@@ -42,7 +42,11 @@ class MenuDetailsAdapter constructor(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
-        holder.titleView.text = item.title
+        if (item.title.isEmpty()) {
+            holder.titleView.visibility = View.GONE
+        } else {
+            holder.titleView.text = item.title
+        }
         holder.descriptionView.text = item.description
         holder.priceView.text = item.price.joinToString(separator = " / ")
         if (item.allergens != null && item.allergens.isNotEmpty()) {
