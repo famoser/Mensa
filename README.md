@@ -6,6 +6,21 @@
 
 eth & uzh mensas in zurich
 
-Overview             |  Mensa View
-:-------------------------:|:-------------------------:
-![Alt text](assets/screenshot_main.jpg?raw=true "Screenshot Main") | ![Alt text](assets/screenshot_mensa.jpg?raw=true "Screenshot Mensa")
+<table>
+    <tbody>
+        <tr>
+            <td>Overview</td>
+            <td>Mensa View</td>
+        </tr>
+        <tr>
+            <td><img src="assets/screenshot_main.jpg?raw=true" alt="Screenshot Main"></td>
+            <td><img src="assets/screenshot_mensa.jpg?raw=true" alt="Screenshot Mensa"></td>
+        </tr>
+        <tr>
+            <td colspan="2">Tablet view</td>
+        </tr>
+        <tr>
+            <td colspan="2"><img src="assets/screenshot_tablet.jpg?raw=true" alt="Screenshot Tablet"></td>
+        </tr>
+    </tbody>
+</table>
