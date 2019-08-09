@@ -19,7 +19,7 @@ android:
  
 script:
   - ./gradlew build 
-  - ./gradlew sonarqube
+  - test $TRAVIS_PULL_REQUEST != "false" || ./gradlew sonarqube
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock

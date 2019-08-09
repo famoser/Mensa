@@ -15,7 +15,7 @@
             android:name="ch.famoser.mensa.ItemListFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layoutManager="LinearLayoutManager"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/row_menu_details"
             tools:itemCount="3"/>
 

@@ -29,6 +29,7 @@
                     tools:context=".activities.MainActivity"
                     tools:listitem="@layout/row_location"
                     tools:itemCount="1"
+                    android:descendantFocusability="blocksDescendants"
                     tools:layout_height="200sp"/>
 
             <LinearLayout
