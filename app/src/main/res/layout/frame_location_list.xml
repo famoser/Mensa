@@ -35,22 +35,14 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
                     android:orientation="horizontal"
+                    android:gravity="end"
             >
-
-                <TextView
-                        android:id="@+id/made_by"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                        android:text="@string/made_by"
-                />
 
                 <TextView
                         android:id="@+id/source"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                         android:text="@string/source"
                 />
             </LinearLayout>

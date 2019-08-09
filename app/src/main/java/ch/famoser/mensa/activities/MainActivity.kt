@@ -57,7 +57,6 @@ class MainActivity : AppCompatActivity() {
             twoPane = true
         }
 
-        made_by.movementMethod = LinkMovementMethod.getInstance()
         source.movementMethod = LinkMovementMethod.getInstance()
 
         this.refreshMensaEventProcessor = ProgressCollector(swipeContainer, downloadProgress)
