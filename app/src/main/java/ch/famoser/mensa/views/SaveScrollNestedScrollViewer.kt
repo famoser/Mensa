@@ -3,9 +3,9 @@ package ch.famoser.mensa.views
 import android.content.Context
 import android.os.Parcelable
 import android.util.AttributeSet
-import androidx.recyclerview.widget.RecyclerView
+import androidx.core.widget.NestedScrollView
 
-class SaveScrollRecyclerView : RecyclerView {
+class SaveScrollNestedScrollViewer : NestedScrollView {
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attributes: AttributeSet) : super(context, attributes)
