@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         this.locationListAdapter = locationAdapter
 
         if (locationListScrollState != null) {
-            location_list.onRestoreInstanceState(locationListScrollState)
+            location_list_scroll_viewer.onRestoreInstanceState(locationListScrollState)
         }
 
         EventBus.getDefault().register(this)
@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
 
     public override fun onPause() {
         // Save ListView locationListScrollState @ onPause
-        locationListScrollState = location_list.onSaveInstanceState()
+        locationListScrollState = location_list_scroll_viewer.onSaveInstanceState()
         super.onPause()
     }
 

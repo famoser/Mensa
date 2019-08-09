@@ -8,7 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <androidx.core.widget.NestedScrollView
+    <ch.famoser.mensa.views.SaveScrollNestedScrollViewer
+            android:id="@+id/location_list_scroll_viewer"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -18,7 +19,7 @@
                 android:layout_height="wrap_content">
 
 
-            <ch.famoser.mensa.views.SaveScrollRecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/location_list"
                     android:name="ch.famoser.mensa.ItemListFragment"
                     android:layout_width="match_parent"
@@ -47,6 +48,6 @@
                 />
             </LinearLayout>
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+    </ch.famoser.mensa.views.SaveScrollNestedScrollViewer>
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
