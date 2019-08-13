@@ -14,7 +14,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
-class UZHMensaProvider(
+class UZHRSSMensaProvider(
     cacheService: ICacheService,
     assetService: IAssetService,
     serializationService: ISerializationService
@@ -84,8 +84,8 @@ class UZHMensaProvider(
         language: String
     ): List<Menu>? {
         val dayOfWeek = getDayOfWeekForApi(date) ?: return null
-        val apiUrl = "https://www.mensa.uzh.ch/$language/menueplaene/${uzhMensa.apiUrlSlug}/$dayOfWeek.html"
-        val htmlMenus = parseMensaHtml(apiUrl)
+        val apiUrl = "https://zfv.ch/$language/menus/rssMenuPlan?menuId=${uzhMensa.idSlug}&type=uzh2&dayOfWeek=$dayOfWeek"
+        val htmlMenus = parseMensaRSS(apiUrl)
 
         return htmlMenus.map {
             val price = if (it.price != null) it.price!! else arrayOf()
@@ -94,23 +94,22 @@ class UZHMensaProvider(
         }
     }
 
-    private fun getDayOfWeekForApi(date: Date): String? {
+    private fun getDayOfWeekForApi(date: Date): Int? {
         val calender = Calendar.getInstance()
         calender.time = date
 
         return when (calender.get(Calendar.DAY_OF_WEEK)) {
-            Calendar.MONDAY -> "montag"
-            Calendar.TUESDAY -> "dienstag"
-            Calendar.WEDNESDAY -> "mittwoch"
-            Calendar.THURSDAY -> "donnerstag"
-            Calendar.FRIDAY -> "freitag"
+            Calendar.MONDAY -> 1
+            Calendar.TUESDAY -> 2
+            Calendar.WEDNESDAY -> 3
+            Calendar.THURSDAY -> 4
+            Calendar.FRIDAY -> 5
             else -> null
         }
     }
-
-    private fun parseMensaHtml(url: String): List<HtmlMenu> {
+    private fun parseMensaRSS(url: String): List<HtmlMenu> {
         val doc = Jsoup.connect(url).get()
-        val newslistDiv = doc.select("#main .mod-newslist .newslist-description").first()
+        val newslistDiv = doc.select("summary").first()
         val contentDiv = newslistDiv.child(0)
 
         var currentMenu: HtmlMenu? = null
@@ -219,7 +218,7 @@ class UZHMensaProvider(
         val id: String,
         val title: String,
         val mealTime: String,
-        val apiUrlSlug: String,
+        val idSlug: Int,
         val infoUrlSlug: String
     )
 }

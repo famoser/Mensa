@@ -7,7 +7,7 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import java.util.*
 
-class UZHMensaProviderTest {
+class UZHHtmlMensaProviderTest {
     private fun getUzhLocationsJson(): String {
         return """
         [
@@ -33,7 +33,7 @@ class UZHMensaProviderTest {
         val cacheService = NoCacheService()
         val inMemoryAssetService = InMemoryAssetService(mapOf("uzh/locations.json" to getUzhLocationsJson()))
         val serializationService = SerializationService()
-        val provider = UZHMensaProvider(cacheService, inMemoryAssetService, serializationService)
+        val provider = UZHHtmlMensaProvider(cacheService, inMemoryAssetService, serializationService)
 
         val c = Calendar.getInstance()
         c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
