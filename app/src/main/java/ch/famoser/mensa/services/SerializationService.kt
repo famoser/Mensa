@@ -2,16 +2,17 @@ package ch.famoser.mensa.services
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
+import java.lang.reflect.Type
 
 interface ISerializationService {
-    fun <T> deserializeList(json: String, entryClassOfT: Class<T>): List<T>
+    fun <T> deserializeList(json: String, type: Type): List<T>
     fun <T : Any> serialize(request: T): String
 }
 
 class SerializationService : ISerializationService {
-    override fun <T> deserializeList(json: String, entryClassOfT: Class<T>): List<T> {
+    override fun <T> deserializeList(json: String, type: Type): List<T> {
         val moshi = Moshi.Builder().build()
-        val listOfT = Types.newParameterizedType(List::class.java, entryClassOfT)
+        val listOfT = Types.newParameterizedType(List::class.java, type)
         val jsonAdapter = moshi.adapter<List<T>>(listOfT)
 
         return jsonAdapter.fromJson(json)!!

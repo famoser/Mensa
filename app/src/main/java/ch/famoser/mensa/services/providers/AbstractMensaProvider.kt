@@ -6,6 +6,8 @@ import ch.famoser.mensa.models.Menu
 import ch.famoser.mensa.services.IAssetService
 import ch.famoser.mensa.services.ICacheService
 import ch.famoser.mensa.services.ISerializationService
+import java.lang.reflect.ParameterizedType
+import java.lang.reflect.Type
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -19,12 +21,25 @@ abstract class AbstractMensaProvider(
     abstract fun getLocations(): List<Location>
 
     protected fun <T> readJsonAssetFileToListOfT(rawFileName: String, classOfT: Class<T>): List<T> {
-        val json: String = assetService.readStringFile(rawFileName) ?: return ArrayList()
-
-        return serializationService.deserializeList(json, classOfT)
+        return readJsonAssetFileToListOfT(rawFileName, classOfT as Type)
     }
 
-    protected fun tryGetMenusFromCache(providerPrefix: String, mensaId: String, date: Date, language: String): List<Menu>? {
+    protected fun <T> readJsonAssetFileToListOfT(rawFileName: String, parameterizedType: ParameterizedType): List<T> {
+        return readJsonAssetFileToListOfT(rawFileName, parameterizedType as Type)
+    }
+
+    private fun <T> readJsonAssetFileToListOfT(rawFileName: String, type: Type): List<T> {
+        val json: String = assetService.readStringFile(rawFileName) ?: return ArrayList()
+
+        return serializationService.deserializeList(json, type)
+    }
+
+    protected fun tryGetMenusFromCache(
+        providerPrefix: String,
+        mensaId: String,
+        date: Date,
+        language: String
+    ): List<Menu>? {
         val cacheKey = getCacheKey(providerPrefix, mensaId, date, language)
 
         return cacheService.readMenus(cacheKey)
