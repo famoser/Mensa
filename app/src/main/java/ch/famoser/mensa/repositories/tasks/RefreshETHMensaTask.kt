@@ -1,6 +1,6 @@
 package ch.famoser.mensa.repositories.tasks
 
-import ch.famoser.mensa.events.MensaMenuUpdatedEvent
+import ch.famoser.mensa.events.MensasUpdatedEvent
 import ch.famoser.mensa.services.providers.AbstractMensaProvider
 import ch.famoser.mensa.services.providers.ETHMensaProvider
 import org.greenrobot.eventbus.EventBus
@@ -20,9 +20,7 @@ class RefreshETHMensaTask(
             if (isCancelled) return
             publishProgress(times.size, index)
 
-            for (mensa in refreshedMensas) {
-                EventBus.getDefault().post(MensaMenuUpdatedEvent(mensa.id))
-            }
+            EventBus.getDefault().post(MensasUpdatedEvent(refreshedMensas))
         }
     }
 }

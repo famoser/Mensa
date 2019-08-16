@@ -11,6 +11,8 @@ class Mensa(
     val url: URI,
     val imagePath: String? = null
 ) {
+    var location: Location? = null
+
     private val _menus: MutableList<Menu> = ArrayList()
 
     val menus: List<Menu>

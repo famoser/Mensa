@@ -1,6 +1,6 @@
 package ch.famoser.mensa.repositories.tasks
 
-import ch.famoser.mensa.events.MensaMenuUpdatedEvent
+import ch.famoser.mensa.events.MensaUpdatedEvent
 import ch.famoser.mensa.models.Mensa
 import ch.famoser.mensa.services.providers.AbstractMensaProvider
 import ch.famoser.mensa.services.providers.UZHMensaProvider
@@ -23,7 +23,7 @@ class RefreshUZHMensaTask<T : UzhMensa>(
             publishProgress(mensas.size, current)
 
             if (refreshSuccessful) {
-                EventBus.getDefault().post(MensaMenuUpdatedEvent(mensa.id))
+                EventBus.getDefault().post(MensaUpdatedEvent(mensa))
             }
         }
     }

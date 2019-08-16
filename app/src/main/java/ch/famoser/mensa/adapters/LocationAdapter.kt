@@ -8,9 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import ch.famoser.mensa.R
 import ch.famoser.mensa.activities.MainActivity
 import ch.famoser.mensa.models.Location
+import ch.famoser.mensa.models.Mensa
 import kotlinx.android.synthetic.main.row_location.view.*
-import java.util.*
-import kotlin.collections.ArrayList
 
 class LocationAdapter(
     private val parentActivity: MainActivity,
@@ -19,14 +18,14 @@ class LocationAdapter(
 ) :
     RecyclerView.Adapter<LocationAdapter.ViewHolder>() {
 
-    private val mensaAdapters: MutableList<MensaAdapter> = ArrayList()
+    private val mensaAdapterByLocation: MutableMap<Location, MensaAdapter> = HashMap()
     private val displayedLocations: MutableList<DisplayedLocation> = ArrayList()
 
     init {
         for (location in values) {
             val adapter = MensaAdapter(parentActivity, location.mensas, twoPane)
             if (adapter.itemCount > 0) {
-                mensaAdapters.add(adapter)
+                mensaAdapterByLocation.put(location, adapter)
                 displayedLocations.add(DisplayedLocation(location, adapter))
             }
         }
@@ -51,9 +50,18 @@ class LocationAdapter(
 
     override fun getItemCount() = displayedLocations.size
 
-    fun mensaMenusRefreshed(mensaId: UUID) {
-        for (mensaAdapter in mensaAdapters) {
-            mensaAdapter.mensaMenusRefreshed(mensaId)
+    fun mensaUpdated(mensa: Mensa) {
+        val mensaAdapter = mensaAdapterByLocation[mensa.location]
+        mensaAdapter?.mensaMenusRefreshed(mensa.id)
+    }
+
+    fun mensasUpdated(mensas: List<Mensa>) {
+        val groupByLocation = mensas.groupBy { it.location }
+        for (sameLocationMensas in groupByLocation) {
+            val mensaAdapter = mensaAdapterByLocation[sameLocationMensas.key]
+            for (sameLocationMensa in sameLocationMensas.value) {
+                mensaAdapter?.mensaMenusRefreshed(sameLocationMensa.id)
+            }
         }
     }
 

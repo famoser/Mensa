@@ -11,10 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import ch.famoser.mensa.R
 import ch.famoser.mensa.adapters.LocationAdapter
 import ch.famoser.mensa.adapters.MensaAdapter
-import ch.famoser.mensa.events.MensaMenuUpdatedEvent
-import ch.famoser.mensa.events.RefreshMensaFinishedEvent
-import ch.famoser.mensa.events.RefreshMensaProgressEvent
-import ch.famoser.mensa.events.RefreshMensaStartedEvent
+import ch.famoser.mensa.events.*
 import ch.famoser.mensa.models.Location
 import ch.famoser.mensa.repositories.LocationRepository
 import ch.famoser.mensa.services.ProgressCollector
@@ -185,8 +182,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onMensaMenuUpdatedEvent(event: MensaMenuUpdatedEvent) {
-        locationListAdapter.mensaMenusRefreshed(event.mensaId)
+    fun onMensaUpdatedEvent(event: MensaUpdatedEvent) {
+        locationListAdapter.mensaUpdated(event.mensa)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onMensasUpdatedEvent(event: MensasUpdatedEvent) {
+        locationListAdapter.mensasUpdated(event.mensas)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
