@@ -17,55 +17,39 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-            <LinearLayout
-                    android:orientation="vertical"
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/location_list"
+                    android:name="ch.famoser.mensa.ItemListFragment"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
                     android:layout_marginTop="@dimen/card_spacing"
-                    android:gravity="center"
-                    android:layout_height="wrap_content">
+                    app:layoutManager="LinearLayoutManager"
+                    tools:context=".activities.MainActivity"
+                    tools:listitem="@layout/row_location"
+                    tools:itemCount="2"
+                    android:descendantFocusability="blocksDescendants"
+                    tools:layout_height="400sp"/>
 
+            <ViewStub
+                    android:id="@+id/no_favorites"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inflatedId="@+id/no_favorites"
+                    android:layout="@layout/fragment_no_mensa_expanded"/>
 
-                <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/location_list"
-                        android:name="ch.famoser.mensa.ItemListFragment"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:nestedScrollingEnabled="false"
-                        app:layoutManager="LinearLayoutManager"
-                        tools:context=".activities.MainActivity"
-                        tools:listitem="@layout/row_location"
-                        tools:itemCount="2"
-                        android:descendantFocusability="blocksDescendants"
-                        tools:layout_height="400sp"/>
-
-                <TextView
-                        android:id="@+id/no_favorites"
-                        android:visibility="gone"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/card_spacing_eight"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                        android:text="@string/no_expanded_canteens"
-                />
-
-
-                <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/text_margin"
-                        android:orientation="horizontal"
-                        android:gravity="end"
-                >
-
-                    <TextView
-                            android:id="@+id/source"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                            android:text="@string/source"
-                    />
-                </LinearLayout>
-            </LinearLayout>
+            <TextView
+                    android:id="@+id/source"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                    android:text="@string/source"
+                    android:layout_below="@id/location_list"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/text_margin"
+                    android:paddingBottom="@dimen/text_margin"
+                    android:layout_alignParentBottom="true"
+            />
 
             <ImageButton
                     android:id="@+id/settings"

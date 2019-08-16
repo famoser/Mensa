@@ -63,7 +63,6 @@ class MainActivity : AppCompatActivity() {
     private var twoPane: Boolean = false
 
     private lateinit var refreshMensaEventProcessor: ProgressCollector
-    private lateinit var locationRepository: LocationRepository
     private lateinit var locationListAdapter: LocationAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,15 +81,14 @@ class MainActivity : AppCompatActivity() {
 
         this.refreshMensaEventProcessor = ProgressCollector(swipeContainer, downloadProgress)
 
-        this.locationRepository = LocationRepository.getInstance(this.applicationContext)
-        initializeLocationList(locationRepository.getLocations())
-
         if (locationListScrollState != null) {
             location_list_scroll_viewer.onRestoreInstanceState(locationListScrollState)
         }
 
         EventBus.getDefault().register(this)
 
+        val locationRepository = LocationRepository.getInstance(this)
+        initializeLocationList(locationRepository.getLocations())
         locationRepository.refresh(Date(System.currentTimeMillis()), getLanguage())
 
         swipeContainer.setOnRefreshListener { forceRefresh() }
@@ -128,6 +126,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun forceRefresh() {
+        val locationRepository = LocationRepository.getInstance(this.applicationContext)
         locationRepository.refresh(Date(System.currentTimeMillis()), getLanguage(), true)
     }
 
@@ -136,7 +135,8 @@ class MainActivity : AppCompatActivity() {
         location_list.adapter = locationAdapter
         this.locationListAdapter = locationAdapter
 
-        no_favorites.visibility = if (locationAdapter.itemCount == 0) {
+        val noFavorites = findViewById<View>(R.id.no_favorites)
+        noFavorites.visibility = if (locationAdapter.itemCount == 0) {
             View.VISIBLE
         } else {
             View.GONE
@@ -174,6 +174,7 @@ class MainActivity : AppCompatActivity() {
         val currentValue = MensaAdapter.showOnlyFavoriteMensas(this)
         MensaAdapter.saveOnlyFavoriteMensasSetting(this, !currentValue)
 
+        val locationRepository = LocationRepository.getInstance(this)
         initializeLocationList(locationRepository.getLocations())
     }
 
@@ -203,6 +204,7 @@ class MainActivity : AppCompatActivity() {
         refreshMensaEventProcessor.onFinished(event)
 
         // if progress hidden then forceRefresh finished
+        val locationRepository = LocationRepository.getInstance(this)
         if (!locationRepository.refreshActive() && !locationRepository.someMenusLoaded()) {
             toast(R.string.no_menus_loaded)
         }
