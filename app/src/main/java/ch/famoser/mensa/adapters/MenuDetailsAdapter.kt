@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import ch.famoser.mensa.R
 import ch.famoser.mensa.models.Menu
 import kotlinx.android.synthetic.main.row_menu_details.view.*
 
@@ -48,7 +49,14 @@ class MenuDetailsAdapter constructor(
             holder.titleView.text = item.title
         }
         holder.descriptionView.text = item.description
-        holder.priceView.text = item.price.joinToString(separator = " / ")
+
+        if (item.price.isNotEmpty()) {
+            val priceString = item.price.joinToString(separator = " / ");
+            holder.priceView.text = activity.getString(R.string.price, priceString)
+        } else {
+            holder.priceView.visibility = View.GONE;
+        }
+
         if (item.allergens != null && item.allergens.isNotEmpty()) {
             holder.allergensView.text = item.allergens
         } else {

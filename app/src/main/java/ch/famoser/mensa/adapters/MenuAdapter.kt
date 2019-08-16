@@ -57,7 +57,9 @@ class MenuAdapter constructor(
         val item = values[position]
         holder.titleView.text = item.title
         holder.descriptionView.text = item.description
-        holder.priceView.text = item.price.firstOrNull()
+        if (item.price.isNotEmpty()) {
+            holder.priceView.text = parentActivity.getString(R.string.price, item.price.first())
+        }
 
         with(holder.itemView) {
             tag = item
