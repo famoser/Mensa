@@ -1,6 +1,7 @@
 package ch.famoser.mensa.repositories.tasks
 
 import ch.famoser.mensa.events.MensaMenuUpdatedEvent
+import ch.famoser.mensa.services.providers.AbstractMensaProvider
 import ch.famoser.mensa.services.providers.ETHMensaProvider
 import org.greenrobot.eventbus.EventBus
 import java.util.*
@@ -8,7 +9,7 @@ import java.util.*
 class RefreshETHMensaTask(
     private val mensaProvider: ETHMensaProvider,
     private val date: Date,
-    private val language: String,
+    private val language: AbstractMensaProvider.Language,
     private val ignoreCache: Boolean
 ) : AbstractRefreshMensaTask<String>() {
 

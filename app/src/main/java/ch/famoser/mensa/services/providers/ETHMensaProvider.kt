@@ -26,10 +26,10 @@ class ETHMensaProvider(
 
     private val mensaMap: MutableMap<Mensa, EthMensa> = HashMap()
 
-    fun getMenus(time: String, date: Date, language: String, ignoreCache: Boolean)
+    fun getMenus(time: String, date: Date, language: Language, ignoreCache: Boolean)
             : List<Mensa> {
         try {
-            val normalizedLanguage = normalizeLanguage(language)
+            val normalizedLanguage = languageToString(language)
             val menuByMensaIds = getMenuByMensaId(date, ignoreCache, time, normalizedLanguage)
 
             val refreshedMensas = ArrayList<Mensa>()
@@ -46,13 +46,6 @@ class ETHMensaProvider(
             ex.printStackTrace()
 
             return ArrayList()
-        }
-    }
-
-    private fun normalizeLanguage(language: String): String {
-        return when (language) {
-            "de" -> "de"
-            else -> "en"
         }
     }
 

@@ -1,17 +1,24 @@
 package ch.famoser.mensa.activities
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.method.LinkMovementMethod
+import android.view.View
+import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import ch.famoser.mensa.R
 import ch.famoser.mensa.adapters.LocationAdapter
+import ch.famoser.mensa.adapters.MensaAdapter
 import ch.famoser.mensa.events.MensaMenuUpdatedEvent
 import ch.famoser.mensa.events.RefreshMensaFinishedEvent
 import ch.famoser.mensa.events.RefreshMensaProgressEvent
 import ch.famoser.mensa.events.RefreshMensaStartedEvent
+import ch.famoser.mensa.models.Location
 import ch.famoser.mensa.repositories.LocationRepository
 import ch.famoser.mensa.services.ProgressCollector
+import ch.famoser.mensa.services.providers.AbstractMensaProvider
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.frame_location_list.*
@@ -33,6 +40,20 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         var locationListScrollState: Parcelable? = null
+        private const val InvertLanguageSetting = "InvertLanguage"
+
+        fun saveInvertLanguage(context: Activity, value: Boolean) {
+            val sharedPreferences = context.getPreferences(Context.MODE_PRIVATE) ?: return
+            sharedPreferences
+                .edit()
+                .putBoolean(InvertLanguageSetting, value)
+                .apply()
+        }
+
+        fun invertLanguage(context: Activity): Boolean {
+            val sharedPreferences = context.getPreferences(Context.MODE_PRIVATE) ?: return false
+            return sharedPreferences.getBoolean(InvertLanguageSetting, false)
+        }
     }
 
     /**
@@ -62,11 +83,7 @@ class MainActivity : AppCompatActivity() {
         this.refreshMensaEventProcessor = ProgressCollector(swipeContainer, downloadProgress)
 
         this.locationRepository = LocationRepository.getInstance(this.applicationContext)
-        val locations = locationRepository.getLocations()
-
-        val locationAdapter = LocationAdapter(this, twoPane, locations)
-        location_list.adapter = locationAdapter
-        this.locationListAdapter = locationAdapter
+        initializeLocationList(locationRepository.getLocations())
 
         if (locationListScrollState != null) {
             location_list_scroll_viewer.onRestoreInstanceState(locationListScrollState)
@@ -74,12 +91,90 @@ class MainActivity : AppCompatActivity() {
 
         EventBus.getDefault().register(this)
 
-        val language = Locale.getDefault().language
-        locationRepository.refresh(Date(System.currentTimeMillis()), language)
+        locationRepository.refresh(Date(System.currentTimeMillis()), getLanguage())
 
-        swipeContainer.setOnRefreshListener {
-            locationRepository.refresh(Date(System.currentTimeMillis()), language, true)
+        swipeContainer.setOnRefreshListener { forceRefresh() }
+
+        settings.setOnClickListener {
+            val popup = PopupMenu(this, it)
+            popup.menuInflater.inflate(R.menu.settings, popup.menu)
+
+            val showOnlyExpandedMensaItem = popup.menu.findItem(R.id.show_only_expanded)
+            val showInOtherLanguageItem = popup.menu.findItem(R.id.show_in_other_language)
+
+            // change value on click
+            popup.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.show_only_expanded -> {
+                        showOnlyExpandedMensaItem.isChecked = !showOnlyExpandedMensaItem.isChecked
+                        toggleShowAllMensas()
+                    }
+                    R.id.show_in_other_language -> {
+                        showInOtherLanguageItem.isChecked = !showInOtherLanguageItem.isChecked
+                        toggleShowInOtherLanguage()
+                    }
+                    else -> return@setOnMenuItemClickListener false
+                }
+
+                true
+            }
+
+            // set initial values
+            showInOtherLanguageItem.isChecked = invertLanguage(this)
+            showOnlyExpandedMensaItem.isChecked = MensaAdapter.showOnlyFavoriteMensas(this)
+
+            popup.show()
         }
+    }
+
+    private fun forceRefresh() {
+        locationRepository.refresh(Date(System.currentTimeMillis()), getLanguage(), true)
+    }
+
+    private fun initializeLocationList(locations: MutableList<Location>) {
+        val locationAdapter = LocationAdapter(this, twoPane, locations)
+        location_list.adapter = locationAdapter
+        this.locationListAdapter = locationAdapter
+
+        no_favorites.visibility = if (locationAdapter.itemCount == 0) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+    }
+
+    private fun getLanguage(): AbstractMensaProvider.Language {
+        val systemLanguage = Locale.getDefault().language
+        var language = if (systemLanguage === "de") {
+            AbstractMensaProvider.Language.German
+        } else {
+            AbstractMensaProvider.Language.English
+        }
+
+        if (invertLanguage(this)) {
+            language = if (language == AbstractMensaProvider.Language.English) {
+                AbstractMensaProvider.Language.German
+            } else {
+                AbstractMensaProvider.Language.English
+            }
+        }
+
+        return language
+    }
+
+    private fun toggleShowInOtherLanguage() {
+        val invertLanguage = invertLanguage(this)
+        val newValue = !invertLanguage
+        saveInvertLanguage(this, newValue)
+
+        forceRefresh()
+    }
+
+    private fun toggleShowAllMensas() {
+        val currentValue = MensaAdapter.showOnlyFavoriteMensas(this)
+        MensaAdapter.saveOnlyFavoriteMensasSetting(this, !currentValue)
+
+        initializeLocationList(locationRepository.getLocations())
     }
 
     public override fun onPause() {
@@ -107,7 +202,7 @@ class MainActivity : AppCompatActivity() {
     fun onRefreshMensaFinishedEvent(event: RefreshMensaFinishedEvent) {
         refreshMensaEventProcessor.onFinished(event)
 
-        // if progress hidden then refresh finished
+        // if progress hidden then forceRefresh finished
         if (!locationRepository.refreshActive() && !locationRepository.someMenusLoaded()) {
             toast(R.string.no_menus_loaded)
         }

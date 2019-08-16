@@ -2,6 +2,7 @@ package ch.famoser.mensa.repositories.tasks
 
 import ch.famoser.mensa.events.MensaMenuUpdatedEvent
 import ch.famoser.mensa.models.Mensa
+import ch.famoser.mensa.services.providers.AbstractMensaProvider
 import ch.famoser.mensa.services.providers.UZHMensaProvider
 import ch.famoser.mensa.services.providers.UzhMensa
 import org.greenrobot.eventbus.EventBus
@@ -10,7 +11,7 @@ import java.util.*
 class RefreshUZHMensaTask<T : UzhMensa>(
     private val htmlMensaProvider: UZHMensaProvider<T>,
     private val date: Date,
-    private val language: String,
+    private val language: AbstractMensaProvider.Language,
     private val ignoreCache: Boolean
 ) : AbstractRefreshMensaTask<Mensa>() {
 

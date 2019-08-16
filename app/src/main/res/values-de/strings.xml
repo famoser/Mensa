@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Mensa</string>
+    <string name="title_item_detail">Mensa Detail</string>
+    <string name="mensa">Mensa</string>
+    <string name="share">teilen</string>
+    <string name="no_menus_loaded">Keine Internetverbindung oder keine Menus heute.</string>
+    <string name="currency">CHF</string>
+    <string name="closed">geschlossen</string>
+    <string name="made_by">made with ♡ by <a href="https://famoser.ch">famoser</a></string>
+    <string name="source">source code on <a href="https://github.com/famoser/Mensa">github</a></string>
+    <string name="settings">Einstellungen</string>
+    <string name="show_only_expanded">nur ausgewählte Mensen</string>
+    <string name="show_menus_in_german">Menus auf Englisch</string>
+    <string name="no_expanded_canteens">keine ausgewählten Mensen</string>
+</resources>

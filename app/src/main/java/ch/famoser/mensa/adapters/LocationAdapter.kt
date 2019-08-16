@@ -19,35 +19,45 @@ class LocationAdapter(
 ) :
     RecyclerView.Adapter<LocationAdapter.ViewHolder>() {
 
+    private val mensaAdapters: MutableList<MensaAdapter> = ArrayList()
+    private val displayedLocations: MutableList<DisplayedLocation> = ArrayList()
+
+    init {
+        for (location in values) {
+            val adapter = MensaAdapter(parentActivity, location.mensas, twoPane)
+            if (adapter.itemCount > 0) {
+                mensaAdapters.add(adapter)
+                displayedLocations.add(DisplayedLocation(location, adapter))
+            }
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.row_location, parent, false)
         return ViewHolder(view)
     }
 
-    private val mensaAdapters: MutableList<MensaAdapter> = ArrayList()
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = values[position]
+        val item = displayedLocations[position]
 
-        val adapter = MensaAdapter(parentActivity, item.mensas, twoPane)
-        mensaAdapters.add(adapter)
-
-        holder.titleView.text = item.title
-        holder.mensaView.adapter = adapter
+        holder.titleView.text = item.location.title
+        holder.mensaView.adapter = item.mensaAdapter
 
         with(holder.itemView) {
             tag = item
         }
     }
 
-    override fun getItemCount() = values.size
+    override fun getItemCount() = displayedLocations.size
 
     fun mensaMenusRefreshed(mensaId: UUID) {
         for (mensaAdapter in mensaAdapters) {
             mensaAdapter.mensaMenusRefreshed(mensaId)
         }
     }
+
+    inner class DisplayedLocation(val location: Location, val mensaAdapter: MensaAdapter)
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleView: TextView = view.title

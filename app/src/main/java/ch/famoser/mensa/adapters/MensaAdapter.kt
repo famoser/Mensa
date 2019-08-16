@@ -1,5 +1,6 @@
 package ch.famoser.mensa.adapters
 
+import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -18,11 +19,48 @@ import kotlin.collections.HashMap
 
 class MensaAdapter constructor(
     private val parentActivity: MainActivity,
-    private val values: List<Mensa>,
+    values: List<Mensa>,
     private val twoPane: Boolean
 ) : RecyclerView.Adapter<MensaAdapter.ViewHolder>() {
     companion object {
-        const val MensaMenusVisibilitySettingPrefix = "MensaMenusVisibility"
+        private const val MensaIsFavoriteSettingPrefix = "MensaMenusVisibility"
+        private const val ShowOnlyFavoriteMensasSetting = "ShowOnlyFavoriteMensas"
+
+        fun saveIsFavoriteMensa(context: Activity, mensa: Mensa, value: Boolean) {
+            val sharedPreferences = context.getPreferences(Context.MODE_PRIVATE) ?: return
+            sharedPreferences
+                .edit()
+                .putBoolean(MensaIsFavoriteSettingPrefix + "." + mensa.id, value)
+                .apply()
+        }
+
+        fun isFavoriteMensa(context: Activity, mensa: Mensa): Boolean {
+            val sharedPreferences = context.getPreferences(Context.MODE_PRIVATE) ?: return false
+            return sharedPreferences.getBoolean(MensaIsFavoriteSettingPrefix + "." + mensa.id, false)
+        }
+
+        fun showOnlyFavoriteMensas(context: Activity): Boolean {
+            val sharedPreferences = context.getPreferences(Context.MODE_PRIVATE) ?: return false
+            return sharedPreferences.getBoolean(ShowOnlyFavoriteMensasSetting, false);
+        }
+
+        fun saveOnlyFavoriteMensasSetting(context: Activity, value: Boolean) {
+            val sharedPreferences = context.getPreferences(Context.MODE_PRIVATE) ?: return
+            sharedPreferences
+                .edit()
+                .putBoolean(ShowOnlyFavoriteMensasSetting, value)
+                .apply()
+        }
+    }
+
+    private val displayedMensas: List<Mensa>;
+
+    init {
+        displayedMensas = if (showOnlyFavoriteMensas()) {
+            values.filter { isFavoriteMensa(it) }
+        } else {
+            values
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -34,7 +72,7 @@ class MensaAdapter constructor(
     private val viewHoldersByMensaId: MutableMap<UUID, ViewHolder> = HashMap()
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val mensa = values[position]
+        val mensa = displayedMensas[position]
         viewHoldersByMensaId[mensa.id] = holder
 
         holder.titleView.text = mensa.title
@@ -53,8 +91,7 @@ class MensaAdapter constructor(
             }
         }
 
-        val sharedPreferences = parentActivity.getPreferences(Context.MODE_PRIVATE) ?: return
-        val visibility = sharedPreferences.getBoolean(MensaMenusVisibilitySettingPrefix + "." + mensa.id, false)
+        val visibility = isFavoriteMensa(mensa)
         if (visibility) {
             holder.menuView.visibility = View.VISIBLE
         }
@@ -63,29 +100,33 @@ class MensaAdapter constructor(
     private fun toggleMenuVisibility(mensa: Mensa, holder: ViewHolder) {
         if (holder.menuView.visibility == View.GONE) {
             holder.menuView.visibility = View.VISIBLE
-            saveVisibilityState(mensa, true)
+            saveIsFavoriteMensa(mensa, true)
         } else {
             holder.menuView.visibility = View.GONE
-            saveVisibilityState(mensa, false)
+            saveIsFavoriteMensa(mensa, false)
         }
     }
 
-    private fun saveVisibilityState(mensa: Mensa, visibilityState: Boolean) {
-        val sharedPreferences = parentActivity.getPreferences(Context.MODE_PRIVATE) ?: return
-        sharedPreferences
-            .edit()
-            .putBoolean(MensaMenusVisibilitySettingPrefix + "." + mensa.id, visibilityState)
-            .apply()
+    private fun saveIsFavoriteMensa(mensa: Mensa, value: Boolean) {
+        saveIsFavoriteMensa(parentActivity, mensa, value)
     }
 
-    override fun getItemCount() = values.size
+    private fun isFavoriteMensa(mensa: Mensa): Boolean {
+        return Companion.isFavoriteMensa(parentActivity, mensa)
+    }
+
+    private fun showOnlyFavoriteMensas(): Boolean {
+        return Companion.showOnlyFavoriteMensas(parentActivity)
+    }
+
+    override fun getItemCount() = displayedMensas.size;
 
     fun mensaMenusRefreshed(mensaId: UUID) {
         val viewHolder = viewHoldersByMensaId[mensaId]
         if (viewHolder != null) {
             viewHolder.menuView.adapter?.notifyDataSetChanged()
 
-            val menu = values.first { it.id == mensaId }
+            val menu = displayedMensas.first { it.id == mensaId }
             setOpeningTimes(menu, viewHolder)
         }
     }

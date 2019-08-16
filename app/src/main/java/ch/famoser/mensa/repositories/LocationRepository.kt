@@ -87,7 +87,7 @@ class LocationRepository internal constructor(
         return mensas
     }
 
-    fun refresh(today: Date, language: String, ignoreCache: Boolean = false) {
+    fun refresh(today: Date, language: AbstractMensaProvider.Language, ignoreCache: Boolean = false) {
         synchronized(this) {
             if (activeRefreshingTasks > 0 || (refreshed && !ignoreCache)) {
                 return

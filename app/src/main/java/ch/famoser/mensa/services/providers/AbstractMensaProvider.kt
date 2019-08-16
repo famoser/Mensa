@@ -79,4 +79,16 @@ abstract class AbstractMensaProvider(
 
         return normalized
     }
+
+    protected fun languageToString(language: Language): String {
+        return when (language) {
+            Language.German -> "de"
+            Language.English -> "en"
+        }
+    }
+
+    enum class Language {
+        German,
+        English
+    }
 }

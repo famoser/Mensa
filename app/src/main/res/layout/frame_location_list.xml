@@ -13,42 +13,73 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <LinearLayout
-                android:orientation="vertical"
+        <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-
-            <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/location_list"
-                    android:name="ch.famoser.mensa.ItemListFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"
-                    app:layoutManager="LinearLayoutManager"
-                    tools:context=".activities.MainActivity"
-                    tools:listitem="@layout/row_location"
-                    tools:itemCount="1"
-                    android:descendantFocusability="blocksDescendants"
-                    tools:layout_height="200sp"/>
-
             <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/text_margin"
-                    android:orientation="horizontal"
-                    android:gravity="end"
-            >
+                    android:layout_marginTop="@dimen/card_spacing"
+                    android:gravity="center"
+                    android:layout_height="wrap_content">
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/location_list"
+                        android:name="ch.famoser.mensa.ItemListFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"
+                        app:layoutManager="LinearLayoutManager"
+                        tools:context=".activities.MainActivity"
+                        tools:listitem="@layout/row_location"
+                        tools:itemCount="2"
+                        android:descendantFocusability="blocksDescendants"
+                        tools:layout_height="400sp"/>
 
                 <TextView
-                        android:id="@+id/source"
+                        android:id="@+id/no_favorites"
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                        android:text="@string/source"
+                        android:layout_margin="@dimen/card_spacing_eight"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:text="@string/no_expanded_canteens"
                 />
+
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/text_margin"
+                        android:orientation="horizontal"
+                        android:gravity="end"
+                >
+
+                    <TextView
+                            android:id="@+id/source"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                            android:text="@string/source"
+                    />
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
+
+            <ImageButton
+                    android:id="@+id/settings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="37dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_more_horiz_grey_24dp"
+                    android:contentDescription="@string/settings"
+                    android:padding="@dimen/card_spacing"
+                    android:layout_alignParentEnd="true"
+                    android:clickable="true"
+                    android:focusable="true"/>
+        </RelativeLayout>
+
     </ch.famoser.mensa.views.SaveScrollNestedScrollViewer>
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
