@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/card_spacing_four"
         android:orientation="vertical">
-    
+
     <TextView
             android:id="@+id/title"
             android:layout_height="wrap_content"
@@ -28,4 +28,5 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/row_mensa"
             tools:itemCount="3"/>
+
 </LinearLayout>

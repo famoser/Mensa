@@ -69,41 +69,88 @@ class MensaAdapter constructor(
         return ViewHolder(view)
     }
 
-    private val viewHoldersByMensaId: MutableMap<UUID, ViewHolder> = HashMap()
+    private val statefulViewHoldersByMensaId: MutableMap<UUID, StatefulViewHolder> = HashMap()
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val mensa = displayedMensas[position]
-        viewHoldersByMensaId[mensa.id] = holder
+        val holder = StatefulViewHolder(viewHolder, mensa)
+        statefulViewHoldersByMensaId[mensa.id] = holder
 
-        holder.titleView.text = mensa.title
-        setOpeningTimes(mensa, holder)
-        holder.menuView.adapter = MenuAdapter(parentActivity, mensa.menus, twoPane)
-        holder.menuView.addItemDecoration(
-            DividerItemDecoration(
-                parentActivity,
-                DividerItemDecoration.VERTICAL
-            )
-        )
+        viewHolder.titleView.text = mensa.title
 
-        holder.itemView.setOnClickListener {
-            if (mensa.menus.isNotEmpty()) {
-                toggleMenuVisibility(mensa, holder)
+        viewHolder.itemView.setOnClickListener {
+            if (holder.viewHolderState == ViewHolderState.Available) {
+                saveIsFavoriteMensa(mensa, true)
+                transitionToDesiredHolderState(holder, ViewHolderState.Expanded)
+            } else if (holder.viewHolderState == ViewHolderState.Expanded) {
+                saveIsFavoriteMensa(mensa, false)
+                transitionToDesiredHolderState(holder, ViewHolderState.Available)
             }
         }
 
-        val visibility = isFavoriteMensa(mensa)
-        if (visibility) {
-            holder.menuView.visibility = View.VISIBLE
+        if (mensa.menus.isNotEmpty()) {
+            val isFavorite = isFavoriteMensa(holder.mensa)
+            if (isFavorite) {
+                transitionToDesiredHolderState(holder, ViewHolderState.Expanded)
+            } else {
+                transitionToDesiredHolderState(holder, ViewHolderState.Available)
+            }
+        } else {
+            transitionToDesiredHolderState(holder, ViewHolderState.Closed)
         }
     }
 
-    private fun toggleMenuVisibility(mensa: Mensa, holder: ViewHolder) {
-        if (holder.menuView.visibility == View.GONE) {
-            holder.menuView.visibility = View.VISIBLE
-            saveIsFavoriteMensa(mensa, true)
-        } else {
-            holder.menuView.visibility = View.GONE
-            saveIsFavoriteMensa(mensa, false)
+    private fun transitionToDesiredHolderState(holder: StatefulViewHolder, target: ViewHolderState) {
+        when (target) {
+            ViewHolderState.Closed -> {
+                showClosedHeader(holder)
+                hideMenu(holder)
+            }
+            ViewHolderState.Expanded -> {
+                showAvailableHeader(holder)
+                showMenuList(holder)
+            }
+            ViewHolderState.Available -> {
+                showAvailableHeader(holder)
+                hideMenu(holder);
+            }
+            ViewHolderState.Initial -> throw Exception("you are not allowed to go to the initial state")
+        }
+
+        holder.viewHolderState = target
+    }
+
+    private fun showMenuList(holder: StatefulViewHolder) {
+        holder.viewHolder.getMenuView().visibility = View.VISIBLE
+        val recyclerView = holder.viewHolder.getMenuRecyclerView()
+        if (recyclerView.adapter == null) {
+            recyclerView.adapter = MenuAdapter(parentActivity, holder.mensa.menus, twoPane)
+            recyclerView.addItemDecoration(
+                DividerItemDecoration(
+                    parentActivity,
+                    DividerItemDecoration.VERTICAL
+                )
+            )
+        }
+    }
+
+    private fun showClosedHeader(holder: StatefulViewHolder) {
+        holder.viewHolder.openingTimesView.text = parentActivity.getString(R.string.closed)
+        holder.viewHolder.headerWrapper.background =
+            ContextCompat.getDrawable(parentActivity.applicationContext, R.color.colorPrimaryLight)
+    }
+
+    private fun showAvailableHeader(holder: StatefulViewHolder) {
+        if (holder.viewHolderState == ViewHolderState.Initial || holder.viewHolderState == ViewHolderState.Closed) {
+            holder.viewHolder.openingTimesView.text = holder.mensa.mealTime
+            holder.viewHolder.headerWrapper.background =
+                ContextCompat.getDrawable(parentActivity.applicationContext, R.color.colorPrimary)
+        }
+    }
+
+    private fun hideMenu(holder: StatefulViewHolder) {
+        if (holder.viewHolderState == ViewHolderState.Expanded) {
+            holder.viewHolder.getMenuView().visibility = View.GONE
         }
     }
 
@@ -122,31 +169,55 @@ class MensaAdapter constructor(
     override fun getItemCount() = displayedMensas.size;
 
     fun mensaMenusRefreshed(mensaId: UUID) {
-        val viewHolder = viewHoldersByMensaId[mensaId]
-        if (viewHolder != null) {
-            viewHolder.menuView.adapter?.notifyDataSetChanged()
+        val viewHolder = statefulViewHoldersByMensaId[mensaId] ?: return
 
-            val menu = displayedMensas.first { it.id == mensaId }
-            setOpeningTimes(menu, viewHolder)
+        if (viewHolder.mensa.menus.isNotEmpty()) {
+            if (viewHolder.viewHolderState == ViewHolderState.Expanded) {
+                viewHolder.viewHolder.getMenuRecyclerView().adapter?.notifyDataSetChanged()
+            } else if (viewHolder.viewHolderState == ViewHolderState.Closed) {
+                val isFavorite = isFavoriteMensa(viewHolder.mensa)
+                if (isFavorite) {
+                    transitionToDesiredHolderState(viewHolder, ViewHolderState.Expanded)
+                } else {
+                    transitionToDesiredHolderState(viewHolder, ViewHolderState.Available)
+                }
+            }
+        } else if (viewHolder.viewHolderState != ViewHolderState.Closed) {
+            transitionToDesiredHolderState(viewHolder, ViewHolderState.Closed)
         }
     }
 
-    private fun setOpeningTimes(mensa: Mensa, viewHolder: ViewHolder) {
-        if (mensa.menus.isNotEmpty()) {
-            viewHolder.openingTimesView.text = mensa.mealTime
-            viewHolder.headerWrapper.background =
-                ContextCompat.getDrawable(parentActivity.applicationContext, R.color.colorPrimary)
-        } else {
-            viewHolder.openingTimesView.text = parentActivity.getString(R.string.closed)
-            viewHolder.headerWrapper.background =
-                ContextCompat.getDrawable(parentActivity.applicationContext, R.color.colorPrimaryLight)
-        }
-    }
+    inner class StatefulViewHolder(
+        val viewHolder: ViewHolder,
+        val mensa: Mensa,
+        var viewHolderState: ViewHolderState = ViewHolderState.Initial
+    )
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         val titleView: TextView = view.title
         val openingTimesView: TextView = view.meal_time
-        val menuView: RecyclerView = view.menu_list
+
+        private var menuView: View = view.findViewById(R.id.menu_list)
+        fun getMenuView() = menuView
+
+        private var resolvedMenuRecycler: RecyclerView? = null
+        fun getMenuRecyclerView(): RecyclerView {
+            if (resolvedMenuRecycler == null) {
+                val menuRecycler = view.findViewById<RecyclerView>(R.id.menu_list)
+                menuView = menuRecycler
+                resolvedMenuRecycler = menuRecycler
+            }
+
+            return resolvedMenuRecycler!!
+        }
+
         val headerWrapper: View = view.header_wrapper
+    }
+
+    enum class ViewHolderState {
+        Initial,
+        Closed,
+        Available,
+        Expanded
     }
 }

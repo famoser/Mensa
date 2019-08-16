@@ -33,10 +33,12 @@
 
             <ViewStub
                     android:id="@+id/no_favorites"
+                    android:layout_marginBottom="@dimen/card_spacing_eight"
+                    android:layout_marginTop="@dimen/card_spacing_eight"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inflatedId="@+id/no_favorites"
-                    android:layout="@layout/fragment_no_mensa_expanded"/>
+                    android:layout="@layout/frame_location_list_stub_no_mensa_expanded"/>
 
             <TextView
                     android:id="@+id/source"
