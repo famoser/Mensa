@@ -20,7 +20,8 @@ import kotlin.collections.HashMap
 class MensaAdapter constructor(
     private val parentActivity: MainActivity,
     values: List<Mensa>,
-    private val twoPane: Boolean
+    private val twoPane: Boolean,
+    private val initializeFully: Boolean
 ) : RecyclerView.Adapter<MensaAdapter.ViewHolder>() {
     companion object {
         private const val MensaIsFavoriteSettingPrefix = "MensaMenusVisibility"
@@ -53,14 +54,14 @@ class MensaAdapter constructor(
         }
     }
 
-    private val displayedMensas: List<Mensa>;
+    private val displayedMensas: List<MensaViewModel>;
 
     init {
         displayedMensas = if (showOnlyFavoriteMensas()) {
             values.filter { isFavoriteMensa(it) }
         } else {
             values
-        }
+        }.map { MensaViewModel(it) }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -72,59 +73,59 @@ class MensaAdapter constructor(
     private val statefulViewHoldersByMensaId: MutableMap<UUID, StatefulViewHolder> = HashMap()
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        val mensa = displayedMensas[position]
-        val holder = StatefulViewHolder(viewHolder, mensa)
-        statefulViewHoldersByMensaId[mensa.id] = holder
+        val mensaViewModel = displayedMensas[position]
+        val holder = StatefulViewHolder(viewHolder, mensaViewModel)
+        statefulViewHoldersByMensaId[mensaViewModel.mensa.id] = holder
 
-        viewHolder.titleView.text = mensa.title
+        viewHolder.titleView.text = mensaViewModel.mensa.title
 
         viewHolder.itemView.setOnClickListener {
-            if (holder.viewHolderState == ViewHolderState.Available) {
-                saveIsFavoriteMensa(mensa, true)
-                transitionToDesiredHolderState(holder, ViewHolderState.Expanded)
-            } else if (holder.viewHolderState == ViewHolderState.Expanded) {
-                saveIsFavoriteMensa(mensa, false)
-                transitionToDesiredHolderState(holder, ViewHolderState.Available)
+            if (mensaViewModel.viewState == ViewState.Available) {
+                saveIsFavoriteMensa(mensaViewModel.mensa, true)
+                transitionToDesiredHolderState(holder, ViewState.Expanded)
+            } else if (mensaViewModel.viewState == ViewState.Expanded) {
+                saveIsFavoriteMensa(mensaViewModel.mensa, false)
+                transitionToDesiredHolderState(holder, ViewState.Available)
             }
         }
 
-        if (mensa.menus.isNotEmpty()) {
-            val isFavorite = isFavoriteMensa(holder.mensa)
-            if (isFavorite) {
-                transitionToDesiredHolderState(holder, ViewHolderState.Expanded)
+        if (mensaViewModel.viewState == ViewState.Initial) {
+            if (initializeFully) {
+                val recommendedState = getRecommendedState(holder.mensaViewModel.mensa)
+                transitionToDesiredHolderState(holder, recommendedState)
             } else {
-                transitionToDesiredHolderState(holder, ViewHolderState.Available)
+                showAvailableHeader(holder)
             }
         } else {
-            transitionToDesiredHolderState(holder, ViewHolderState.Closed)
+            transitionToDesiredHolderState(holder, holder.mensaViewModel.viewState)
         }
     }
 
-    private fun transitionToDesiredHolderState(holder: StatefulViewHolder, target: ViewHolderState) {
+    private fun transitionToDesiredHolderState(holder: StatefulViewHolder, target: ViewState) {
         when (target) {
-            ViewHolderState.Closed -> {
+            ViewState.Closed -> {
                 showClosedHeader(holder)
                 hideMenu(holder)
             }
-            ViewHolderState.Expanded -> {
+            ViewState.Expanded -> {
                 showAvailableHeader(holder)
                 showMenuList(holder)
             }
-            ViewHolderState.Available -> {
+            ViewState.Available -> {
                 showAvailableHeader(holder)
                 hideMenu(holder);
             }
-            ViewHolderState.Initial -> throw Exception("you are not allowed to go to the initial state")
+            ViewState.Initial -> throw Exception("you are not allowed to go to the initial state")
         }
 
-        holder.viewHolderState = target
+        holder.mensaViewModel.viewState = target
     }
 
     private fun showMenuList(holder: StatefulViewHolder) {
         holder.viewHolder.getMenuView().visibility = View.VISIBLE
         val recyclerView = holder.viewHolder.getMenuRecyclerView()
         if (recyclerView.adapter == null) {
-            recyclerView.adapter = MenuAdapter(parentActivity, holder.mensa.menus, twoPane)
+            recyclerView.adapter = MenuAdapter(parentActivity, holder.mensaViewModel.mensa.menus, twoPane)
             recyclerView.addItemDecoration(
                 DividerItemDecoration(
                     parentActivity,
@@ -141,17 +142,13 @@ class MensaAdapter constructor(
     }
 
     private fun showAvailableHeader(holder: StatefulViewHolder) {
-        if (holder.viewHolderState == ViewHolderState.Initial || holder.viewHolderState == ViewHolderState.Closed) {
-            holder.viewHolder.openingTimesView.text = holder.mensa.mealTime
-            holder.viewHolder.headerWrapper.background =
-                ContextCompat.getDrawable(parentActivity.applicationContext, R.color.colorPrimary)
-        }
+        holder.viewHolder.openingTimesView.text = holder.mensaViewModel.mensa.mealTime
+        holder.viewHolder.headerWrapper.background =
+            ContextCompat.getDrawable(parentActivity.applicationContext, R.color.colorPrimary)
     }
 
     private fun hideMenu(holder: StatefulViewHolder) {
-        if (holder.viewHolderState == ViewHolderState.Expanded) {
-            holder.viewHolder.getMenuView().visibility = View.GONE
-        }
+        holder.viewHolder.getMenuView().visibility = View.GONE
     }
 
     private fun saveIsFavoriteMensa(mensa: Mensa, value: Boolean) {
@@ -169,29 +166,39 @@ class MensaAdapter constructor(
     override fun getItemCount() = displayedMensas.size;
 
     fun mensaMenusRefreshed(mensaId: UUID) {
-        val viewHolder = statefulViewHoldersByMensaId[mensaId] ?: return
+        val holder = statefulViewHoldersByMensaId[mensaId] ?: return
 
-        if (viewHolder.mensa.menus.isNotEmpty()) {
-            if (viewHolder.viewHolderState == ViewHolderState.Expanded) {
-                viewHolder.viewHolder.getMenuRecyclerView().adapter?.notifyDataSetChanged()
-            } else if (viewHolder.viewHolderState == ViewHolderState.Closed) {
-                val isFavorite = isFavoriteMensa(viewHolder.mensa)
-                if (isFavorite) {
-                    transitionToDesiredHolderState(viewHolder, ViewHolderState.Expanded)
-                } else {
-                    transitionToDesiredHolderState(viewHolder, ViewHolderState.Available)
-                }
+        val currentState = holder.mensaViewModel.viewState
+        val recommendedState = getRecommendedState(holder.mensaViewModel.mensa)
+        if (recommendedState == ViewState.Closed) {
+            if (currentState != ViewState.Closed) {
+                transitionToDesiredHolderState(holder, ViewState.Closed)
             }
-        } else if (viewHolder.viewHolderState != ViewHolderState.Closed) {
-            transitionToDesiredHolderState(viewHolder, ViewHolderState.Closed)
+        } else {
+            if (currentState == ViewState.Expanded) {
+                holder.viewHolder.getMenuRecyclerView().adapter?.notifyDataSetChanged()
+            } else if (currentState == ViewState.Closed || currentState == ViewState.Initial) {
+                transitionToDesiredHolderState(holder, recommendedState)
+            }
         }
     }
 
-    inner class StatefulViewHolder(
-        val viewHolder: ViewHolder,
-        val mensa: Mensa,
-        var viewHolderState: ViewHolderState = ViewHolderState.Initial
-    )
+    private fun getRecommendedState(mensa: Mensa): ViewState {
+        return if (mensa.menus.isNotEmpty()) {
+            val isFavorite = isFavoriteMensa(mensa)
+            if (isFavorite) {
+                ViewState.Expanded
+            } else {
+                ViewState.Available
+            }
+        } else {
+            ViewState.Closed
+        }
+    }
+
+    inner class MensaViewModel(val mensa: Mensa, var viewState: ViewState = ViewState.Initial)
+
+    inner class StatefulViewHolder(val viewHolder: ViewHolder, val mensaViewModel: MensaViewModel)
 
     inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         val titleView: TextView = view.title
@@ -214,7 +221,7 @@ class MensaAdapter constructor(
         val headerWrapper: View = view.header_wrapper
     }
 
-    enum class ViewHolderState {
+    enum class ViewState {
         Initial,
         Closed,
         Available,

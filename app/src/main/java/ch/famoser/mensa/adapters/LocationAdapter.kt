@@ -14,7 +14,8 @@ import kotlinx.android.synthetic.main.row_location.view.*
 class LocationAdapter(
     private val parentActivity: MainActivity,
     private val twoPane: Boolean,
-    private val values: List<Location>
+    private val values: List<Location>,
+    initializeFully: Boolean
 ) :
     RecyclerView.Adapter<LocationAdapter.ViewHolder>() {
 
@@ -22,10 +23,17 @@ class LocationAdapter(
     private val displayedLocations: MutableList<DisplayedLocation> = ArrayList()
 
     init {
+        reset(initializeFully)
+    }
+
+    fun reset(initializeFully: Boolean = true) {
+        mensaAdapterByLocation.clear()
+        displayedLocations.clear()
+
         for (location in values) {
-            val adapter = MensaAdapter(parentActivity, location.mensas, twoPane)
+            val adapter = MensaAdapter(parentActivity, location.mensas, twoPane, initializeFully);
             if (adapter.itemCount > 0) {
-                mensaAdapterByLocation.put(location, adapter)
+                mensaAdapterByLocation[location] = adapter
                 displayedLocations.add(DisplayedLocation(location, adapter))
             }
         }

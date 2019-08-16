@@ -57,6 +57,10 @@ class LocationRepository internal constructor(
     private val ethMensaProvider = ETHMensaProvider(cacheService, assetService, serializationService)
     private val uzhMensaProvider = UZHRSSMensaProvider(cacheService, assetService, serializationService)
 
+    fun isRefreshPending(): Boolean {
+        return !refreshed;
+    }
+
     fun getLocations(): MutableList<Location> {
         if (!initialized) {
             initialized = true

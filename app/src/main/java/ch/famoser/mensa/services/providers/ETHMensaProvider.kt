@@ -37,8 +37,9 @@ class ETHMensaProvider(
                 val menus = menuByMensaIds[ethzMensa.idSlug.toString() + "_" + ethzMensa.timeSlug]
                 if (menus != null) {
                     mensa.replaceMenus(menus)
-                    refreshedMensas.add(mensa)
                 }
+
+                refreshedMensas.add(mensa)
             }
 
             return refreshedMensas

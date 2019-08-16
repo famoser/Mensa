@@ -3,6 +3,7 @@ package ch.famoser.mensa.activities
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.os.Parcelable
 import android.text.method.LinkMovementMethod
 import android.view.View
@@ -85,8 +86,14 @@ class MainActivity : AppCompatActivity() {
         EventBus.getDefault().register(this)
 
         val locationRepository = LocationRepository.getInstance(this)
-        initializeLocationList(locationRepository.getLocations())
-        locationRepository.refresh(Date(System.currentTimeMillis()), getLanguage())
+        val isRefreshPending = locationRepository.isRefreshPending()
+        initializeLocationList(locationRepository.getLocations(), !isRefreshPending)
+
+        if (isRefreshPending) {
+            Handler().postDelayed({
+                locationRepository.refresh(Date(System.currentTimeMillis()), getLanguage())
+            }, 300)
+        }
 
         swipeContainer.setOnRefreshListener { forceRefresh() }
 
@@ -127,8 +134,8 @@ class MainActivity : AppCompatActivity() {
         locationRepository.refresh(Date(System.currentTimeMillis()), getLanguage(), true)
     }
 
-    private fun initializeLocationList(locations: MutableList<Location>) {
-        val locationAdapter = LocationAdapter(this, twoPane, locations)
+    private fun initializeLocationList(locations: MutableList<Location>, initializeFully: Boolean) {
+        val locationAdapter = LocationAdapter(this, twoPane, locations, initializeFully)
         location_list.adapter = locationAdapter
         this.locationListAdapter = locationAdapter
 
@@ -171,8 +178,8 @@ class MainActivity : AppCompatActivity() {
         val currentValue = MensaAdapter.showOnlyFavoriteMensas(this)
         MensaAdapter.saveOnlyFavoriteMensasSetting(this, !currentValue)
 
-        val locationRepository = LocationRepository.getInstance(this)
-        initializeLocationList(locationRepository.getLocations())
+        this.locationListAdapter.reset()
+        this.locationListAdapter.notifyDataSetChanged()
     }
 
     public override fun onPause() {
