@@ -8,7 +8,7 @@ open class UzhMensa(
     val infoUrlSlug: String
 )
 
-class RSSUZHMensa(id: String, title: String, mealTime: String, val idSlug: Int, infoUrlSlug: String) :
+class RSSUZHMensa(id: String, title: String, mealTime: String, val idSlugDe: Int, val idSlugEn: Int, infoUrlSlug: String) :
     UzhMensa(id, title, mealTime, infoUrlSlug)
 
 class HtmlUZHMensa(id: String, title: String, mealTime: String, val apiUrlSlug: String, infoUrlSlug: String) :

@@ -18,7 +18,7 @@ class UZHRSSMensaProvider(
     }
 
     override fun getLocationsJsonFileName(): String {
-        return "locations.json"
+        return "locations_rss.json"
     }
 
     override fun getParametrizedUzhLocation(): ParameterizedType {
@@ -27,7 +27,13 @@ class UZHRSSMensaProvider(
 
     override fun getUrlFor(uzhMensa: RSSUZHMensa, dayOfWeek: Int, language: String): String? {
         val dayOfWeekForApi = transformDayOfWeek(dayOfWeek) ?: return null
-        return "https://zfv.ch/$language/menus/rssMenuPlan?menuId=${uzhMensa.idSlug}&type=uzh2&dayOfWeek=$dayOfWeekForApi"
+
+        var idSlug = uzhMensa.idSlugEn
+        if (language === "de") {
+            idSlug = uzhMensa.idSlugDe;
+        }
+
+        return "https://zfv.ch/$language/menus/rssMenuPlan?menuId=$idSlug&type=uzh2&dayOfWeek=$dayOfWeekForApi"
     }
 
     private fun transformDayOfWeek(dayOfWeek: Int): Int? {

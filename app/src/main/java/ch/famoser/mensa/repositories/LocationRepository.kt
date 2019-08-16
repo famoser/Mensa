@@ -10,7 +10,7 @@ import ch.famoser.mensa.repositories.tasks.RefreshUZHMensaTask
 import ch.famoser.mensa.services.*
 import ch.famoser.mensa.services.providers.AbstractMensaProvider
 import ch.famoser.mensa.services.providers.ETHMensaProvider
-import ch.famoser.mensa.services.providers.UZHHtmlMensaProvider
+import ch.famoser.mensa.services.providers.UZHRSSMensaProvider
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -55,7 +55,7 @@ class LocationRepository internal constructor(
 
     private var uzhMensas: List<Mensa> = ArrayList()
     private val ethMensaProvider = ETHMensaProvider(cacheService, assetService, serializationService)
-    private val uzhMensaProvider = UZHHtmlMensaProvider(cacheService, assetService, serializationService)
+    private val uzhMensaProvider = UZHRSSMensaProvider(cacheService, assetService, serializationService)
 
     fun getLocations(): MutableList<Location> {
         if (!initialized) {
