@@ -14,7 +14,7 @@
         <activity
                 android:name=".activities.MainActivity"
                 android:label="@string/app_name"
-                android:theme="@style/AppTheme.NoActionBar">
+                android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -25,7 +25,7 @@
                 android:name=".activities.MensaActivity"
                 android:label="@string/title_item_detail"
                 android:parentActivityName=".activities.MainActivity"
-                android:theme="@style/AppTheme.NoActionBar">
+                android:theme="@style/AppTheme">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="ch.famoser.mensa.activities.MainActivity"/>

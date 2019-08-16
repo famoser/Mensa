@@ -3,7 +3,6 @@ package ch.famoser.mensa.activities
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
 import android.os.Parcelable
 import android.text.method.LinkMovementMethod
 import android.view.View
@@ -65,6 +64,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.AppTheme)
         setContentView(R.layout.activity_main)
 
         if (details_container != null) {
@@ -90,9 +90,9 @@ class MainActivity : AppCompatActivity() {
         initializeLocationList(locationRepository.getLocations(), !isRefreshPending)
 
         if (isRefreshPending) {
-            Handler().postDelayed({
+            window.decorView.post {
                 locationRepository.refresh(Date(System.currentTimeMillis()), getLanguage())
-            }, 300)
+            }
         }
 
         swipeContainer.setOnRefreshListener { forceRefresh() }
