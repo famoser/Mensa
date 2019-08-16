@@ -42,7 +42,7 @@ class ETHMensaProviderTest {
 
         // act
         val locations = provider.getLocations()
-        val response = provider.getMenus("lunch", nearestMondayDate, "de", true)
+        val response = provider.getMenus("lunch", nearestMondayDate, AbstractMensaProvider.Language.German, true)
 
         // assert
         assertThat(locations).hasSize(1)

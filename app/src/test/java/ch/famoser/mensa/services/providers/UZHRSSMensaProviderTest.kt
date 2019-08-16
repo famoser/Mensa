@@ -18,7 +18,8 @@ class UZHRSSMensaProviderTest {
                         "id": "25588906-4759-4b54-9c0e-bf7b4fd158a4",
                         "title": "Untere Mensa",
                         "mealTime": "11:00-14:30",
-                        "idSlug": 142,
+                        "idSlugDe": 142,
+                        "idSlugEn": 142,
                         "infoUrlSlug": "mensa-uzh-zentrum"
                     }
                 ] 
@@ -31,7 +32,7 @@ class UZHRSSMensaProviderTest {
     fun locationsAndMenu_locationsAndMenuAreLoad() {
         // arrange
         val cacheService = NoCacheService()
-        val inMemoryAssetService = InMemoryAssetService(mapOf("uzh/locations.json" to getUzhLocationsJson()))
+        val inMemoryAssetService = InMemoryAssetService(mapOf("uzh/locations_rss.json" to getUzhLocationsJson()))
         val serializationService = SerializationService()
         val provider = UZHRSSMensaProvider(cacheService, inMemoryAssetService, serializationService)
 
@@ -42,7 +43,7 @@ class UZHRSSMensaProviderTest {
         // act
         val locations = provider.getLocations()
         val mensa = locations.first().mensas.first()
-        val response = provider.getMenus(mensa, nearestMondayDate, "de", true)
+        val response = provider.getMenus(mensa, nearestMondayDate, AbstractMensaProvider.Language.German, true)
 
         // assert
         assertThat(locations).hasSize(1)

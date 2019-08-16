@@ -42,7 +42,7 @@ class UZHHtmlMensaProviderTest {
         // act
         val locations = provider.getLocations()
         val mensa = locations.first().mensas.first()
-        val response = provider.getMenus(mensa, nearestMondayDate, "de", true)
+        val response = provider.getMenus(mensa, nearestMondayDate, AbstractMensaProvider.Language.German, true)
 
         // assert
         assertThat(locations).hasSize(1)
