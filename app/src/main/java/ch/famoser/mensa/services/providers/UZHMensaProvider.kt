@@ -90,8 +90,7 @@ abstract class UZHMensaProvider<T : UzhMensa>(
         val calender = Calendar.getInstance()
         calender.time = date
 
-        val dayOfWeek = calender.get(Calendar.DAY_OF_WEEK)
-        return dayOfWeek
+        return calender.get(Calendar.DAY_OF_WEEK)
     }
 
     protected abstract fun getUrlFor(uzhMensa: T, dayOfWeek: Int, language: String): String?
@@ -104,7 +103,7 @@ abstract class UZHMensaProvider<T : UzhMensa>(
         return parseContent(contentDiv)
     }
 
-    abstract protected fun getContentSelector(): String;
+    protected abstract fun getContentSelector(): String
 
     override fun getLocations(): List<Location> {
         val fileName = "uzh/" + getLocationsJsonFileName()

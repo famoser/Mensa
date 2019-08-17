@@ -37,7 +37,7 @@ class MenuDetailsAdapter constructor(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(ch.famoser.mensa.R.layout.row_menu_details, parent, false)
+            .inflate(R.layout.row_menu_details, parent, false)
         return ViewHolder(view)
     }
 
@@ -51,10 +51,10 @@ class MenuDetailsAdapter constructor(
         holder.descriptionView.text = item.description
 
         if (item.price.isNotEmpty()) {
-            val priceString = item.price.joinToString(separator = " / ");
+            val priceString = item.price.joinToString(separator = " / ")
             holder.priceView.text = activity.getString(R.string.price, priceString)
         } else {
-            holder.priceView.visibility = View.GONE;
+            holder.priceView.visibility = View.GONE
         }
 
         if (item.allergens != null && item.allergens.isNotEmpty()) {

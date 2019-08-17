@@ -30,7 +30,7 @@ class UZHRSSMensaProvider(
 
         var idSlug = uzhMensa.idSlugEn
         if (language === "de") {
-            idSlug = uzhMensa.idSlugDe;
+            idSlug = uzhMensa.idSlugDe
         }
 
         return "https://zfv.ch/$language/menus/rssMenuPlan?menuId=$idSlug&type=uzh2&dayOfWeek=$dayOfWeekForApi"
@@ -38,9 +38,9 @@ class UZHRSSMensaProvider(
 
     private fun transformDayOfWeek(dayOfWeek: Int): Int? {
         if (dayOfWeek < Calendar.MONDAY || dayOfWeek > Calendar.FRIDAY) {
-            return null;
+            return null
         }
 
-        return dayOfWeek - 1;
+        return dayOfWeek - 1
     }
 }

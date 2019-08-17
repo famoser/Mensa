@@ -105,8 +105,8 @@ class MainActivity : AppCompatActivity() {
             val showInOtherLanguageItem = popup.menu.findItem(R.id.show_in_other_language)
 
             // change value on click
-            popup.setOnMenuItemClickListener {
-                when (it.itemId) {
+            popup.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
                     R.id.show_only_expanded -> {
                         showOnlyExpandedMensaItem.isChecked = !showOnlyExpandedMensaItem.isChecked
                         toggleShowAllMensas()

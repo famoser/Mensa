@@ -42,7 +42,7 @@ class MensaAdapter constructor(
 
         fun showOnlyFavoriteMensas(context: Activity): Boolean {
             val sharedPreferences = context.getPreferences(Context.MODE_PRIVATE) ?: return false
-            return sharedPreferences.getBoolean(ShowOnlyFavoriteMensasSetting, false);
+            return sharedPreferences.getBoolean(ShowOnlyFavoriteMensasSetting, false)
         }
 
         fun saveOnlyFavoriteMensasSetting(context: Activity, value: Boolean) {
@@ -54,7 +54,7 @@ class MensaAdapter constructor(
         }
     }
 
-    private val displayedMensas: List<MensaViewModel>;
+    private val displayedMensas: List<MensaViewModel>
 
     init {
         displayedMensas = if (showOnlyFavoriteMensas()) {
@@ -113,7 +113,7 @@ class MensaAdapter constructor(
             }
             ViewState.Available -> {
                 showAvailableHeader(holder)
-                hideMenu(holder);
+                hideMenu(holder)
             }
             ViewState.Initial -> throw Exception("you are not allowed to go to the initial state")
         }
@@ -163,7 +163,7 @@ class MensaAdapter constructor(
         return Companion.showOnlyFavoriteMensas(parentActivity)
     }
 
-    override fun getItemCount() = displayedMensas.size;
+    override fun getItemCount() = displayedMensas.size
 
     fun mensaMenusRefreshed(mensaId: UUID) {
         val holder = statefulViewHoldersByMensaId[mensaId] ?: return

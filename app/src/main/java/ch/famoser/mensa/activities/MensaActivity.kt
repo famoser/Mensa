@@ -64,9 +64,7 @@ class MensaActivity : AppCompatActivity() {
         val mensaId = UUID.fromString(intent.getStringExtra(MensaDetailFragment.MENSA_ID))
 
         val locationRepository = LocationRepository.getInstance(this)
-        val mensa = locationRepository.getMensa(mensaId)
-
-        return mensa
+        return locationRepository.getMensa(mensaId)
     }
 
     private fun loadMensaDetailFragment(mensaId: UUID) {

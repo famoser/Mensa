@@ -58,7 +58,7 @@ class LocationRepository internal constructor(
     private val uzhMensaProvider = UZHRSSMensaProvider(cacheService, assetService, serializationService)
 
     fun isRefreshPending(): Boolean {
-        return !refreshed;
+        return !refreshed
     }
 
     fun getLocations(): MutableList<Location> {

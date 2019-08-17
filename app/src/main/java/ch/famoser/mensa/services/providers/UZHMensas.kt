@@ -10,6 +10,3 @@ open class UzhMensa(
 
 class RSSUZHMensa(id: String, title: String, mealTime: String, val idSlugDe: Int, val idSlugEn: Int, infoUrlSlug: String) :
     UzhMensa(id, title, mealTime, infoUrlSlug)
-
-class HtmlUZHMensa(id: String, title: String, mealTime: String, val apiUrlSlug: String, infoUrlSlug: String) :
-    UzhMensa(id, title, mealTime, infoUrlSlug)

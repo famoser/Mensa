@@ -31,7 +31,7 @@ class LocationAdapter(
         displayedLocations.clear()
 
         for (location in values) {
-            val adapter = MensaAdapter(parentActivity, location.mensas, twoPane, initializeFully);
+            val adapter = MensaAdapter(parentActivity, location.mensas, twoPane, initializeFully)
             if (adapter.itemCount > 0) {
                 mensaAdapterByLocation[location] = adapter
                 displayedLocations.add(DisplayedLocation(location, adapter))
