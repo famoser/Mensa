@@ -79,11 +79,31 @@ abstract class UZHMensaProvider<T : UzhMensa>(
         val apiUrl = getUrlFor(uzhMensa, dayOfWeek, language) ?: return null
         val htmlMenus = parseMensaHtml(apiUrl)
 
+        // if only "closed" or "not available" then do not show any menus
+        val realMenus = htmlMenus.filter { !isNoMenuNotice(it, language) }
+        if (realMenus.isEmpty()) {
+            return ArrayList()
+        }
+
         return htmlMenus.map {
             val price = if (it.price != null) it.price!! else arrayOf()
             val title = if (it.title != null) it.title!! else ""
             Menu(title, normalizeText(it.description), price, it.allergenInfo)
         }
+    }
+
+    private fun isNoMenuNotice(menu: HtmlMenu, language: String): Boolean {
+        when (language) {
+            "en" -> {
+                val invalidMenus = arrayOf("no dinner", "is closed")
+                return invalidMenus.any { menu.description.contains(it) }
+            }
+            "de" -> {
+                val invalidMenus = arrayOf("kein Abendessen", "geschlossen")
+                return invalidMenus.any { menu.description.contains(it) }
+            }
+        }
+        return false
     }
 
     private fun getDayOfWeek(date: Date): Int {
