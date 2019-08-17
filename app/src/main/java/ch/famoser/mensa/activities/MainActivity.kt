@@ -131,7 +131,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun forceRefresh() {
         val locationRepository = LocationRepository.getInstance(this.applicationContext)
-        locationRepository.refresh(Date(System.currentTimeMillis()), getLanguage(), true)
+        val date = Date(System.currentTimeMillis())
+        locationRepository.refresh(date, getLanguage(), true)
     }
 
     private fun initializeLocationList(locations: MutableList<Location>, initializeFully: Boolean) {
