@@ -17,14 +17,12 @@ class RefreshUZHMensaTask<T : UzhMensa>(
 
     override fun doInBackground(vararg mensas: Mensa) {
         for ((current, mensa) in mensas.withIndex()) {
-            val refreshSuccessful = htmlMensaProvider.getMenus(mensa, date, language, ignoreCache)
+            htmlMensaProvider.getMenus(mensa, date, language, ignoreCache)
 
             if (isCancelled) return
             publishProgress(mensas.size, current)
 
-            if (refreshSuccessful) {
-                EventBus.getDefault().post(MensaUpdatedEvent(mensa))
-            }
+            EventBus.getDefault().post(MensaUpdatedEvent(mensa))
         }
     }
 }
