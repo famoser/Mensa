@@ -58,7 +58,7 @@ class MensaAdapter constructor(
 
     init {
         displayedMensas = if (showOnlyFavoriteMensas()) {
-            values.filter { isFavoriteMensa(it) }
+            values.filter { getRecommendedState(it) == ViewState.Expanded }
         } else {
             values
         }.map { MensaViewModel(it) }
