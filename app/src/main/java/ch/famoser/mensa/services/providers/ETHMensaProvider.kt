@@ -32,22 +32,17 @@ class ETHMensaProvider(
             val normalizedLanguage = languageToString(language)
             val menuByMensaIds = getMenuByMensaId(date, ignoreCache, time, normalizedLanguage)
 
-            val refreshedMensas = ArrayList<Mensa>()
             for ((mensa, ethzMensa) in mensaMap) {
                 val menus = menuByMensaIds[ethzMensa.idSlug.toString() + "_" + ethzMensa.timeSlug]
                 if (menus != null) {
                     mensa.replaceMenus(menus)
                 }
-
-                refreshedMensas.add(mensa)
             }
-
-            return refreshedMensas
         } catch (ex: Exception) {
             ex.printStackTrace()
-
-            return ArrayList()
         }
+
+        return mensaMap.keys.toList()
     }
 
     private fun getMenuByMensaId(
