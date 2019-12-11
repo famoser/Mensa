@@ -27,10 +27,14 @@ class MenuAdapter constructor(
     init {
         onClickListener = View.OnClickListener { view ->
             val item = view.tag as Menu
+            val mensa = item.mensa!!
+            val menuIndex = mensa.menus.indexOf(item);
+
             if (twoPane) {
                 val fragment = MensaDetailFragment().apply {
                     arguments = Bundle().apply {
-                        putString(MensaDetailFragment.MENSA_ID, item.mensa!!.id.toString())
+                        putString(MensaDetailFragment.MENSA_ID, mensa.id.toString())
+                        putInt(MensaDetailFragment.MENU_INDEX, menuIndex)
                     }
                 }
                 parentActivity.supportFragmentManager
@@ -39,7 +43,8 @@ class MenuAdapter constructor(
                     .commit()
             } else {
                 val intent = Intent(view.context, MensaActivity::class.java).apply {
-                    putExtra(MensaDetailFragment.MENSA_ID, item.mensa!!.id.toString())
+                    putExtra(MensaDetailFragment.MENSA_ID, mensa.id.toString())
+                    putExtra(MensaDetailFragment.MENU_INDEX, menuIndex)
                 }
 
                 view.context.startActivity(intent)

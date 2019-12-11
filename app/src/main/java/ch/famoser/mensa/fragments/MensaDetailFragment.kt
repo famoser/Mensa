@@ -10,7 +10,9 @@ import ch.famoser.mensa.adapters.MenuDetailsAdapter
 import ch.famoser.mensa.models.Mensa
 import ch.famoser.mensa.repositories.LocationRepository
 import kotlinx.android.synthetic.main.activity_mensa.*
+import kotlinx.android.synthetic.main.fragment_mensa_detail.*
 import kotlinx.android.synthetic.main.fragment_mensa_detail.view.*
+import kotlinx.android.synthetic.main.fragment_mensa_detail.view.menu_details_list
 import java.util.*
 
 class MensaDetailFragment : Fragment() {
@@ -19,6 +21,7 @@ class MensaDetailFragment : Fragment() {
      * The dummy content this fragment is presenting.
      */
     private var item: Mensa? = null
+    private var menuIndex: Int = 0;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +34,10 @@ class MensaDetailFragment : Fragment() {
                 item = locationRepository.getMensa(mensaId)
 
                 activity?.toolbar_layout?.title = item?.title
+            }
+            if (it.containsKey(MENU_INDEX)) {
+                menuIndex = it.getInt(MENU_INDEX);
+                //TODO: scroll to correct position
             }
         }
     }
@@ -56,5 +63,6 @@ class MensaDetailFragment : Fragment() {
          * represents.
          */
         const val MENSA_ID = "item_id"
+        const val MENU_INDEX = "menu_index"
     }
 }

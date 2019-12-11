@@ -32,21 +32,22 @@ class MensaActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val mensa = loadMensaFromIntent() ?: return
-        initializeContent(mensa, savedInstanceState)
+        val menuIndex = loadMenuIndexFromIntent() ?: return
+        initializeContent(mensa, menuIndex, savedInstanceState)
 
         details_action.setOnClickListener {
             browse(mensa.url.toString())
         }
     }
 
-    private fun initializeContent(mensa: Mensa, savedInstanceState: Bundle?) {
+    private fun initializeContent(mensa: Mensa, menuIndex: Int, savedInstanceState: Bundle?) {
         if (mensa.imagePath != null) {
             loadMensaImage(mensa.imagePath)
         }
 
         // load fragment if if first time (e.g. savedInstanceState == null
         if (savedInstanceState == null) {
-            loadMensaDetailFragment(mensa.id)
+            loadMensaDetailFragment(mensa.id, menuIndex)
         }
     }
 
@@ -67,12 +68,20 @@ class MensaActivity : AppCompatActivity() {
         return locationRepository.getMensa(mensaId)
     }
 
-    private fun loadMensaDetailFragment(mensaId: UUID) {
+    private fun loadMenuIndexFromIntent(): Int {
+        return intent.getIntExtra(MensaDetailFragment.MENU_INDEX, 0);
+    }
+
+    private fun loadMensaDetailFragment(mensaId: UUID, menuIndex: Int) {
         val fragment = MensaDetailFragment().apply {
             arguments = Bundle().apply {
                 putString(
                     MensaDetailFragment.MENSA_ID,
                     mensaId.toString()
+                )
+                putInt(
+                    MensaDetailFragment.MENU_INDEX,
+                    menuIndex
                 )
             }
         }
