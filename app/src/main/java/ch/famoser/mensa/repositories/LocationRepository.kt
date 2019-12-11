@@ -15,6 +15,8 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.defaultSharedPreferences
+import org.jetbrains.anko.doAsync
+import java.time.Instant
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -49,7 +51,7 @@ class LocationRepository internal constructor(
 
     private val mensaMap: MutableMap<UUID, Mensa> = HashMap()
     private var initialized = false
-    private var refreshed = false
+    private var refreshed: Date? = null
     private var activeRefreshingTasks = 0
     private val locations: MutableList<Location> = LinkedList()
 
@@ -58,7 +60,14 @@ class LocationRepository internal constructor(
     private val uzhMensaProvider = UZHRSSMensaProvider(cacheService, assetService, serializationService)
 
     fun isRefreshPending(): Boolean {
-        return !refreshed
+        val now = Date(System.currentTimeMillis());
+        val refreshed = refreshed;
+
+        return refreshed == null || !isSameDay(now, refreshed);
+    }
+
+    private fun isSameDay(now: Date, other: Date): Boolean {
+        return now.year == other.year && now.month == other.month && now.day == other.day;
     }
 
     fun getLocations(): MutableList<Location> {
@@ -93,11 +102,11 @@ class LocationRepository internal constructor(
 
     fun refresh(today: Date, language: AbstractMensaProvider.Language, ignoreCache: Boolean = false) {
         synchronized(this) {
-            if (activeRefreshingTasks > 0 || (refreshed && !ignoreCache)) {
+            if (activeRefreshingTasks > 0) {
                 return
             }
 
-            refreshed = true
+            refreshed = Date(System.currentTimeMillis())
 
             // how many tasks are launched
             // 3 because one ETH and two UZH tasks

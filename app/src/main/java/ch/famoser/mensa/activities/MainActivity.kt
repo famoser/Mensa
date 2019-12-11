@@ -85,16 +85,6 @@ class MainActivity : AppCompatActivity() {
 
         EventBus.getDefault().register(this)
 
-        val locationRepository = LocationRepository.getInstance(this)
-        val isRefreshPending = locationRepository.isRefreshPending()
-        initializeLocationList(locationRepository.getLocations(), !isRefreshPending)
-
-        if (isRefreshPending) {
-            window.decorView.post {
-                locationRepository.refresh(Date(System.currentTimeMillis()), getLanguage())
-            }
-        }
-
         swipeContainer.setOnRefreshListener { forceRefresh() }
 
         settings.setOnClickListener {
@@ -181,6 +171,20 @@ class MainActivity : AppCompatActivity() {
 
         this.locationListAdapter.reset()
         this.locationListAdapter.notifyDataSetChanged()
+    }
+
+    public override fun onResume() {
+        val locationRepository = LocationRepository.getInstance(this)
+        val isRefreshPending = locationRepository.isRefreshPending()
+        initializeLocationList(locationRepository.getLocations(), !isRefreshPending)
+
+        if (isRefreshPending) {
+            window.decorView.post {
+                locationRepository.refresh(Date(System.currentTimeMillis()), getLanguage())
+            }
+        }
+
+        super.onResume()
     }
 
     public override fun onPause() {
