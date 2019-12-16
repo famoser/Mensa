@@ -7,6 +7,7 @@ import java.lang.reflect.Type
 interface ISerializationService {
     fun <T> deserializeList(json: String, type: Class<T>): List<T>
     fun <T> deserializeList(json: String, type: Type): List<T>
+    fun <T> deserialize(json: String, type: Type): T
     fun <T : Any> serialize(request: T): String
 }
 
@@ -19,6 +20,13 @@ class SerializationService : ISerializationService {
         val moshi = Moshi.Builder().build()
         val listOfT = Types.newParameterizedType(List::class.java, type)
         val jsonAdapter = moshi.adapter<List<T>>(listOfT)
+
+        return jsonAdapter.fromJson(json)!!
+    }
+
+    override fun <T> deserialize(json: String, type: Type): T {
+        val moshi = Moshi.Builder().build()
+        val jsonAdapter = moshi.adapter<T>(type)
 
         return jsonAdapter.fromJson(json)!!
     }
