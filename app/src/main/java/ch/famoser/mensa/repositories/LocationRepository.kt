@@ -116,7 +116,7 @@ class LocationRepository internal constructor(
         cacheService.startObserveCacheUsage()
 
         RefreshETHMensaTask(ethMensaProvider, today, language, ignoreCache)
-            .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "lunch", "dinner")
+            .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, ETHMensaProvider.MEAL_TIME_LUNCH, ETHMensaProvider.MEAL_TIME_DINNER)
 
         val half = uzhMensas.size / 2
         val batch1 = uzhMensas.subList(0, half)

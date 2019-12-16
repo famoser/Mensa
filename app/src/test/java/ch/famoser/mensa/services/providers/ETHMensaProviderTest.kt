@@ -14,14 +14,14 @@ class ETHMensaProviderTest {
             {
                 "title": "Zentrum",
                 "mensas": [
-                    {
-                        "id": "24e3a71a-ff05-4d20-a8c3-fa24f342c1dc",
-                        "title": "Mensa Polyterrasse",
-                        "mealTime": "11:00-13:30",
-                        "idSlug": 12,
+                      {
+                        "id": "cc422893-0cd5-4250-9cca-3d23044083ac",
+                        "title": "Dozentenfoyer",
+                        "mealTime": "11:00-14:00",
+                        "idSlug": 6,
                         "timeSlug": "lunch",
-                        "infoUrlSlug": "zentrum/mensa-polyterrasse"
-                    } 
+                        "infoUrlSlug": "zentrum/dozentenfoyer"
+                      }
                 ] 
             }
         ]

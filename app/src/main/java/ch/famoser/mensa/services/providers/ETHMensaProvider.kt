@@ -22,6 +22,8 @@ class ETHMensaProvider(
 
     companion object {
         const val CACHE_PROVIDER_PREFIX = "eth"
+        const val MEAL_TIME_LUNCH = "lunch"
+        const val MEAL_TIME_DINNER = "lunch"
     }
 
     private val mensaMap: MutableMap<Mensa, EthMensa> = HashMap()
@@ -33,7 +35,7 @@ class ETHMensaProvider(
             val menuByMensaIds = getMenuByMensaId(date, ignoreCache, time, normalizedLanguage)
 
             for ((mensa, ethzMensa) in mensaMap) {
-                val menus = menuByMensaIds[ethzMensa.idSlug.toString() + "_" + ethzMensa.timeSlug]
+                val menus = menuByMensaIds[ethzMensa.getMapId()]
                 if (menus != null) {
                     mensa.replaceMenus(menus)
                 }
@@ -58,7 +60,14 @@ class ETHMensaProvider(
             }
         }
 
-        val menuByMensaIds = getMenuByMensaIdFromApi(language, date, time)
+        val menuByMensaIds = getMensaMenusFromSearchApi(language, date, time)
+
+        for ((_, ethzMensa) in mensaMap) {
+            val menus = menuByMensaIds[ethzMensa.getMapId()]
+            if (menus == null && ethzMensa.timeSlug == time) {
+                menuByMensaIds[ethzMensa.getMapId()] = getMensaMenuFromApi(language, date, time, ethzMensa)
+            }
+        }
 
         val cacheKey = getMensaIdCacheKey(date, time, language)
         cacheService.saveMensaIds(cacheKey, menuByMensaIds.keys.toList())
@@ -91,16 +100,16 @@ class ETHMensaProvider(
     }
 
     @SuppressLint("UseSparseArrays")
-    private fun getMenuByMensaIdFromApi(
+    private fun getMensaMenusFromSearchApi(
         language: String,
         date: Date,
         time: String
-    ): Map<String, List<Menu>> {
+    ): MutableMap<String, List<Menu>> {
         val dateSlug = getDateTimeString(date)
-        val json = URL("https://www.webservices.ethz.ch/gastro/v1/RVRI/Q1E1/meals/$language/$dateSlug/$time")
+        val json = URL("https://www.webservices.ethz.ch/gastro/v1/RVRI/Q1E1/meals/$language/$dateSlug/$time?language=$language")
             .readText()
 
-        val apiMensas = serializationService.deserializeList(json, ApiMensa::class.java)
+        val apiMensas = serializationService.deserializeList(json, ApiMensaSearch::class.java)
 
         val menuByMensaIds = HashMap<String, List<Menu>>()
         for (apiMensa in apiMensas) {
@@ -110,6 +119,21 @@ class ETHMensaProvider(
         }
 
         return menuByMensaIds
+    }
+
+    @SuppressLint("UseSparseArrays")
+    private fun getMensaMenuFromApi(
+        language: String,
+        date: Date,
+        time: String,
+        mensa: EthMensa
+    ): List<Menu> {
+        val dateSlug = getDateTimeString(date)
+        val json = URL("https://www.webservices.ethz.ch/gastro/v1/RVRI/Q1E1/mensas/${mensa.idSlug}/$language/menus/daily/$dateSlug/$time?language=$language")
+            .readText()
+
+        val apiMensa = serializationService.deserialize<ApiMensa>(json, ApiMensa::class.java)
+        return apiMensa.menu.meals.map { parseApiMenu(it) }
     }
 
     private fun parseApiMenu(apiMeal: ApiMeal): Menu {
@@ -160,11 +184,25 @@ class ETHMensaProvider(
         }
     }
 
+    data class ApiMensaSearch(
+        val id: Int,
+        val mensa: String,
+        val daytime: String,
+        val hours: ApiHours,
+        val meals: List<ApiMeal>
+    )
+
     data class ApiMensa(
         val id: Int,
         val mensa: String,
         val daytime: String,
         val hours: ApiHours,
+        val menu: ApiMenu
+    )
+
+    data class ApiMenu(
+        val date: String,
+        val day: String,
         val meals: List<ApiMeal>
     )
 
@@ -194,5 +232,9 @@ class ETHMensaProvider(
         val idSlug: Int,
         val timeSlug: String,
         val infoUrlSlug: String
-    )
+    ) {
+        fun getMapId(): String {
+            return idSlug.toString() + "_" + timeSlug
+        }
+    }
 }
