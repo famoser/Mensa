@@ -14,14 +14,14 @@ class ETHMensaProviderTest {
             {
                 "title": "Zentrum",
                 "mensas": [
-                      {
-                        "id": "cc422893-0cd5-4250-9cca-3d23044083ac",
-                        "title": "Dozentenfoyer",
-                        "mealTime": "11:00-14:00",
-                        "idSlug": 6,
-                        "timeSlug": "lunch",
-                        "infoUrlSlug": "zentrum/dozentenfoyer"
-                      }
+                  {
+                    "id": "58c14697-c998-42f1-b6ac-2c0bc782af6d",
+                    "title": "Mensa Polyterrasse - Abendessen",
+                    "mealTime": "17:30-19:30",
+                    "idSlug": 12,
+                    "timeSlug": "dinner",
+                    "infoUrlSlug": "zentrum/mensa-polyterrasse"
+                  }
                 ] 
             }
         ]
@@ -42,7 +42,7 @@ class ETHMensaProviderTest {
 
         // act
         val locations = provider.getLocations()
-        val response = provider.getMenus("lunch", nearestMondayDate, AbstractMensaProvider.Language.German, true)
+        val response = provider.getMenus(ETHMensaProvider.MEAL_TIME_DINNER, nearestMondayDate, AbstractMensaProvider.Language.German, true)
 
         // assert
         assertThat(locations).hasSize(1)

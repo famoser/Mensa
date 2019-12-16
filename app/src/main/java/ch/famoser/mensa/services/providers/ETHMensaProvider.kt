@@ -23,7 +23,7 @@ class ETHMensaProvider(
     companion object {
         const val CACHE_PROVIDER_PREFIX = "eth"
         const val MEAL_TIME_LUNCH = "lunch"
-        const val MEAL_TIME_DINNER = "lunch"
+        const val MEAL_TIME_DINNER = "dinner"
     }
 
     private val mensaMap: MutableMap<Mensa, EthMensa> = HashMap()
