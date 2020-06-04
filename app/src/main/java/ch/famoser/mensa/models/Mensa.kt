@@ -1,9 +1,11 @@
 package ch.famoser.mensa.models
 
+import com.squareup.moshi.JsonClass
 import java.net.URI
 import java.util.*
 import kotlin.collections.ArrayList
 
+@JsonClass(generateAdapter = true)
 class Mensa(
     val id: UUID,
     val title: String,

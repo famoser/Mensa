@@ -7,6 +7,7 @@ import ch.famoser.mensa.models.Menu
 import ch.famoser.mensa.services.IAssetService
 import ch.famoser.mensa.services.ICacheService
 import ch.famoser.mensa.services.ISerializationService
+import com.squareup.moshi.JsonClass
 import java.net.URI
 import java.net.URL
 import java.util.*
@@ -184,6 +185,7 @@ class ETHMensaProvider(
         }
     }
 
+    @JsonClass(generateAdapter = true)
     data class ApiMensaSearch(
         val id: Int,
         val mensa: String,
@@ -192,6 +194,7 @@ class ETHMensaProvider(
         val meals: List<ApiMeal>
     )
 
+    @JsonClass(generateAdapter = true)
     data class ApiMensa(
         val id: Int,
         val mensa: String,
@@ -200,15 +203,23 @@ class ETHMensaProvider(
         val menu: ApiMenu
     )
 
+    @JsonClass(generateAdapter = true)
     data class ApiMenu(
         val date: String,
         val day: String,
         val meals: List<ApiMeal>
     )
 
+    @JsonClass(generateAdapter = true)
     data class ApiHours(val opening: List<ApiOpening>, val mealtime: List<ApiMealtime>)
+
+    @JsonClass(generateAdapter = true)
     data class ApiOpening(val from: String, val to: String, val type: String)
+
+    @JsonClass(generateAdapter = true)
     data class ApiMealtime(val from: String, val to: String, val type: String)
+
+    @JsonClass(generateAdapter = true)
     data class ApiMeal(
         val id: Int,
         val type: String,
@@ -220,11 +231,19 @@ class ETHMensaProvider(
         val origins: List<ApiOrigin>
     )
 
+    @JsonClass(generateAdapter = true)
     data class ApiPrices(val student: String, val staff: String, val extern: String)
+
+    @JsonClass(generateAdapter = true)
     data class ApiAllergen(val allergen_id: Int, val label: String)
+
+    @JsonClass(generateAdapter = true)
     data class ApiOrigin(val origin_id: Int, val label: String)
 
+    @JsonClass(generateAdapter = true)
     data class EthLocation(val title: String, val mensas: List<EthMensa>)
+
+    @JsonClass(generateAdapter = true)
     data class EthMensa(
         val id: String,
         val title: String,
