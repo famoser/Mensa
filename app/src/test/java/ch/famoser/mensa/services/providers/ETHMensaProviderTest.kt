@@ -14,14 +14,14 @@ class ETHMensaProviderTest {
             {
                 "title": "Zentrum",
                 "mensas": [
-                  {
-                    "id": "58c14697-c998-42f1-b6ac-2c0bc782af6d",
-                    "title": "Mensa Polyterrasse - Abendessen",
-                    "mealTime": "17:30-19:30",
-                    "idSlug": 12,
-                    "timeSlug": "dinner",
-                    "infoUrlSlug": "zentrum/mensa-polyterrasse"
-                  }
+                    {
+                        "id": "24e3a71a-ff05-4d20-a8c3-fa24f342c1dc",
+                        "title": "Mensa Polyterrasse",
+                        "mealTime": "11:00-13:30",
+                        "idSlug": 12,
+                        "timeSlug": "lunch",
+                        "infoUrlSlug": "zentrum/mensa-polyterrasse"
+                    }
                 ] 
             }
         ]
@@ -42,13 +42,13 @@ class ETHMensaProviderTest {
 
         // act
         val locations = provider.getLocations()
-        val response = provider.getMenus(ETHMensaProvider.MEAL_TIME_DINNER, nearestMondayDate, AbstractMensaProvider.Language.German, true)
+        val response = provider.getMenus(ETHMensaProvider.MEAL_TIME_LUNCH, nearestMondayDate, AbstractMensaProvider.Language.German, true)
 
         // assert
-        assertThat(locations).hasSize(1)
-        assertThat(locations.first().mensas).hasSize(1)
         val polymensa = locations.first().mensas.first()
         assertThat(response).contains(polymensa)
-        assertThat(polymensa.menus).isNotEmpty()
+        assertThat(locations).hasSize(1)
+        assertThat(locations.first().mensas).hasSize(1)
+        assertThat(locations.first().mensas.filter { it.menus.isNotEmpty() }).isNotEmpty()
     }
 }
