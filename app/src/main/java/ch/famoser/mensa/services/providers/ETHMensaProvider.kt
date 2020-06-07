@@ -7,6 +7,7 @@ import ch.famoser.mensa.models.Menu
 import ch.famoser.mensa.services.IAssetService
 import ch.famoser.mensa.services.ICacheService
 import ch.famoser.mensa.services.ISerializationService
+import com.squareup.moshi.JsonClass
 import java.net.URI
 import java.net.URL
 import java.util.*
@@ -113,12 +114,26 @@ class ETHMensaProvider(
 
         val menuByMensaIds = HashMap<String, List<Menu>>()
         for (apiMensa in apiMensas) {
-            val menus = apiMensa.meals.map { parseApiMenu(it) }
+            val menus = apiMensa.meals.map { parseApiMenu(it) }.filter { !isNoMenuNotice(it, language) }
 
             menuByMensaIds[apiMensa.id.toString() + "_" + time] = menus
         }
 
         return menuByMensaIds
+    }
+
+    private fun isNoMenuNotice(menu: Menu, language: String): Boolean {
+        when (language) {
+            "en" -> {
+                val invalidMenus = arrayOf("We look forward to serving you this menu again soon!", "is closed")
+                return invalidMenus.any { menu.description.contains(it) }
+            }
+            "de" -> {
+                val invalidMenus = arrayOf("Dieses Menu servieren wir Ihnen gerne bald wieder!", "geschlossen")
+                return invalidMenus.any { menu.description.contains(it) }
+            }
+        }
+        return false
     }
 
     @SuppressLint("UseSparseArrays")
@@ -147,7 +162,7 @@ class ETHMensaProvider(
         val description = normalizeText(descriptionLines.joinToString(separator = "\n").trim())
 
         val prices = apiMeal.prices
-            .run { arrayOf<String?>(student, staff, extern) }
+            .run { arrayOf(student, staff, extern) }
             .filterNot { it.isNullOrEmpty() }
             .filterNotNull()
             .toTypedArray()
@@ -184,6 +199,7 @@ class ETHMensaProvider(
         }
     }
 
+    @JsonClass(generateAdapter = true)
     data class ApiMensaSearch(
         val id: Int,
         val mensa: String,
@@ -192,6 +208,7 @@ class ETHMensaProvider(
         val meals: List<ApiMeal>
     )
 
+    @JsonClass(generateAdapter = true)
     data class ApiMensa(
         val id: Int,
         val mensa: String,
@@ -200,31 +217,41 @@ class ETHMensaProvider(
         val menu: ApiMenu
     )
 
+    @JsonClass(generateAdapter = true)
     data class ApiMenu(
         val date: String,
         val day: String,
         val meals: List<ApiMeal>
     )
 
+    @JsonClass(generateAdapter = true)
     data class ApiHours(val opening: List<ApiOpening>, val mealtime: List<ApiMealtime>)
+
+    @JsonClass(generateAdapter = true)
     data class ApiOpening(val from: String, val to: String, val type: String)
+
+    @JsonClass(generateAdapter = true)
     data class ApiMealtime(val from: String, val to: String, val type: String)
+
+    @JsonClass(generateAdapter = true)
     data class ApiMeal(
         val id: Int,
-        val type: String,
         val label: String,
         val description: List<String>,
-        val position: Int,
         val prices: ApiPrices,
-        val allergens: List<ApiAllergen>,
-        val origins: List<ApiOrigin>
+        val allergens: List<ApiAllergen>
     )
 
-    data class ApiPrices(val student: String, val staff: String, val extern: String)
-    data class ApiAllergen(val allergen_id: Int, val label: String)
-    data class ApiOrigin(val origin_id: Int, val label: String)
+    @JsonClass(generateAdapter = true)
+    data class ApiPrices(val student: String?, val staff: String?, val extern: String?)
 
+    @JsonClass(generateAdapter = true)
+    data class ApiAllergen(val allergen_id: Int, val label: String)
+
+    @JsonClass(generateAdapter = true)
     data class EthLocation(val title: String, val mensas: List<EthMensa>)
+
+    @JsonClass(generateAdapter = true)
     data class EthMensa(
         val id: String,
         val title: String,

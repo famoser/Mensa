@@ -4,9 +4,11 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "ch.famoser.mensa"
         minSdkVersion 21
@@ -14,6 +16,9 @@ android {
         versionCode 9
         versionName "1.4.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    packagingOptions  {
+        exclude("META-INF/*.kotlin_module")
     }
     buildTypes {
         release {
@@ -25,20 +30,21 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.1.0'
+    implementation 'androidx.core:core-ktx:1.3.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'com.google.android.material:material:1.1.0'
     implementation "androidx.cardview:cardview:1.0.0"
-    implementation "com.squareup.moshi:moshi:1.8.0" // json deserialize
+    implementation 'com.squareup.moshi:moshi:1.9.2' // json deserialize
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:1.9.2" // generate json adapters
     implementation 'org.greenrobot:eventbus:3.1.1' // events
     implementation "org.jetbrains.anko:anko-commons:$anko_version" // easy notifications
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
-    implementation "org.jsoup:jsoup:1.11.3" // html parser
-    testImplementation 'junit:junit:4.12'
-    testImplementation "com.google.truth:truth:1.0" // assertion library
+    implementation 'org.jsoup:jsoup:1.13.1' // html parser
+    testImplementation 'junit:junit:4.13'
+    testImplementation 'com.google.truth:truth:1.0.1' // assertion library
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
