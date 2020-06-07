@@ -13,7 +13,6 @@ android:
     - android-29
 
     # Additional components
-    - extra-google-google_play_services
     - extra-google-m2repository
     - extra-android-m2repository
     
