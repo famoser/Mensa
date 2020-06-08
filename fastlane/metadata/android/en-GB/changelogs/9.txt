@@ -1,0 +1,2 @@
+- fallback for ETH canteen in case the used API endpoint does not return all infos
+- app detects upon resume if menus are still accurate; else it refreshes automatically.

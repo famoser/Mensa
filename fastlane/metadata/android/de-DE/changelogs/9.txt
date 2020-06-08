@@ -1,0 +1,2 @@
+- Fallback für ETH Mensas falls die benutzte API Schnittstelle keine vollständigen Infos zurückgibt
+- App erkennt beim Start ob die Menus noch aktuell sind, und aktualisiert automatisch falls nötig
