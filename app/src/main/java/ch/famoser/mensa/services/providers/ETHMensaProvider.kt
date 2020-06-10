@@ -125,11 +125,11 @@ class ETHMensaProvider(
     private fun isNoMenuNotice(menu: Menu, language: String): Boolean {
         when (language) {
             "en" -> {
-                val invalidMenus = arrayOf("We look forward to serving you this menu again soon!", "is closed")
+                val invalidMenus = arrayOf("We look forward to serving you this menu again soon!", "is closed", "Closed")
                 return invalidMenus.any { menu.description.contains(it) }
             }
             "de" -> {
-                val invalidMenus = arrayOf("Dieses Menu servieren wir Ihnen gerne bald wieder!", "geschlossen")
+                val invalidMenus = arrayOf("Dieses Menu servieren wir Ihnen gerne bald wieder!", "geschlossen", "Geschlossen")
                 return invalidMenus.any { menu.description.contains(it) }
             }
         }
@@ -163,7 +163,7 @@ class ETHMensaProvider(
 
         val prices = apiMeal.prices
             .run { arrayOf(student, staff, extern) }
-            .filterNot { it.isNullOrEmpty() }
+            .filterNot { it.isNullOrEmpty() || it == "NaN" }
             .filterNotNull()
             .toTypedArray()
 
