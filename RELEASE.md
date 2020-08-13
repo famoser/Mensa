@@ -8,3 +8,6 @@ Release checklist:
 - [ ] upload the signed abb to the play store
 - [ ] generate a signed apk
 - [ ] create a new release on github with the `versionName` and attach the signed apk
+
+The key store can be found in assets/publish_key.jks.  
+The password is the personal strong passord of the author.

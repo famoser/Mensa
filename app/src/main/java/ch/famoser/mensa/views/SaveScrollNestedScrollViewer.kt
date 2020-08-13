@@ -12,7 +12,6 @@ class SaveScrollNestedScrollViewer : NestedScrollView {
 
     constructor(context: Context, attributes: AttributeSet, defStyleAttr: Int) : super(context, attributes, defStyleAttr)
 
-
     public override fun onSaveInstanceState(): Parcelable? {
         return super.onSaveInstanceState()
     }
