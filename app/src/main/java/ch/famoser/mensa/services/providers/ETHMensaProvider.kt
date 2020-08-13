@@ -1,6 +1,7 @@
 package ch.famoser.mensa.services.providers
 
 import android.annotation.SuppressLint
+import android.util.Log
 import ch.famoser.mensa.models.Location
 import ch.famoser.mensa.models.Mensa
 import ch.famoser.mensa.models.Menu
@@ -66,7 +67,8 @@ class ETHMensaProvider(
         for ((_, ethzMensa) in mensaMap) {
             val menus = menuByMensaIds[ethzMensa.getMapId()]
             if (menus == null && ethzMensa.timeSlug == time) {
-                menuByMensaIds[ethzMensa.getMapId()] = getMensaMenuFromApi(language, date, time, ethzMensa)
+                menuByMensaIds[ethzMensa.getMapId()] =
+                    getMensaMenuFromApi(language, date, time, ethzMensa)
             }
         }
 
@@ -80,7 +82,11 @@ class ETHMensaProvider(
         return menuByMensaIds
     }
 
-    private fun getMenuByMensaIdFromCache(date: Date, source: String, language: String): Map<String, List<Menu>>? {
+    private fun getMenuByMensaIdFromCache(
+        date: Date,
+        source: String,
+        language: String
+    ): Map<String, List<Menu>>? {
         val cacheKey = getMensaIdCacheKey(date, source, language)
         val impactedMensas = cacheService.readMensaIds(cacheKey) ?: return null
 
@@ -106,15 +112,24 @@ class ETHMensaProvider(
         date: Date,
         time: String
     ): MutableMap<String, List<Menu>> {
-        val dateSlug = getDateTimeString(date)
-        val json = URL("https://www.webservices.ethz.ch/gastro/v1/RVRI/Q1E1/meals/$language/$dateSlug/$time?language=$language")
-            .readText()
+        var apiMensas: List<ApiMensaSearch> = ArrayList();
 
-        val apiMensas = serializationService.deserializeList(json, ApiMensaSearch::class.java)
+        val dateSlug = getDateTimeString(date)
+        val url =
+            URL("https://www.webservices.ethz.ch/gastro/v1/RVRI/Q1E1/meals/$language/$dateSlug/$time?language=$language")
+
+        try {
+            val json = url.readText()
+
+            apiMensas = serializationService.deserializeList(json, ApiMensaSearch::class.java)
+        } catch (e: java.lang.Exception) {
+            Log.e("ETHMensaProvider", "request for mensa search failed: $url", e);
+        }
 
         val menuByMensaIds = HashMap<String, List<Menu>>()
         for (apiMensa in apiMensas) {
-            val menus = apiMensa.meals.map { parseApiMenu(it) }.filter { !isNoMenuNotice(it, language) }
+            val menus =
+                apiMensa.meals.map { parseApiMenu(it) }.filter { !isNoMenuNotice(it, language) }
 
             menuByMensaIds[apiMensa.id.toString() + "_" + time] = menus
         }
@@ -125,11 +140,19 @@ class ETHMensaProvider(
     private fun isNoMenuNotice(menu: Menu, language: String): Boolean {
         when (language) {
             "en" -> {
-                val invalidMenus = arrayOf("We look forward to serving you this menu again soon!", "is closed", "Closed")
+                val invalidMenus = arrayOf(
+                    "We look forward to serving you this menu again soon!",
+                    "is closed",
+                    "Closed"
+                )
                 return invalidMenus.any { menu.description.contains(it) }
             }
             "de" -> {
-                val invalidMenus = arrayOf("Dieses Menu servieren wir Ihnen gerne bald wieder!", "geschlossen", "Geschlossen")
+                val invalidMenus = arrayOf(
+                    "Dieses Menu servieren wir Ihnen gerne bald wieder!",
+                    "geschlossen",
+                    "Geschlossen"
+                )
                 return invalidMenus.any { menu.description.contains(it) }
             }
         }
@@ -144,11 +167,19 @@ class ETHMensaProvider(
         mensa: EthMensa
     ): List<Menu> {
         val dateSlug = getDateTimeString(date)
-        val json = URL("https://www.webservices.ethz.ch/gastro/v1/RVRI/Q1E1/mensas/${mensa.idSlug}/$language/menus/daily/$dateSlug/$time?language=$language")
-            .readText()
+        val url =
+            URL("https://www.webservices.ethz.ch/gastro/v1/RVRI/Q1E1/mensas/${mensa.idSlug}/$language/menus/daily/$dateSlug/$time?language=$language")
 
-        val apiMensa = serializationService.deserialize<ApiMensa>(json, ApiMensa::class.java)
-        return apiMensa.menu.meals.map { parseApiMenu(it) }
+        try {
+            val json = url.readText()
+
+            val apiMensa = serializationService.deserialize<ApiMensa>(json, ApiMensa::class.java)
+            return apiMensa.menu.meals.map { parseApiMenu(it) }
+        } catch (e: java.lang.Exception) {
+            Log.e("ETHMensaProvider", "request for single mensa ${mensa.title} failed: $url", e);
+
+            return ArrayList();
+        }
     }
 
     private fun parseApiMenu(apiMeal: ApiMeal): Menu {
@@ -180,7 +211,8 @@ class ETHMensaProvider(
     }
 
     override fun getLocations(): List<Location> {
-        val ethLocations = super.readJsonAssetFileToListOfT("eth/locations.json", EthLocation::class.java)
+        val ethLocations =
+            super.readJsonAssetFileToListOfT("eth/locations.json", EthLocation::class.java)
 
         return ethLocations.map { ethLocation ->
             Location(ethLocation.title, ethLocation.mensas.map {

@@ -41,6 +41,7 @@ class ETHMensaProviderTest {
         if (dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY) {
             c.add(Calendar.DAY_OF_WEEK, 2);
         }
+
         val nearestValidDate = Date.from(c.toInstant())
 
         // act
