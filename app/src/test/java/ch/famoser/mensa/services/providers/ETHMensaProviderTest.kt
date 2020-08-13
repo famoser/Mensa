@@ -37,12 +37,15 @@ class ETHMensaProviderTest {
         val provider = ETHMensaProvider(cacheService, inMemoryAssetService, serializationService)
 
         val c = Calendar.getInstance()
-        c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
-        val nearestMondayDate = Date.from(c.toInstant())
+        val dayOfWeek = c.get(Calendar.DAY_OF_WEEK)
+        if (dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY) {
+            c.add(Calendar.DAY_OF_WEEK, 2);
+        }
+        val nearestValidDate = Date.from(c.toInstant())
 
         // act
         val locations = provider.getLocations()
-        val response = provider.getMenus(ETHMensaProvider.MEAL_TIME_LUNCH, nearestMondayDate, AbstractMensaProvider.Language.German, true)
+        val response = provider.getMenus(ETHMensaProvider.MEAL_TIME_LUNCH, nearestValidDate, AbstractMensaProvider.Language.German, true)
 
         // assert
         val polymensa = locations.first().mensas.first()
