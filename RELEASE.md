@@ -10,5 +10,5 @@ Release checklist:
 - [ ] commit
 - [ ] create a new release on github with the `versionName` and attach the signed apk
 
-The key store can be found in assets/publish_key.jks.  
+The key store can be found in `assets/keystore.jks`, the name of the key is `upload`.  
 The password is the personal strong passord of the author.
