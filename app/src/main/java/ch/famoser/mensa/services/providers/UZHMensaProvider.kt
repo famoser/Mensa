@@ -88,7 +88,8 @@ abstract class UZHMensaProvider<T : UzhMensa>(
         return htmlMenus.map {
             val price = if (it.price != null) it.price!! else arrayOf()
             val title = if (it.title != null) it.title!! else ""
-            Menu(title, normalizeText(it.description), price, it.allergenInfo)
+            val allergens = if (it.allergenInfo != null) it.allergenInfo!!.replace("\\s+".toRegex(), " ") else ""
+            Menu(title, normalizeText(it.description), price, allergens)
         }
     }
 
