@@ -138,25 +138,27 @@ class ETHMensaProvider(
     }
 
     private fun isNoMenuNotice(menu: Menu, language: String): Boolean {
-        when (language) {
+        val invalidMenus = when (language) {
             "en" -> {
-                val invalidMenus = arrayOf(
+                arrayOf(
                     "We look forward to serving you this menu again soon!",
                     "is closed",
                     "Closed"
                 )
-                return invalidMenus.any { menu.description.contains(it) }
             }
             "de" -> {
-                val invalidMenus = arrayOf(
+                arrayOf(
                     "Dieses Menu servieren wir Ihnen gerne bald wieder!",
                     "geschlossen",
                     "Geschlossen"
                 )
-                return invalidMenus.any { menu.description.contains(it) }
+            }
+            else -> {
+                arrayOf()
             }
         }
-        return false
+
+        return invalidMenus.any { menu.description.contains(it) || menu.title == it }
     }
 
     @SuppressLint("UseSparseArrays")
@@ -187,7 +189,11 @@ class ETHMensaProvider(
         var descriptionLines = apiMeal.description
         if (label.isEmpty() && apiMeal.description.isNotEmpty()) {
             label = apiMeal.description.first()
-            descriptionLines = descriptionLines.subList(1, descriptionLines.size - 1)
+            if (descriptionLines.size > 1) {
+                descriptionLines = descriptionLines.subList(1, descriptionLines.size)
+            } else {
+                descriptionLines = ArrayList()
+            }
         }
 
         val description = normalizeText(descriptionLines.joinToString(separator = "\n").trim())
