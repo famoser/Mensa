@@ -33,8 +33,7 @@ class ETHMensaProvider(
     fun getMenus(time: String, date: Date, language: Language, ignoreCache: Boolean)
             : List<Mensa> {
         try {
-            val normalizedLanguage = languageToString(language)
-            val menuByMensaIds = getMenuByMensaId(date, ignoreCache, time, normalizedLanguage)
+            val menuByMensaIds = getMenuByMensaId(date, ignoreCache, time, language)
 
             for ((mensa, ethzMensa) in mensaMap) {
                 val menus = menuByMensaIds[ethzMensa.getMapId()]
@@ -53,30 +52,45 @@ class ETHMensaProvider(
         date: Date,
         ignoreCache: Boolean,
         time: String,
-        language: String
+        language: Language
     ): Map<String, List<Menu>> {
+        val languageString = languageToString(language)
         if (!ignoreCache) {
-            val menuByMensaIds = getMenuByMensaIdFromCache(date, time, language)
+            val menuByMensaIds = getMenuByMensaIdFromCache(date, time, languageString)
             if (menuByMensaIds != null) {
                 return menuByMensaIds
             }
         }
 
-        val menuByMensaIds = getMensaMenusFromSearchApi(language, date, time)
+        val menuByMensaIds = getMensaMenusFromSearchApi(languageString, date, time)
 
         for ((_, ethzMensa) in mensaMap) {
             val menus = menuByMensaIds[ethzMensa.getMapId()]
             if (menus == null && ethzMensa.timeSlug == time) {
                 menuByMensaIds[ethzMensa.getMapId()] =
-                    getMensaMenuFromApi(language, date, time, ethzMensa)
+                    getMensaMenuFromApi(languageString, date, time, ethzMensa)
+            }
+
+            if (menus !== null && menus.any() && menus.all { it.isSomeEmpty() }) {
+                val fallbackLanguage = fallbackLanguage(language)
+                val fallbackLanguageString = languageToString(fallbackLanguage)
+                val fallbackMenus = getMensaMenuFromApi(fallbackLanguageString, date, time, ethzMensa)
+
+                val newMenus = ArrayList<Menu>(menus);
+                var i = 0;
+                while (i < newMenus.size && i < fallbackMenus.size) {
+                    newMenus[i] = newMenus[i].mergeWithFallback(fallbackMenus[i]);
+                    i++;
+                }
+                menuByMensaIds[ethzMensa.getMapId()] = newMenus;
             }
         }
 
-        val cacheKey = getMensaIdCacheKey(date, time, language)
+        val cacheKey = getMensaIdCacheKey(date, time, languageString)
         cacheService.saveMensaIds(cacheKey, menuByMensaIds.keys.toList())
 
         for ((mensaId, menus) in menuByMensaIds) {
-            cacheMenus(CACHE_PROVIDER_PREFIX, mensaId, date, language, menus)
+            cacheMenus(CACHE_PROVIDER_PREFIX, mensaId, date, languageString, menus)
         }
 
         return menuByMensaIds

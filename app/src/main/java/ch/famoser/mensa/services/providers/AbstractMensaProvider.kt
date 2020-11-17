@@ -87,6 +87,13 @@ abstract class AbstractMensaProvider(
         }
     }
 
+    protected fun fallbackLanguage(language: Language): Language {
+        return when (language) {
+            Language.German -> Language.English
+            Language.English -> Language.German
+        }
+    }
+
     enum class Language {
         German,
         English
