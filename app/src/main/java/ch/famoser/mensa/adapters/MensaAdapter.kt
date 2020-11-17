@@ -94,7 +94,7 @@ class MensaAdapter constructor(
                 val recommendedState = getRecommendedState(holder.mensaViewModel.mensa)
                 transitionToDesiredHolderState(holder, recommendedState)
             } else {
-                showAvailableHeader(holder)
+                showInitialHeader(holder)
             }
         } else {
             transitionToDesiredHolderState(holder, holder.mensaViewModel.viewState)
@@ -137,6 +137,12 @@ class MensaAdapter constructor(
 
     private fun showClosedHeader(holder: StatefulViewHolder) {
         holder.viewHolder.openingTimesView.text = parentActivity.getString(R.string.closed)
+        holder.viewHolder.headerWrapper.background =
+            ContextCompat.getDrawable(parentActivity.applicationContext, R.color.colorPrimaryLight)
+    }
+
+    private fun showInitialHeader(holder: StatefulViewHolder) {
+        holder.viewHolder.openingTimesView.text = holder.mensaViewModel.mensa.mealTime
         holder.viewHolder.headerWrapper.background =
             ContextCompat.getDrawable(parentActivity.applicationContext, R.color.colorPrimaryLight)
     }
