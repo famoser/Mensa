@@ -80,6 +80,10 @@ abstract class UZHMensaProvider<T : UzhMensa>(
         val htmlMenus = parseMensaHtml(apiUrl)
 
         // if only "closed" or "not available" then do not show any menus
+        if (isMensaClosedNotice(uzhMensa, htmlMenus, language)) {
+            return ArrayList()
+        }
+
         val realMenus = htmlMenus.filter { !isNoMenuNotice(it, language) }
         if (realMenus.isEmpty()) {
             return ArrayList()
@@ -91,6 +95,14 @@ abstract class UZHMensaProvider<T : UzhMensa>(
             val allergens = if (it.allergenInfo != null) it.allergenInfo!!.replace("\\s+".toRegex(), " ") else ""
             Menu(title, normalizeText(it.description), price, allergens)
         }
+    }
+
+    private fun isMensaClosedNotice(uzhMensa: T, menus: List<HtmlMenu>, language: String): Boolean {
+        if (uzhMensa.infoUrlSlug == "raemi59" && menus.size == 2) {
+            return menus[1].description.contains("weiters Geschlossen");
+        }
+
+        return false
     }
 
     private fun isNoMenuNotice(menu: HtmlMenu, language: String): Boolean {
