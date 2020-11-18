@@ -34,7 +34,7 @@
                     android:fitsSystemWindows="true"
                     android:scaleType="centerCrop"
                     android:adjustViewBounds="true"
-                    android:tint="#44000000"
+                    app:tint="#44000000"
                     android:contentDescription="@string/mensa"
                     tools:src="@drawable/mensa_example"/>
 
