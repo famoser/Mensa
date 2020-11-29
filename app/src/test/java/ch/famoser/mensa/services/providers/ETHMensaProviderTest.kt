@@ -15,12 +15,12 @@ class ETHMensaProviderTest {
                 "title": "Zentrum",
                 "mensas": [
                   {
-                    "id": "e01cded9-53aa-47c0-9ea5-3b5c85909e23",
-                    "title": "FUSION coffee",
-                    "mealTime": "17:30-19:00",
-                    "idSlug": 22,
+                    "id": "24e3a71a-ff05-4d20-a8c3-fa24f342c1dc",
+                    "title": "Mensa Polyterrasse",
+                    "mealTime": "11:00-13:30",
+                    "idSlug": 12,
                     "timeSlug": "lunch",
-                    "infoUrlSlug": "hoenggerberg/fusion-coffee"
+                    "infoUrlSlug": "zentrum/mensa-polyterrasse"
                   }
                 ] 
             }
