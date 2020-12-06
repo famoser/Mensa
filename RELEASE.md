@@ -7,6 +7,7 @@ Release checklist:
 - [ ] increase the `versionCode` and adapt the `versionName` in `app/build.gradle`.
 - [ ] upload the signed abb to the play store
 - [ ] generate a signed apk
+- [ ] write a changelog in fastlane metadata
 - [ ] commit
 - [ ] create a new release on github with the `versionName` and attach the signed apk
 
