@@ -18,9 +18,6 @@ android:
 
 jdk: openjdk11
 
-before_install:
-  - yes | sdkmanager "platforms;android-29"
- 
 script:
   - ./gradlew build 
   - test $TRAVIS_PULL_REQUEST != "false" || ./gradlew sonarqube
