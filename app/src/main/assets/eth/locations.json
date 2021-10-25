@@ -13,7 +13,7 @@
       {
         "id": "cc422893-0cd5-4250-9cca-3d23044083ac",
         "title": "Dozentenfoyer",
-        "mealTime": "11:00-14:00",
+        "mealTime": "11:30-13:45",
         "idSlug": 6,
         "timeSlug": "lunch",
         "infoUrlSlug": "zentrum/dozentenfoyer"
@@ -29,7 +29,7 @@
       {
         "id": "d4a1f423-7731-4bb0-8805-e1763e36150e",
         "title": "Foodtrailer",
-        "mealTime": "11:00-14:00",
+        "mealTime": "11:30-13:30",
         "idSlug": 9,
         "timeSlug": "lunch",
         "infoUrlSlug": "zentrum/foodtrailer-etz"
@@ -45,7 +45,7 @@
       {
         "id": "24e3a71a-ff05-4d20-a8c3-fa24f342c1dc",
         "title": "Mensa Polyterrasse",
-        "mealTime": "11:00-13:30",
+        "mealTime": "11:15-14:15",
         "idSlug": 12,
         "timeSlug": "lunch",
         "infoUrlSlug": "zentrum/mensa-polyterrasse"
@@ -82,7 +82,7 @@
       {
         "id": "0414ece7-d352-4495-99ec-51e9494c5d39",
         "title": "Alumni quattro Lounge",
-        "mealTime": "11:00-21:00",
+        "mealTime": "11:30-19:30",
         "idSlug": 15,
         "timeSlug": "lunch",
         "infoUrlSlug": "hoenggerberg/alumni-quattro-lounge"
@@ -90,7 +90,7 @@
       {
         "id": "c4e2a6fd-5c72-4f1c-8dcd-7d87f662f5f2",
         "title": "food market - green day",
-        "mealTime": "11:00-16:00",
+        "mealTime": "11:15-13:30",
         "idSlug": 19,
         "timeSlug": "lunch",
         "infoUrlSlug": "hoenggerberg/food-market-green-day"
@@ -98,7 +98,7 @@
       {
         "id": "e316e042-a99d-486e-872c-5e90b5092145",
         "title": "food market - grill bbQ",
-        "mealTime": "11:00-16:00",
+        "mealTime": "11:15-13:30",
         "idSlug": 20,
         "timeSlug": "lunch",
         "infoUrlSlug": "hoenggerberg/food-market-grill-bbq"
@@ -106,7 +106,7 @@
       {
         "id": "6bad9247-0c79-4423-9b16-33b8f74a87cd",
         "title": "food market - pizza pasta day",
-        "mealTime": "11:00-16:00",
+        "mealTime": "11:15-13:30",
         "idSlug": 18,
         "timeSlug": "lunch",
         "infoUrlSlug": "hoenggerberg/food-market-pizza-pasta"
@@ -122,10 +122,18 @@
       {
         "id": "e01cded9-53aa-47c0-9ea5-3b5c85909e23",
         "title": "FUSION coffee",
-        "mealTime": "17:30-19:00",
+        "mealTime": "11:00-14:00",
         "idSlug": 22,
         "timeSlug": "lunch",
         "infoUrlSlug": "hoenggerberg/fusion-coffee"
+      },
+      {
+        "id": "e01cded9-53ea-47c0-9a25-2b5c85909e23",
+        "title": "Rice Up!",
+        "mealTime": "11:00-14:00",
+        "idSlug": 27,
+        "timeSlug": "lunch",
+        "infoUrlSlug": "hoenggerberg/rice-up"
       }
     ]
   }

@@ -6,7 +6,7 @@ addons:
     organization: "famoser-github"
     token:
       secure: "Ti5fuTMl+j23xVWDoqoeHMxfbDgvivlUZ4FdLvZH7LBhkvQ9tLvmhnzZksA3qUJxGcdK7NWWojHNEoDpw/riFuRb0dW4fCTkTaw9CfvspNkAiTWq/N5CYsPRThYFYzPzKTbTR9gTxJIJ9z/1ETmwecZRtkuCb+GpI5vuuvxlHsLBamnbvIP4xOF4hoI3xO0di1dVRmDDQTk9ke96QEaE2uLMsmyQOG7KXBvzGx0y0uwJQmwxdLhz3QL6qCbLaqKkR3XNq0mwGzbixblmVejbNlz7sn+UQovTTkPdcBVyXuBlhJqL8TWeNhUaW/9ZW4tVYyNVpUR0qywys1J1MaD+aHzAE0+Z93OtwofWyj24a6IgCSzOyvVP69/f/MnRrhDJj2nRVuBvuR5PsHqX5EJ6eUTglYKb2DvDD7DTMk5/Bxw/CWHYhaMiXPkzZ7PSJ5h2YRf64qdQGSGmAIl/6K2ckWiGbjYLAc92c15mm63xCouGpQ1ujjqVcyWbvGdrNeIQhBttfvtb/2UrRl8bjnEBUv8IAGEoMzBFXAJ6vAzJmWF5MnBNT4uPcoSRhq9RYTKJOUiSuFVyH/PCgPP0s2NO8ZXeLYDqQn2kWzWczJdxU25YZFn67Eg1A9dNv20hq6E7otoinP/jdZhlJk/BmznyfbWOcbGKGnAxOYvRY+yvsEM="
-  
+
 android:
   components:
     - build-tools-29.0.3
@@ -15,10 +15,16 @@ android:
     # Additional components
     - extra-google-m2repository
     - extra-android-m2repository
-    
+
+jdk: openjdk11
+
+matrix:
+  allow_failures:
+    - jdk: openjdk11
+
 before_install:
   - yes | sdkmanager "platforms;android-29"
- 
+
 script:
   - ./gradlew build 
   - test $TRAVIS_PULL_REQUEST != "false" || ./gradlew sonarqube
