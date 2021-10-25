@@ -16,7 +16,7 @@ android:
     - extra-google-m2repository
     - extra-android-m2repository
 
-jdk: openjdk11
+jdk: openjdk8
 
 script:
   - ./gradlew build 
