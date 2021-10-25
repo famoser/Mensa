@@ -16,7 +16,14 @@ android:
     - extra-google-m2repository
     - extra-android-m2repository
 
-jdk: openjdk9
+jdk: openjdk11
+
+matrix:
+  allow_failures:
+    - jdk: openjdk11
+
+before_install:
+  - yes | sdkmanager "platforms;android-29"
 
 script:
   - ./gradlew build 
