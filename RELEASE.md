@@ -5,7 +5,7 @@ The app is published in the [play store](https://play.google.com/store/apps/deta
 Release checklist:
 
 - [ ] increase the `versionCode` and adapt the `versionName` in `app/build.gradle`.
-- [ ] upload the signed abb to the play store
+- [ ] upload the signed abb to the play store (use `assets/keystore.jks` with strong PW)
 - [ ] generate a signed apk
 - [ ] write a changelog in fastlane metadata
 - [ ] commit
