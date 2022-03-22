@@ -5,7 +5,7 @@
       {
         "id": "25588906-4759-4b54-9c0e-bf7b4fd158a4",
         "title": "Untere Mensa",
-        "mealTime": "11:00-14:30",
+        "mealTime": "11:00-14:00",
         "apiUrlSlug": "zentrum-mercato",
         "idSlugDe": 147,
         "idSlugEn": 505,
@@ -14,7 +14,7 @@
       {
         "id": "7a05967f-9d99-40ca-9b4b-064a81261644",
         "title": "Untere Mensa - Abendessen",
-        "mealTime": "17:00-19:30",
+        "mealTime": "17:00-19:00",
         "apiUrlSlug": "zentrum-mercato-abend",
         "idSlugDe": 149,
         "idSlugEn": 506,
@@ -23,7 +23,7 @@
       {
         "id": "2e02c699-d208-4845-8b3c-519bde6b9574",
         "title": "Obere Mensa",
-        "mealTime": "11:00-14:30",
+        "mealTime": "11:00-14:00",
         "apiUrlSlug": "zentrum-mensa",
         "idSlugDe": 148,
         "idSlugEn": 507,
@@ -141,7 +141,7 @@
       {
         "id": "1200e7c2-e898-4e5b-917c-c98d4a239671",
         "title": "Cafeteria Plattenstrasse",
-        "mealTime": "07:00-16:30",
+        "mealTime": "09:00-14:30",
         "apiUrlSlug": "cafeteria-uzh-plattenstrasse",
         "idSlugDe": 143,
         "idSlugEn": 520,
