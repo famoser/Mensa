@@ -13,7 +13,7 @@
       {
         "id": "cc422893-0cd5-4250-9cca-3d23044083ac",
         "title": "Dozentenfoyer",
-        "mealTime": "11:30-13:45",
+        "mealTime": "11:30-13:30",
         "idSlug": 6,
         "timeSlug": "lunch",
         "infoUrlSlug": "zentrum/dozentenfoyer"
@@ -45,7 +45,7 @@
       {
         "id": "24e3a71a-ff05-4d20-a8c3-fa24f342c1dc",
         "title": "Mensa Polyterrasse",
-        "mealTime": "11:15-14:15",
+        "mealTime": "11:15-14:00",
         "idSlug": 12,
         "timeSlug": "lunch",
         "infoUrlSlug": "zentrum/mensa-polyterrasse"
@@ -61,7 +61,7 @@
       {
         "id": "f7058f19-1c57-4dd4-9e3c-d3a80bcc8b35",
         "title": "Polysnack",
-        "mealTime": "11:00-14:00",
+        "mealTime": "11:00-13:30",
         "idSlug": 13,
         "timeSlug": "lunch",
         "infoUrlSlug": "zentrum/polysnack"
@@ -69,7 +69,7 @@
       {
         "id": "490c3c0d-3ff2-45ca-b89a-c2062724dfbe",
         "title": "Tannenbar",
-        "mealTime": "11:00-13:30",
+        "mealTime": "11:30-13:30",
         "idSlug": 14,
         "timeSlug": "lunch",
         "infoUrlSlug": "zentrum/tannenbar"
@@ -82,9 +82,17 @@
       {
         "id": "0414ece7-d352-4495-99ec-51e9494c5d39",
         "title": "Alumni quattro Lounge",
-        "mealTime": "11:30-19:30",
+        "mealTime": "11:00-16:00",
         "idSlug": 15,
         "timeSlug": "lunch",
+        "infoUrlSlug": "hoenggerberg/alumni-quattro-lounge"
+      },
+      {
+        "id": "0414ece7-d352-4495-29ec-51e9814c5d39",
+        "title": "Alumni quattro Lounge - Abendessen",
+        "mealTime": "16:00-20:00",
+        "idSlug": 15,
+        "timeSlug": "dinner",
         "infoUrlSlug": "hoenggerberg/alumni-quattro-lounge"
       },
       {
@@ -130,7 +138,7 @@
       {
         "id": "e01cded9-53ea-47c0-9a25-2b5c85909e23",
         "title": "Rice Up!",
-        "mealTime": "11:00-14:00",
+        "mealTime": "10:30-14:30",
         "idSlug": 27,
         "timeSlug": "lunch",
         "infoUrlSlug": "hoenggerberg/rice-up"
