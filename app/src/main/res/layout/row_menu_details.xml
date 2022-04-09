@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/share"
                     android:layout_gravity="bottom"
-                    android:background="@drawable/ic_share_black_24dp"
+                    android:background="@drawable/ic_share_24dp"
             />
 
         </LinearLayout>
