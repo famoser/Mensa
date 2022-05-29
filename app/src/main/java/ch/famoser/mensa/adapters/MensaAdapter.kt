@@ -138,13 +138,13 @@ class MensaAdapter constructor(
     private fun showClosedHeader(holder: StatefulViewHolder) {
         holder.viewHolder.openingTimesView.text = parentActivity.getString(R.string.closed)
         holder.viewHolder.headerWrapper.background =
-            ContextCompat.getDrawable(parentActivity.applicationContext, R.color.colorPrimaryLight)
+            ContextCompat.getDrawable(parentActivity.applicationContext, R.color.colorCardDisabled)
     }
 
     private fun showInitialHeader(holder: StatefulViewHolder) {
         holder.viewHolder.openingTimesView.text = holder.mensaViewModel.mensa.mealTime
         holder.viewHolder.headerWrapper.background =
-            ContextCompat.getDrawable(parentActivity.applicationContext, R.color.colorPrimaryLight)
+            ContextCompat.getDrawable(parentActivity.applicationContext, R.color.colorCardDisabled)
     }
 
     private fun showAvailableHeader(holder: StatefulViewHolder) {

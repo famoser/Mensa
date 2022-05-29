@@ -24,7 +24,7 @@
                 android:maxHeight="2dp"
                 android:visibility="gone"
                 android:progressTint="@color/colorPrimary"
-                android:progressBackgroundTint="@android:color/white"
+                android:progressBackgroundTint="?android:attr/colorBackground"
                 android:indeterminateTintMode="src_atop"
                 android:foregroundTint="@color/colorPrimaryDark"
                 tools:max="100"
