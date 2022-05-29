@@ -12,12 +12,16 @@ import java.net.URI
 import java.util.UUID
 
 class SerializationService {
+    val safeDeserialization = Json {
+        ignoreUnknownKeys = true
+    }
+
     inline fun <reified T> deserializeList(json: String): List<T> {
-        return Json.decodeFromString(json)
+        return safeDeserialization.decodeFromString(json)
     }
 
     inline fun <reified T> deserialize(json: String): T {
-        return Json.decodeFromString(json)
+        return safeDeserialization.decodeFromString(json)
     }
 
     inline fun <reified T : Any> serialize(request: T): String {
