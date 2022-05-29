@@ -7,11 +7,11 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
     defaultConfig {
         applicationId "ch.famoser.mensa"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 32
         versionCode 17
         versionName "1.5.7"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -36,12 +36,11 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'com.google.android.material:material:1.6.0'
     implementation "androidx.cardview:cardview:1.0.0"
     implementation 'com.squareup.moshi:moshi:1.9.2' // json deserialize
     kapt "com.squareup.moshi:moshi-kotlin-codegen:1.9.2" // generate json adapters
     implementation 'org.greenrobot:eventbus:3.1.1' // events
-    implementation "org.jetbrains.anko:anko-commons:$anko_version" // easy notifications
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'org.jsoup:jsoup:1.13.1' // html parser
     testImplementation 'junit:junit:4.13'
