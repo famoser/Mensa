@@ -12,8 +12,8 @@ android {
         applicationId "ch.famoser.mensa"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 17
-        versionName "1.5.7"
+        versionCode 18
+        versionName "1.6.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     packagingOptions {
