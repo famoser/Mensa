@@ -2,6 +2,7 @@ package ch.famoser.mensa.activities
 
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +11,6 @@ import ch.famoser.mensa.fragments.MensaDetailFragment
 import ch.famoser.mensa.models.Mensa
 import ch.famoser.mensa.repositories.LocationRepository
 import kotlinx.android.synthetic.main.activity_mensa.*
-import org.jetbrains.anko.browse
 import java.io.FileNotFoundException
 import java.util.*
 
@@ -35,7 +35,9 @@ class MensaActivity : AppCompatActivity() {
         initializeContent(mensa, savedInstanceState)
 
         details_action.setOnClickListener {
-            browse(mensa.url.toString())
+            val i = Intent(Intent.ACTION_VIEW)
+            i.data = Uri.parse(mensa.url.toString())
+            startActivity(i)
         }
     }
 

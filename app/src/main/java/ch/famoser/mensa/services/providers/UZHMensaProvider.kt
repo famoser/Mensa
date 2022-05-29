@@ -5,26 +5,45 @@ import ch.famoser.mensa.models.Mensa
 import ch.famoser.mensa.models.Menu
 import ch.famoser.mensa.services.IAssetService
 import ch.famoser.mensa.services.ICacheService
-import ch.famoser.mensa.services.ISerializationService
+import ch.famoser.mensa.services.SerializationService
+import kotlinx.serialization.Serializable
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
-import java.lang.reflect.ParameterizedType
 import java.net.URI
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-abstract class UZHMensaProvider<T : UzhMensa>(
+class UZHMensaProvider(
     cacheService: ICacheService,
-    assetService: IAssetService,
-    serializationService: ISerializationService
-) : AbstractMensaProvider(cacheService, assetService, serializationService) {
+    private val assetService: IAssetService,
+    private val serializationService: SerializationService
+) : AbstractMensaProvider(cacheService) {
 
     companion object {
         const val CACHE_PROVIDER_PREFIX = "uzh"
     }
 
-    private val mensaMap: MutableMap<Mensa, T> = HashMap()
+    private fun getUrlFor(uzhMensa: UzhMensa, dayOfWeek: Int, language: String): String? {
+        val dayOfWeekForApi = transformDayOfWeek(dayOfWeek) ?: return null
+
+        var idSlug = uzhMensa.idSlugEn
+        if (language === "de") {
+            idSlug = uzhMensa.idSlugDe
+        }
+
+        return "https://zfv.ch/$language/menus/rssMenuPlan?menuId=$idSlug&type=uzh2&dayOfWeek=$dayOfWeekForApi"
+    }
+
+    private fun transformDayOfWeek(dayOfWeek: Int): Int? {
+        if (dayOfWeek < Calendar.MONDAY || dayOfWeek > Calendar.FRIDAY) {
+            return null
+        }
+
+        return dayOfWeek - 1
+    }
+
+    private val mensaMap: MutableMap<Mensa, UzhMensa> = HashMap()
 
     fun getMenus(mensa: Mensa, date: Date, language: Language, ignoreCache: Boolean): Boolean {
         val uzhMensa = mensaMap[mensa]
@@ -49,7 +68,7 @@ abstract class UZHMensaProvider<T : UzhMensa>(
     }
 
     private fun loadMenus(
-        uzhMensa: T,
+        uzhMensa: UzhMensa,
         date: Date,
         language: String,
         ignoreCache: Boolean
@@ -71,7 +90,7 @@ abstract class UZHMensaProvider<T : UzhMensa>(
     }
 
     private fun loadMenusFromApi(
-        uzhMensa: T,
+        uzhMensa: UzhMensa,
         date: Date,
         language: String
     ): List<Menu>? {
@@ -97,7 +116,7 @@ abstract class UZHMensaProvider<T : UzhMensa>(
         }
     }
 
-    private fun isMensaClosedNotice(uzhMensa: T, menus: List<HtmlMenu>, language: String): Boolean {
+    private fun isMensaClosedNotice(uzhMensa: UzhMensa, menus: List<HtmlMenu>, language: String): Boolean {
         if (uzhMensa.infoUrlSlug == "raemi59" && menus.size == 2) {
             return menus[1].description.contains("weiters Geschlossen");
         }
@@ -126,22 +145,17 @@ abstract class UZHMensaProvider<T : UzhMensa>(
         return calender.get(Calendar.DAY_OF_WEEK)
     }
 
-    protected abstract fun getUrlFor(uzhMensa: T, dayOfWeek: Int, language: String): String?
-
     private fun parseMensaHtml(url: String): List<HtmlMenu> {
         val doc = Jsoup.connect(url).get()
-        val newslistDiv = doc.select(getContentSelector()).first()
+        val newslistDiv = doc.select("summary").first()
         val contentDiv = newslistDiv.child(0)
 
         return parseContent(contentDiv)
     }
 
-    protected abstract fun getContentSelector(): String
-
     override fun getLocations(): List<Location> {
-        val fileName = "uzh/" + getLocationsJsonFileName()
-        val uzhLocations =
-            super.readJsonAssetFileToListOfT<UzhLocation<T>>(fileName, getParametrizedUzhLocation())
+        val json: String = assetService.readStringFile("uzh/locations_rss.json") ?: return ArrayList()
+        val uzhLocations = serializationService.deserializeList<UzhLocation>(json)
 
         return uzhLocations.map { uzhLocation ->
             Location(uzhLocation.title, uzhLocation.mensas.map {
@@ -156,10 +170,6 @@ abstract class UZHMensaProvider<T : UzhMensa>(
             })
         }
     }
-
-    protected abstract fun getParametrizedUzhLocation(): ParameterizedType
-
-    protected abstract fun getLocationsJsonFileName(): String
 
     private fun parseContent(contentDiv: Element): ArrayList<HtmlMenu> {
         var currentMenu: HtmlMenu? = null
@@ -245,4 +255,18 @@ abstract class UZHMensaProvider<T : UzhMensa>(
         var description: String = ""
         var allergenInfo: String? = null
     }
+
+    @Serializable
+    data class UzhLocation(val title: String, val mensas: List<UzhMensa>)
+
+    @Serializable
+    open class UzhMensa(
+        val id: String,
+        val title: String,
+        val mealTime: String,
+        val infoUrlSlug: String,
+        val apiUrlSlug: String,
+        val idSlugDe: Int,
+        val idSlugEn: Int,
+    )
 }
