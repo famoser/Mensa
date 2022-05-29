@@ -213,7 +213,7 @@ class MainActivity : AppCompatActivity() {
         refreshMensaEventProcessor.onProgress(event)
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN, priority = -1)
     fun onRefreshMensaFinishedEvent(event: RefreshMensaFinishedEvent) {
         refreshMensaEventProcessor.onFinished(event)
 
