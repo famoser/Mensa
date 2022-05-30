@@ -163,7 +163,7 @@ class UZHMensaProvider(
                     UUID.fromString(it.id),
                     it.title,
                     it.mealTime,
-                    URI("http://www.mensa.uzh.ch/de/standorte/${it.infoUrlSlug}.html")
+                    URI("https://www.mensa.uzh.ch/de/standorte/${it.infoUrlSlug}.html")
                 )
                 mensaMap[mensa] = it
                 mensa
