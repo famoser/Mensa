@@ -7,6 +7,7 @@ import android.os.Parcelable
 import android.text.method.LinkMovementMethod
 import android.view.View
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import ch.famoser.mensa.R
 import ch.famoser.mensa.adapters.LocationAdapter
@@ -22,7 +23,6 @@ import kotlinx.android.synthetic.main.frame_location_list.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.jetbrains.anko.toast
 import java.util.*
 
 
@@ -213,14 +213,14 @@ class MainActivity : AppCompatActivity() {
         refreshMensaEventProcessor.onProgress(event)
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN, priority = -1)
     fun onRefreshMensaFinishedEvent(event: RefreshMensaFinishedEvent) {
         refreshMensaEventProcessor.onFinished(event)
 
         // if progress hidden then forceRefresh finished
         val locationRepository = LocationRepository.getInstance(this)
         if (!locationRepository.refreshActive() && !locationRepository.someMenusLoaded()) {
-            toast(R.string.no_menus_loaded)
+            Toast.makeText(this, R.string.no_menus_loaded, Toast.LENGTH_SHORT).show()
         }
     }
 

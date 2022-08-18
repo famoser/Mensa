@@ -1,13 +1,19 @@
 package ch.famoser.mensa.models
 
+import ch.famoser.mensa.services.URISerializer
+import ch.famoser.mensa.services.UUIDSerializer
+import kotlinx.serialization.Serializable
 import java.net.URI
 import java.util.*
 import kotlin.collections.ArrayList
 
+@Serializable
 class Mensa(
+    @Serializable(with = UUIDSerializer::class)
     val id: UUID,
     val title: String,
     val mealTime: String,
+    @Serializable(with = URISerializer::class)
     val url: URI,
     val imagePath: String? = null
 ) {

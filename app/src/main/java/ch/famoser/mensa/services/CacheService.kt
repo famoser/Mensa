@@ -38,7 +38,7 @@ class CacheService(
         val cacheKey = getCacheKey(key, CacheType.Menu)
         val json = preferences.getString(cacheKey, null) ?: return null
 
-        return serializationService.deserializeList(json, Menu::class.java)
+        return serializationService.deserializeList(json)
     }
 
     override fun saveMensaIds(key: String, mensaIds: List<String>) {
@@ -52,7 +52,7 @@ class CacheService(
         val cacheKey = getCacheKey(key, CacheType.MensaIds)
         val json = preferences.getString(cacheKey, null) ?: return null
 
-        return serializationService.deserializeList(json, String::class.java)
+        return serializationService.deserializeList(json)
     }
 
     override fun removeAllUntouchedCacheEntries() {

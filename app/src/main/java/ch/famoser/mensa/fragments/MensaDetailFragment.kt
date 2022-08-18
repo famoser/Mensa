@@ -27,7 +27,7 @@ class MensaDetailFragment : Fragment() {
             if (it.containsKey(MENSA_ID)) {
                 val mensaId = UUID.fromString(it.getString(MENSA_ID))
 
-                val locationRepository = LocationRepository.getInstance(context!!)
+                val locationRepository = LocationRepository.getInstance(requireContext())
                 item = locationRepository.getMensa(mensaId)
 
                 activity?.toolbar_layout?.title = item?.title

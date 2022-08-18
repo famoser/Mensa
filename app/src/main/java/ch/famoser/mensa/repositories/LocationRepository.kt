@@ -10,13 +10,10 @@ import ch.famoser.mensa.repositories.tasks.RefreshUZHMensaTask
 import ch.famoser.mensa.services.*
 import ch.famoser.mensa.services.providers.AbstractMensaProvider
 import ch.famoser.mensa.services.providers.ETHMensaProvider
-import ch.famoser.mensa.services.providers.UZHRSSMensaProvider
+import ch.famoser.mensa.services.providers.UZHMensaProvider
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.jetbrains.anko.defaultSharedPreferences
-import org.jetbrains.anko.doAsync
-import java.time.Instant
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -24,7 +21,7 @@ import kotlin.collections.HashMap
 class LocationRepository internal constructor(
     private val cacheService: ICacheService,
     assetService: IAssetService,
-    serializationService: ISerializationService
+    serializationService: SerializationService
 ) {
     companion object {
         private var defaultInstance: LocationRepository? = null
@@ -32,7 +29,7 @@ class LocationRepository internal constructor(
         fun getInstance(context: Context): LocationRepository {
             synchronized(this) {
                 if (defaultInstance == null) {
-                    val sharedPreferences = context.applicationContext.defaultSharedPreferences
+                    val sharedPreferences = context.applicationContext.getSharedPreferences("ch.famoser.mensa_preferences",  Context.MODE_PRIVATE)
                     val serializationService = SerializationService()
                     val cacheService = CacheService(sharedPreferences, serializationService)
                     val assetService = AssetService(context.assets)
@@ -57,7 +54,7 @@ class LocationRepository internal constructor(
 
     private var uzhMensas: List<Mensa> = ArrayList()
     private val ethMensaProvider = ETHMensaProvider(cacheService, assetService, serializationService)
-    private val uzhMensaProvider = UZHRSSMensaProvider(cacheService, assetService, serializationService)
+    private val uzhMensaProvider = UZHMensaProvider(cacheService, assetService, serializationService)
 
     fun isRefreshPending(): Boolean {
         val now = Date(System.currentTimeMillis());

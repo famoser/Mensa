@@ -34,7 +34,7 @@ class UZHRSSMensaProviderTest {
         val cacheService = NoCacheService()
         val inMemoryAssetService = InMemoryAssetService(mapOf("uzh/locations_rss.json" to getUzhLocationsJson()))
         val serializationService = SerializationService()
-        val provider = UZHRSSMensaProvider(cacheService, inMemoryAssetService, serializationService)
+        val provider = UZHMensaProvider(cacheService, inMemoryAssetService, serializationService)
 
         val c = Calendar.getInstance()
         c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)

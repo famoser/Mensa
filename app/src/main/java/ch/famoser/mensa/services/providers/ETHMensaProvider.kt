@@ -7,8 +7,8 @@ import ch.famoser.mensa.models.Mensa
 import ch.famoser.mensa.models.Menu
 import ch.famoser.mensa.services.IAssetService
 import ch.famoser.mensa.services.ICacheService
-import ch.famoser.mensa.services.ISerializationService
-import com.squareup.moshi.JsonClass
+import ch.famoser.mensa.services.SerializationService
+import kotlinx.serialization.Serializable
 import java.net.URI
 import java.net.URL
 import java.util.*
@@ -18,9 +18,9 @@ import kotlin.collections.HashMap
 
 class ETHMensaProvider(
     private val cacheService: ICacheService,
-    assetService: IAssetService,
-    private val serializationService: ISerializationService
-) : AbstractMensaProvider(cacheService, assetService, serializationService) {
+    private val assetService: IAssetService,
+    private val serializationService: SerializationService
+) : AbstractMensaProvider(cacheService) {
 
     companion object {
         const val CACHE_PROVIDER_PREFIX = "eth"
@@ -135,7 +135,7 @@ class ETHMensaProvider(
         try {
             val json = url.readText()
 
-            apiMensas = serializationService.deserializeList(json, ApiMensaSearch::class.java)
+            apiMensas = serializationService.deserializeList(json)
         } catch (e: java.lang.Exception) {
             Log.e("ETHMensaProvider", "request for mensa search failed: $url", e);
         }
@@ -189,7 +189,7 @@ class ETHMensaProvider(
         try {
             val json = url.readText()
 
-            val apiMensa = serializationService.deserialize<ApiMensa>(json, ApiMensa::class.java)
+            val apiMensa = serializationService.deserialize<ApiMensa>(json)
             return apiMensa.menu.meals.map { parseApiMenu(it) }
         } catch (e: java.lang.Exception) {
             Log.e("ETHMensaProvider", "request for single mensa ${mensa.title} failed: $url", e);
@@ -231,8 +231,8 @@ class ETHMensaProvider(
     }
 
     override fun getLocations(): List<Location> {
-        val ethLocations =
-            super.readJsonAssetFileToListOfT("eth/locations.json", EthLocation::class.java)
+        val json: String = assetService.readStringFile("eth/locations.json") ?: return ArrayList()
+        val ethLocations = serializationService.deserializeList<EthLocation>(json)
 
         return ethLocations.map { ethLocation ->
             Location(ethLocation.title, ethLocation.mensas.map {
@@ -251,7 +251,7 @@ class ETHMensaProvider(
         }
     }
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class ApiMensaSearch(
         val id: Int,
         val mensa: String,
@@ -260,7 +260,7 @@ class ETHMensaProvider(
         val meals: List<ApiMeal>
     )
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class ApiMensa(
         val id: Int,
         val mensa: String,
@@ -269,23 +269,23 @@ class ETHMensaProvider(
         val menu: ApiMenu
     )
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class ApiMenu(
         val date: String,
         val day: String,
         val meals: List<ApiMeal>
     )
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class ApiHours(val opening: List<ApiOpening>, val mealtime: List<ApiMealtime>)
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class ApiOpening(val from: String, val to: String, val type: String)
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class ApiMealtime(val from: String, val to: String, val type: String)
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class ApiMeal(
         val id: Int,
         val label: String,
@@ -294,16 +294,16 @@ class ETHMensaProvider(
         val allergens: List<ApiAllergen>
     )
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class ApiPrices(val student: String?, val staff: String?, val extern: String?)
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class ApiAllergen(val allergen_id: Int, val label: String)
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class EthLocation(val title: String, val mensas: List<EthMensa>)
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class EthMensa(
         val id: String,
         val title: String,
