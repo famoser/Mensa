@@ -6,13 +6,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
     defaultConfig {
         applicationId "ch.famoser.mensa"
         minSdkVersion 21
-        targetSdkVersion 32
-        versionCode 18
-        versionName "1.6.0"
+        targetSdkVersion 33
+        versionCode 19
+        versionName "1.7.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     packagingOptions {
