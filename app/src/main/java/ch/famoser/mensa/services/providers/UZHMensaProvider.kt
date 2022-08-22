@@ -265,7 +265,6 @@ class UZHMensaProvider(
         val title: String,
         val mealTime: String,
         val infoUrlSlug: String,
-        val apiUrlSlug: String,
         val idSlugDe: Int,
         val idSlugEn: Int,
     )
