@@ -4,7 +4,9 @@
 [![Build Status](https://travis-ci.com/famoser/Mensa.svg?branch=master)](https://travis-ci.com/famoser/Mensa)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=famoser_Mensa&metric=alert_status)](https://sonarcloud.io/dashboard?id=famoser_Mensa)
 
-eth & uzh mensas in zurich
+ETHZ & UZH mensas in zurich.
+
+The app is published in the [play store](https://play.google.com/store/apps/details?id=ch.famoser.mensa&hl=de_CH) and in the [f-droid store](https://f-droid.org/en/packages/ch.famoser.mensa/).
 
 <table>
     <tbody>
@@ -34,3 +36,17 @@ For UZH, look in [uzh/locations_rss.json](./app/src/main/assets/uzh/locations_rs
 For ETH, look in [eth/locations.json](./app/src/main/assets/eth/locations.json). The `infoUrlSlug` must match the hompage slug (e.g. `zentrum/clausiusbar` for `https://ethz.ch/de/campus/erleben/gastronomie-und-einkaufen/gastronomie/restaurants-und-cafeterias/zentrum/clausiusbar.html`). The `idSlug` must be the id of the menu plan (e.g. for Clasiusbar, the menu plan linked [here](https://ethz.ch/de/campus/erleben/gastronomie-und-einkaufen/gastronomie/menueplaene.html) has the URL `https://ethz.ch/de/campus/erleben/gastronomie-und-einkaufen/gastronomie/menueplaene/offerDay.html?language=de&date=2022-08-22&id=4`).
 
 For implementation details how the links are constructed (to try it out yourself), check out [ETHMensaProvider.kt](./app/src/main/java/ch/famoser/mensa/services/providers/ETHMensaProvider.kt) and [UZHMensaProvider.kt](./app/src/main/java/ch/famoser/mensa/services/providers/UZHMensaProvider.kt).
+
+## Release Checklist
+
+Release checklist:
+
+- [ ] increase the `versionCode` and adapt the `versionName` in `app/build.gradle`.
+- [ ] upload the signed abb to the play store (use `assets/keystore.jks` with strong PW)
+- [ ] generate a signed apk
+- [ ] write a changelog in fastlane metadata
+- [ ] commit
+- [ ] create a new release on github with the `versionName` and attach the signed apk
+
+The key store can be found in `assets/keystore.jks`, the name of the key is `upload`.  
+The password is the personal strong passord of the author.
