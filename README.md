@@ -24,3 +24,13 @@ eth & uzh mensas in zurich
         </tr>
     </tbody>
 </table>
+
+## Update mensa details
+
+Has a new Mensa opened, or are the opening times no longer accurate? Feel free to directly submit a PR!
+
+For UZH, look in [uzh/locations_rss.json](./app/src/main/assets/uzh/locations_rss.json).The `infoUrlSlug` must match the homepage slug (e.g. `raemi59` for `https://www.mensa.uzh.ch/en/standorte/raemi59.html`). The `idSlug` must be the id of the menu plan (e.g. for Rämi 59, the menu plan linked [here](https://www.mensa.uzh.ch/en/menueplaene/raemi59/montag.html) has the URL `https://api.mensaoffice.de/api/PDF/get/509`).
+
+For ETH, look in [eth/locations.json](./app/src/main/assets/eth/locations.json). The `infoUrlSlug` must match the hompage slug (e.g. `zentrum/clausiusbar` for `https://ethz.ch/de/campus/erleben/gastronomie-und-einkaufen/gastronomie/restaurants-und-cafeterias/zentrum/clausiusbar.html`). The `idSlug` must be the id of the menu plan (e.g. for Clasiusbar, the menu plan linked [here](https://ethz.ch/de/campus/erleben/gastronomie-und-einkaufen/gastronomie/menueplaene.html) has the URL `https://ethz.ch/de/campus/erleben/gastronomie-und-einkaufen/gastronomie/menueplaene/offerDay.html?language=de&date=2022-08-22&id=4`).
+
+For implementation details how the links are constructed (to try it out yourself), check out [ETHMensaProvider.kt](./app/src/main/java/ch/famoser/mensa/services/providers/ETHMensaProvider.kt) and [UZHMensaProvider.kt](./app/src/main/java/ch/famoser/mensa/services/providers/UZHMensaProvider.kt).
