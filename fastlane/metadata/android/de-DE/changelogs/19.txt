@@ -1,0 +1,2 @@
+- Code vereinfacht und dependencies aktualisiert
+- Platte 14 wurde aufgenommen (danke @kimhanm!)
