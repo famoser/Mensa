@@ -40,7 +40,7 @@
                         android:padding="@dimen/text_margin"
                         android:textAppearance="?attr/textAppearanceListItem"
                         android:textStyle="bold"
-                        android:textColor="@android:color/white"
+                        android:textColor="#646464"
                         android:ellipsize="end"
                         android:maxLines="1"
                         tools:text="very long text which overlaps Polyterrasse"/>
@@ -52,7 +52,7 @@
                         android:padding="@dimen/text_margin"
                         android:textAlignment="viewEnd"
                         android:textAppearance="?attr/textAppearanceListItem"
-                        android:textColor="@android:color/white"
+                        android:textColor="#646464"
                         tools:text="11:15 - 13:30"/>
 
             </LinearLayout>
