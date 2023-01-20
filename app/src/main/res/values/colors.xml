@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#112d4e</color>
     <color name="colorAccent">#112d4e</color>
     <color name="colorCardDisabled">#dbe2ef</color>
+    <color name="ic_launcher_background">#3f73b0</color>
 </resources>
