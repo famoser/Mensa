@@ -3,8 +3,7 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              android:background="?android:attr/selectableItemBackground">
+              android:orientation="horizontal">
 
     <TextView
             android:id="@+id/description"
@@ -13,7 +12,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:maxLines="2"
-            android:textAppearance="?attr/textAppearanceListItem"
             tools:text="Quornwürfeln mit Tomatensauce mit Gnocchi"/>
 
     <LinearLayout
@@ -28,7 +26,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="viewEnd"
-                android:textAppearance="?attr/textAppearanceListItem"
                 android:textStyle="bold"
                 tools:text="vitality"/>
 
@@ -37,7 +34,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="viewEnd"
-                android:textAppearance="?attr/textAppearanceListItem"
                 tools:text="CHF 14.50"/>
 
     </LinearLayout>

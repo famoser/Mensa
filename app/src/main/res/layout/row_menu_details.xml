@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:gravity="center"
         android:layout_gravity="center"
@@ -15,16 +16,15 @@
         android:clickable="true"
         android:focusable="true">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:elevation="3dp">
+            style="@style/Widget.Material3.CardView.Filled">
 
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:background="?android:attr/selectableItemBackground"
                 android:baselineAligned="false"
                 android:padding="@dimen/text_margin">
 
@@ -38,7 +38,7 @@
                         android:id="@+id/title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?attr/textAppearanceListItem"
+                        android:textAppearance="?attr/textAppearanceBodyLarge"
                         android:textStyle="bold"
                         tools:text="vitality"/>
 
@@ -47,7 +47,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAlignment="viewStart"
-                        android:textAppearance="?attr/textAppearanceListItem"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
                         tools:text="CHF 14.50 / 20.50 / 21.30"/>
 
                 <TextView
@@ -55,7 +55,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/text_margin"
-                        android:textAppearance="?attr/textAppearanceListItem"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
                         tools:text="Quornwürfeln mit Tomatensauce mit Gnocchi"/>
 
                 <TextView
@@ -63,18 +63,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/text_margin"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textAppearance="?attr/textAppearanceBodySmall"
                         tools:text="Sellerie, Nüsse, Schweinefleisch"/>
             </LinearLayout>
 
-            <ImageView
+            <com.google.android.material.button.MaterialButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/share"
                     android:layout_gravity="bottom"
-                    android:background="@drawable/ic_share_24dp"
-            />
+                    app:icon="@drawable/ic_share_24dp"
+                    style="?attr/materialIconButtonFilledStyle" />
 
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </RelativeLayout>
