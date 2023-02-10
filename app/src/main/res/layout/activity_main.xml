@@ -15,24 +15,14 @@
 
         <include layout="@layout/content_main"/>
 
-        <ProgressBar
-                android:id="@+id/downloadProgress"
-                style="@android:style/Widget.ProgressBar.Horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="2dp"
-                android:maxHeight="2dp"
-                android:visibility="gone"
-                android:progressTint="@color/colorPrimary"
-                android:progressBackgroundTint="?android:attr/colorBackground"
-                android:indeterminateTintMode="src_atop"
-                android:foregroundTint="@color/colorPrimaryDark"
-                tools:max="100"
-                tools:progress="40"
-                tools:visibility="visible"
-                tools:minHeight="5dp"
-                tools:maxHeight="5dp"
-        />
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/downloadProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:max="100"
+            tools:progress="40"
+            tools:visibility="visible" />
     </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
