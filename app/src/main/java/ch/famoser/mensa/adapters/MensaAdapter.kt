@@ -2,7 +2,6 @@ package ch.famoser.mensa.adapters
 
 import android.app.Activity
 import android.content.Context
-import android.content.res.Configuration
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -137,33 +136,23 @@ class MensaAdapter constructor(
 
     private fun showClosedHeader(holder: StatefulViewHolder) {
         holder.viewHolder.openingTimesView.text = parentActivity.getString(R.string.closed)
-        setViewBackground(holder.viewHolder.headerWrapper, R.attr.colorSurfaceVariant)
-        setTextViewColor(holder.viewHolder.openingTimesView, R.attr.colorOnSurfaceVariant)
-        setTextViewColor(holder.viewHolder.titleView, R.attr.colorOnSurfaceVariant)
+        setViewBackground(holder.viewHolder.headerWrapper, R.attr.colorPrimaryContainer)
+        setTextViewColor(holder.viewHolder.openingTimesView, R.attr.colorOnPrimaryContainer)
+        setTextViewColor(holder.viewHolder.titleView, R.attr.colorOnPrimaryContainer)
     }
 
     private fun showInitialHeader(holder: StatefulViewHolder) {
         holder.viewHolder.openingTimesView.text = holder.mensaViewModel.mensa.mealTime
-        setViewBackground(holder.viewHolder.headerWrapper, R.attr.colorSurfaceVariant)
-        setTextViewColor(holder.viewHolder.openingTimesView, R.attr.colorOnSurfaceVariant)
-        setTextViewColor(holder.viewHolder.titleView, R.attr.colorOnSurfaceVariant)
+        setViewBackground(holder.viewHolder.headerWrapper, R.attr.colorPrimaryContainer)
+        setTextViewColor(holder.viewHolder.openingTimesView, R.attr.colorOnPrimaryContainer)
+        setTextViewColor(holder.viewHolder.titleView, R.attr.colorOnPrimaryContainer)
     }
 
     private fun showAvailableHeader(holder: StatefulViewHolder) {
         holder.viewHolder.openingTimesView.text = holder.mensaViewModel.mensa.mealTime
-
-        when (parentActivity.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-            Configuration.UI_MODE_NIGHT_YES -> {
-                setViewBackground(holder.viewHolder.headerWrapper, R.attr.colorPrimaryContainer)
-                setTextViewColor(holder.viewHolder.titleView, R.attr.colorOnPrimaryContainer)
-                setTextViewColor(holder.viewHolder.openingTimesView, R.attr.colorOnPrimaryContainer)
-            }
-            Configuration.UI_MODE_NIGHT_NO -> {
-                setViewBackground(holder.viewHolder.headerWrapper, R.attr.colorPrimary)
-                setTextViewColor(holder.viewHolder.titleView, R.attr.colorOnPrimary)
-                setTextViewColor(holder.viewHolder.openingTimesView, R.attr.colorOnPrimary)
-            }
-        }
+        setViewBackground(holder.viewHolder.headerWrapper, R.attr.colorPrimary)
+        setTextViewColor(holder.viewHolder.titleView, R.attr.colorOnPrimary)
+        setTextViewColor(holder.viewHolder.openingTimesView, R.attr.colorOnPrimary)
     }
 
     private fun setTextViewColor(view: TextView, attrId: Int) {
