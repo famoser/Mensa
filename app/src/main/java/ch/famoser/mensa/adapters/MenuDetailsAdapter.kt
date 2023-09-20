@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import ch.famoser.mensa.R
 import ch.famoser.mensa.models.Menu
+import com.google.android.material.button.MaterialButton
 import kotlinx.android.synthetic.main.row_menu_details.view.*
 
 
@@ -22,6 +24,7 @@ class MenuDetailsAdapter constructor(
     RecyclerView.Adapter<MenuDetailsAdapter.ViewHolder>() {
 
     private val onClickListener: View.OnClickListener
+    private val onButtonClickListener: View.OnClickListener
 
     init {
         onClickListener = View.OnClickListener { view ->
@@ -32,6 +35,17 @@ class MenuDetailsAdapter constructor(
             clipboardManager.setPrimaryClip(clip)
 
             Toast.makeText(activity, "Copied to clipboard", Toast.LENGTH_SHORT).show()
+        }
+        onButtonClickListener = View.OnClickListener { view ->
+            val item = view.tag as Menu
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, item.title + ": " + item.description)
+                type = "text/plain"
+            }
+
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            activity.startActivity(shareIntent)
         }
     }
 
@@ -67,6 +81,10 @@ class MenuDetailsAdapter constructor(
             tag = item
             setOnClickListener(onClickListener)
         }
+        with(holder.shareButton){
+            tag = item
+            setOnClickListener(onButtonClickListener)
+        }
     }
 
     override fun getItemCount() = values.size
@@ -76,5 +94,6 @@ class MenuDetailsAdapter constructor(
         val descriptionView: TextView = view.description
         val priceView: TextView = view.price
         val allergensView: TextView = view.allergens
+        val shareButton: MaterialButton = view.share
     }
 }
