@@ -170,5 +170,19 @@
         "infoUrlSlug": "hoenggerberg/rice-up"
       }
     ]
+  },
+  {
+    "title": "Oerlikon",
+    "mensas": [
+      {
+        "id": "a9f579c2-1071-4e08-9e82-f68552471435",
+        "title": "Octavo",
+        "mealTime": "11:30-13:30",
+        "idSlug": 0,
+        "facilityId": 23,
+        "timeSlug": "lunch",
+        "infoUrlSlug": "oerlikon/octavo"
+      }
+    ]
   }
 ]
