@@ -36,9 +36,7 @@ class ETHMensaProvider2(
 
             for ((mensa, ethzMensa) in mensaMap) {
                 val menus = menuByFacilityIds[ethzMensa.getMapId()]
-                if (menus != null) {
-                    mensa.replaceMenus(menus)
-                }
+                mensa.replaceMenus(menus.orEmpty())
             }
         } catch (ex: Exception) {
             ex.printStackTrace()
@@ -101,22 +99,15 @@ class ETHMensaProvider2(
         date: Date,
         ignoreCache: Boolean
     ): MutableMap<String, List<Menu>> {
-        var apiMensas = ApiRoot(ArrayList());
-
         // observation: dateslug is ignored by API; all future entries are returned in any case
         val dateSlug = getDateTimeStringOfMonday(date)
         val url =
             URL("https://idapps.ethz.ch/cookpit-pub-services/v1/weeklyrotas?client-id=ethz-wcms&lang=$language&rs-first=0&rs-size=50&valid-after=$dateSlug")
 
-        try {
-            val json = getCachedRequest(url, ignoreCache)
+        val json = getCachedRequest(url, ignoreCache)
+            ?: throw java.lang.Exception("Cannot load web content")
 
-            if (json != null) {
-                apiMensas = serializationService.deserialize(json)
-            }
-        } catch (e: java.lang.Exception) {
-            Log.e("ETHMensaProvider2", "request for mensa weekly failed: $url", e);
-        }
+        val apiMensas: ApiRoot = serializationService.deserialize(json)
 
         val cal = Calendar.getInstance()
         cal.time = date
