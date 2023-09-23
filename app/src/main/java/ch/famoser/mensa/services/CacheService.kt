@@ -11,6 +11,9 @@ interface ICacheService {
     fun readMenus(key: String): List<Menu>?
     fun saveMensaIds(key: String, mensaIds: List<String>)
     fun readMensaIds(key: String): List<String>?
+
+    fun saveString(key: String, value: String)
+    fun readString(key: String): String?
 }
 
 class CacheService(
@@ -55,6 +58,17 @@ class CacheService(
         return serializationService.deserializeList(json)
     }
 
+    override fun saveString(key: String, value: String) {
+        val cacheKey = getCacheKey(key, CacheType.String)
+
+        preferences.edit().putString(cacheKey, value).apply()
+    }
+
+    override fun readString(key: String): String? {
+        val cacheKey = getCacheKey(key, CacheType.String)
+        return preferences.getString(cacheKey, null)
+    }
+
     override fun removeAllUntouchedCacheEntries() {
         val obsoleteKeys =
             preferences.all.keys.filter { k -> k.startsWith(CACHE_PREFIX) && !touchedCacheKeys.contains(k) }
@@ -75,7 +89,8 @@ class CacheService(
 
     private enum class CacheType {
         Menu,
-        MensaIds
+        MensaIds,
+        String
     }
 
 }

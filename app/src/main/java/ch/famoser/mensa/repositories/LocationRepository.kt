@@ -9,7 +9,7 @@ import ch.famoser.mensa.repositories.tasks.RefreshETHMensaTask
 import ch.famoser.mensa.repositories.tasks.RefreshUZHMensaTask
 import ch.famoser.mensa.services.*
 import ch.famoser.mensa.services.providers.AbstractMensaProvider
-import ch.famoser.mensa.services.providers.ETHMensaProvider
+import ch.famoser.mensa.services.providers.ETHMensaProvider2
 import ch.famoser.mensa.services.providers.UZHMensaProvider
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -53,7 +53,7 @@ class LocationRepository internal constructor(
     private val locations: MutableList<Location> = LinkedList()
 
     private var uzhMensas: List<Mensa> = ArrayList()
-    private val ethMensaProvider = ETHMensaProvider(cacheService, assetService, serializationService)
+    private val ethMensaProvider = ETHMensaProvider2(cacheService, assetService, serializationService)
     private val uzhMensaProvider = UZHMensaProvider(cacheService, assetService, serializationService)
 
     fun isRefreshPending(): Boolean {
@@ -113,7 +113,7 @@ class LocationRepository internal constructor(
         cacheService.startObserveCacheUsage()
 
         RefreshETHMensaTask(ethMensaProvider, today, language, ignoreCache)
-            .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, ETHMensaProvider.MEAL_TIME_LUNCH, ETHMensaProvider.MEAL_TIME_DINNER)
+            .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
 
         val half = uzhMensas.size / 2
         val batch1 = uzhMensas.subList(0, half)

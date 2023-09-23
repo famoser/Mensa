@@ -24,6 +24,14 @@ class NoCacheService : ICacheService {
         return null
     }
 
+    override fun saveString(key: String, value: String) {
+        // implementation skipped
+    }
+
+    override fun readString(key: String): String? {
+        return null
+    }
+
     override fun startObserveCacheUsage() {
         // implementation skipped
     }
