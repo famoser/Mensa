@@ -5,7 +5,7 @@
       {
         "id": "25588906-4759-4b54-9c0e-bf7b4fd158a4",
         "title": "Untere Mensa",
-        "mealTime": "11:00-14:00",
+        "mealTime": "11:00-14:30",
         "idSlugDe": 147,
         "idSlugEn": 505,
         "infoUrlSlug": "mensa-uzh-zentrum"
@@ -21,7 +21,7 @@
       {
         "id": "2e02c699-d208-4845-8b3c-519bde6b9574",
         "title": "Obere Mensa",
-        "mealTime": "11:00-14:00",
+        "mealTime": "11:00-14:30",
         "idSlugDe": 148,
         "idSlugEn": 507,
         "infoUrlSlug": "mensa-uzh-zentrum"
@@ -45,7 +45,7 @@
       {
         "id": "6d268500-a1dc-4dd1-bb5f-3a1b0ebf167c",
         "title": "Platte 14",
-        "mealTime": "11:00-14:00",
+        "mealTime": "11:00-13:30",
         "idSlugDe": 143,
         "idSlugEn": 520,
         "infoUrlSlug": "platte-14"
@@ -95,7 +95,7 @@
       {
         "id": "50f4eedd-5c16-4677-b8a5-f9dab84b0b2e",
         "title": "Binzmühle",
-        "mealTime": "11:15-14:00",
+        "mealTime": "11:00-14:30",
         "idSlugDe": 184,
         "idSlugEn": 515,
         "infoUrlSlug": "mensa-uzh-binzmuehle"
@@ -111,7 +111,7 @@
       {
         "id": "db4c6c53-7d90-4aa5-a809-e3cd086e6513",
         "title": "Cafeteria Zentrum für Zahnmedizin (ZZM)",
-        "mealTime": "07:00-17:00",
+        "mealTime": "11:00-13:45",
         "idSlugDe": 151,
         "idSlugEn": 517,
         "infoUrlSlug": "cafeteria-uzh-zzm"
@@ -119,7 +119,7 @@
       {
         "id": "edc3b2cb-004c-41fc-84d3-cd9ade4dff74",
         "title": "Cafeteria Tierspital",
-        "mealTime": "07.00-16:30",
+        "mealTime": "06.30-16:30",
         "idSlugDe": 146,
         "idSlugEn": 518,
         "infoUrlSlug": "cafeteria-uzh-tierspital"
@@ -127,7 +127,7 @@
       {
         "id": "7d9d696f-3c4e-4a2e-9b66-469d5d47eeea",
         "title": "Cafeteria Botanischer Garten",
-        "mealTime": "09:00-17:00",
+        "mealTime": "09:00-16:00",
         "idSlugDe": 144,
         "idSlugEn": 519,
         "infoUrlSlug": "cafeteria-uzh-botgarten"
