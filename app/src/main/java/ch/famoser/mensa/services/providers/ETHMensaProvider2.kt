@@ -149,11 +149,11 @@ class ETHMensaProvider2(
     }
 
     private fun parseMealTime(mealTime: String): String? {
-        if (mealTime.lowercase().contains("mittag") || mealTime.lowercase().contains("lunch")) {
+        if (mealTime.lowercase().contains("mittag") || mealTime.lowercase().contains("lunch") || mealTime.lowercase().contains("pranzo")) {
             return MEAL_TIME_LUNCH
         }
 
-        if (mealTime.lowercase().contains("abend") || mealTime.lowercase().contains("dinner")) {
+        if (mealTime.lowercase().contains("abend") || mealTime.lowercase().contains("dinner") || mealTime.lowercase().contains("cena")) {
             return MEAL_TIME_DINNER
         }
 
