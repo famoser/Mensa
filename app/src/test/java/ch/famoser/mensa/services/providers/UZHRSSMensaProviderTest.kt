@@ -4,8 +4,10 @@ import ch.famoser.mensa.services.SerializationService
 import ch.famoser.mensa.testServices.InMemoryAssetService
 import ch.famoser.mensa.testServices.NoCacheService
 import com.google.common.truth.Truth.assertThat
+import org.jsoup.Jsoup
 import org.junit.Test
 import java.util.*
+import kotlin.collections.HashMap
 
 class UZHRSSMensaProviderTest {
     private fun getUzhLocationsJson(): String {
@@ -51,5 +53,23 @@ class UZHRSSMensaProviderTest {
         val mercatoMensa = locations.first().mensas.first()
         assertThat(response).isTrue()
         assertThat(mercatoMensa.menus).isNotEmpty()
+    }
+
+    @Test
+    fun locationsAndMenu_listAllKnownLocations() {
+        val results = HashMap<Int, String>()
+        for (i in 400..450) {
+            try {
+                val url = "https://zfv.ch/de/menus/rssMenuPlan?menuId=$i&type=uzh2&dayOfWeek=2"
+                val doc = Jsoup.connect(url).get()
+                val titleDiv = doc.select("title").first()
+                results.set(i, titleDiv.text())
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
+
+        // 395: ViCAFE Irchel
+        assertThat(results).isNotEmpty()
     }
 }
