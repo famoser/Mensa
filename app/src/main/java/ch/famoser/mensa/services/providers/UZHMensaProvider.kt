@@ -53,13 +53,9 @@ class UZHMensaProvider(
         return try {
             val normalizedLanguage = languageToString(language)
             val menus: List<Menu>? = loadMenus(uzhMensa, date, normalizedLanguage, ignoreCache)
+            mensa.replaceMenus(menus.orEmpty())
 
-            if (menus != null) {
-                mensa.replaceMenus(menus)
-                true
-            } else {
-                false
-            }
+            menus != null
         } catch (ex: Exception) {
             ex.printStackTrace()
 
