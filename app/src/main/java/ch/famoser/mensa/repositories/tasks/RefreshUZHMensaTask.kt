@@ -14,6 +14,7 @@ class RefreshUZHMensaTask(
     private val ignoreCache: Boolean
 ) : AbstractRefreshMensaTask<Mensa>() {
 
+    @Deprecated("Deprecated in Java")
     override fun doInBackground(vararg mensas: Mensa) {
         for ((current, mensa) in mensas.withIndex()) {
             htmlMensaProvider.getMenus(mensa, date, language, ignoreCache)

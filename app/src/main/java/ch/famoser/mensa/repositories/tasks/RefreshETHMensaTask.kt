@@ -13,6 +13,7 @@ class RefreshETHMensaTask(
     private val ignoreCache: Boolean
 ) : AbstractRefreshMensaTask<String>() {
 
+    @Deprecated("Deprecated in Java")
     override fun doInBackground(vararg args: String) {
         val refreshedMensas = mensaProvider.getMenus(date, language, ignoreCache)
 
