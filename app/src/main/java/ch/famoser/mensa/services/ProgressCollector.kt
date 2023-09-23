@@ -21,6 +21,7 @@ class ProgressCollector(private val swipeRefreshLayout: SwipeRefreshLayout, priv
         }
 
         taskActive[event.taskId] = true
+        maxByTask[event.taskId] = 0
     }
 
     fun onProgress(event: RefreshMensaProgressEvent) {

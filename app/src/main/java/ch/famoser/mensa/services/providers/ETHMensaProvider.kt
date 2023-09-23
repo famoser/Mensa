@@ -8,12 +8,11 @@ import ch.famoser.mensa.models.Menu
 import ch.famoser.mensa.services.IAssetService
 import ch.famoser.mensa.services.ICacheService
 import ch.famoser.mensa.services.SerializationService
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.net.URI
 import java.net.URL
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 
 class ETHMensaProvider(
