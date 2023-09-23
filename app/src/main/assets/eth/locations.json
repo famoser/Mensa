@@ -103,7 +103,7 @@
         "mealTime": "11:30-13:30",
         "idSlug": 0,
         "facilityId": 16,
-        "timeSlug": "dinner",
+        "timeSlug": "lunch",
         "infoUrlSlug": "hoenggerberg/bistro-hpi"
       },
       {
@@ -125,15 +125,6 @@
         "infoUrlSlug": "hoenggerberg/food-market-grill-bbq"
       },
       {
-        "id": "ed6b7c60-4da3-47dd-854a-f1f7c3ca2e1c",
-        "title": "food market | grill bbQ - Abendessen",
-        "mealTime": "17:30-19:15",
-        "idSlug": 20,
-        "facilityId": 18,
-        "timeSlug": "dinner",
-        "infoUrlSlug": "hoenggerberg/food-market-grill-bbq"
-      },
-      {
         "id": "6bad9247-0c79-4423-9b16-33b8f74a87cd",
         "title": "food market | pizza pasta day",
         "mealTime": "11:15-13:45",
@@ -141,6 +132,15 @@
         "facilityId": 19,
         "timeSlug": "lunch",
         "infoUrlSlug": "hoenggerberg/food-market-pizza-pasta"
+      },
+      {
+        "id": "ed6b7c60-4da3-47dd-854a-f1f7c3ca2e1c",
+        "title": "food market - Abendessen",
+        "mealTime": "17:30-19:15",
+        "idSlug": 20,
+        "facilityId": 18,
+        "timeSlug": "dinner",
+        "infoUrlSlug": "hoenggerberg/food-market-grill-bbq"
       },
       {
         "id": "ba70f3c8-073a-4b9c-b394-5576ec3fd834",
