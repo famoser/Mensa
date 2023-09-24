@@ -1,0 +1,4 @@
+- Switch to more reliable API for ETH Mensas
+- Material Design 3 (danke @Sevilaa)
+- Design & Layout improvements
+- Increase clarity of the filter

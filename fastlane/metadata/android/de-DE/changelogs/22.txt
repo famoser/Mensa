@@ -1,0 +1,4 @@
+- Zuverlässigere API für ETH Mensas
+- Material Design 3 (danke @Sevilaa)
+- Design & Layout Verbesserungen
+- Klarerer Filter
