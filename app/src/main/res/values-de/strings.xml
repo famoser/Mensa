@@ -10,7 +10,7 @@
         <a href="https://github.com/famoser/Mensa">github</a>
     </string>
     <string name="settings">Einstellungen</string>
-    <string name="show_only_expanded">nur ausgewählte Mensen</string>
+    <string name="show_only_expanded">nur ausgeklappte Einträge</string>
     <string name="show_menus_in_german">Menus auf Englisch</string>
-    <string name="no_expanded_canteens">keine ausgewählten Mensen</string>
+    <string name="no_expanded_canteens">keine ausgeklappten Einträge</string>
 </resources>

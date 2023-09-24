@@ -113,7 +113,10 @@ class MainActivity : AppCompatActivity() {
 
             // set initial values
             showInOtherLanguageItem.isChecked = invertLanguage(this)
-            showOnlyExpandedMensaItem.isChecked = MensaAdapter.showOnlyFavoriteMensas(this)
+
+            val showOnlyFavoriteMensas = MensaAdapter.showOnlyFavoriteMensas(this)
+            showOnlyExpandedMensaItem.isEnabled = showOnlyFavoriteMensas || this.locationListAdapter.getFavoriteMensaCount() > 0
+            showOnlyExpandedMensaItem.isChecked = showOnlyFavoriteMensas
 
             popup.show()
         }
