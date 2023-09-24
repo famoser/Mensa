@@ -2,6 +2,7 @@ package ch.famoser.mensa.activities
 
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
@@ -58,7 +59,7 @@ class MensaActivity : AppCompatActivity() {
             val mensaImageFile = assets.open(imagePath)
             val mensaImage = Drawable.createFromStream(mensaImageFile, null)
             image.setImageDrawable(mensaImage)
-            image.setColorFilter(Color.parseColor("#44000000"))
+            image.setColorFilter(Color.parseColor("#AAFFFFFF"), PorterDuff.Mode.SRC_OVER)
         } catch (exception: FileNotFoundException) {
             // no image is OK
         }
