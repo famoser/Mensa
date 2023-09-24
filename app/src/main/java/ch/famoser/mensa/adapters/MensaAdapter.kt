@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ch.famoser.mensa.R
 import ch.famoser.mensa.activities.MainActivity
 import ch.famoser.mensa.models.Mensa
+import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.row_mensa.view.*
 import java.util.*
 
@@ -78,7 +79,7 @@ class MensaAdapter constructor(
 
         viewHolder.titleView.text = mensaViewModel.mensa.title
 
-        viewHolder.itemView.setOnClickListener {
+        viewHolder.cardView.setOnClickListener {
             if (mensaViewModel.viewState == ViewState.Available) {
                 saveIsFavoriteMensa(mensaViewModel.mensa, true)
                 transitionToDesiredHolderState(holder, ViewState.Expanded)
@@ -221,6 +222,7 @@ class MensaAdapter constructor(
     inner class StatefulViewHolder(val viewHolder: ViewHolder, val mensaViewModel: MensaViewModel)
 
     inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+        val cardView: MaterialCardView = view.card
         val titleView: TextView = view.title
         val openingTimesView: TextView = view.meal_time
 
