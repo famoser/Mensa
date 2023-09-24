@@ -8,17 +8,18 @@
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/card_spacing"
         android:paddingRight="@dimen/card_spacing"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
+        android:paddingTop="@dimen/card_spacing_half"
+        android:paddingBottom="@dimen/card_spacing_half"
         android:clipChildren="false"
-        android:clipToPadding="false"
-        android:clickable="true"
-        android:focusable="true">
+        android:clipToPadding="false">
 
     <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="?attr/materialCardViewElevatedStyle">
+            style="?attr/materialCardViewElevatedStyle"
+            android:clickable="true"
+            android:focusable="true">
 
         <LinearLayout
                 android:layout_width="match_parent"
