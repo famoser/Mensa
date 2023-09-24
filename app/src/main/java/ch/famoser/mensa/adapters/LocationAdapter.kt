@@ -58,6 +58,8 @@ class LocationAdapter(
 
     override fun getItemCount() = displayedLocations.size
 
+    fun getFavoriteMensaCount() = values.map { location -> location.mensas.filter { MensaAdapter.isFavoriteMensa(parentActivity, it) }.count() }.sum()
+
     fun mensaUpdated(mensa: Mensa) {
         val mensaAdapter = mensaAdapterByLocation[mensa.location]
         mensaAdapter?.mensaMenusRefreshed(mensa.id)
