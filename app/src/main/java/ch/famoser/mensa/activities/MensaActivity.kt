@@ -1,6 +1,7 @@
 package ch.famoser.mensa.activities
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
@@ -59,7 +60,12 @@ class MensaActivity : AppCompatActivity() {
             val mensaImageFile = assets.open(imagePath)
             val mensaImage = Drawable.createFromStream(mensaImageFile, null)
             image.setImageDrawable(mensaImage)
-            image.setColorFilter(Color.parseColor("#AAFFFFFF"), PorterDuff.Mode.SRC_OVER)
+
+            // ensure image is darker in dark mode (vice versa for light mode) to easily read text
+            val nightModeFlags: Int = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+            val isDarkModeOn = nightModeFlags == Configuration.UI_MODE_NIGHT_YES
+            val color = if (isDarkModeOn) Color.parseColor("#A0000000") else Color.parseColor("#AAFFFFFF")
+            image.setColorFilter(color, PorterDuff.Mode.SRC_OVER)
         } catch (exception: FileNotFoundException) {
             // no image is OK
         }
