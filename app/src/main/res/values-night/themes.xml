@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 
 <resources>
     <style name="AppTheme" parent="Theme.Material3.Dark.NoActionBar">
@@ -28,8 +27,5 @@
         <item name="colorOnSurfaceInverse">@color/md_theme_dark_inverseOnSurface</item>
         <item name="colorSurfaceInverse">@color/md_theme_dark_inverseSurface</item>
         <item name="colorPrimaryInverse">@color/md_theme_dark_inversePrimary</item>
-        <item name="android:statusBarColor">?android:attr/colorBackground</item>
-
-        <item name="android:windowTranslucentStatus">true</item>
     </style>
 </resources>
