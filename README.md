@@ -13,14 +13,21 @@ The app is published in the [play store](https://play.google.com/store/apps/deta
             <td>Mensa View</td>
         </tr>
         <tr>
-            <td><img src="assets/screenshot_main.jpg?raw=true" alt="Screenshot Main"></td>
-            <td><img src="assets/screenshot_mensa.jpg?raw=true" alt="Screenshot Mensa"></td>
+            <td><img src="assets/screenshot_phone_overview_white.png?raw=true" alt="Screenshot Main"></td>
+            <td><img src="assets/screenshot_phone_detail_white.png?raw=true" alt="Screenshot Mensa"></td>
+        </tr>
+        <tr>
+            <td><img src="assets/screenshot_phone_overview_black.png?raw=true" alt="Screenshot Main"></td>
+            <td><img src="assets/screenshot_phone_detail_black.png?raw=true" alt="Screenshot Mensa"></td>
         </tr>
         <tr>
             <td colspan="2">Tablet view</td>
         </tr>
         <tr>
-            <td colspan="2"><img src="assets/screenshot_tablet.jpg?raw=true" alt="Screenshot Tablet"></td>
+            <td colspan="2"><img src="assets/screenshot_tablet_white.jpg?raw=true" alt="Screenshot Tablet"></td>
+        </tr>
+        <tr>
+            <td colspan="2"><img src="assets/screenshot_tablet_black.jpg?raw=true" alt="Screenshot Tablet"></td>
         </tr>
     </tbody>
 </table>
