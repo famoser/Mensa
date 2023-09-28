@@ -1,0 +1,1 @@
+- Fix issue with the display of ETH canteens which occurred in locales with the first day of the week not set to monday
