@@ -87,7 +87,7 @@ abstract class AbstractMensaProvider(
     protected fun getDateTimeStringOfMonday(date: Date): String {
         val calender = Calendar.getInstance()
         calender.time = date
-        calender.set(Calendar.DAY_OF_WEEK, calender.getFirstDayOfWeek());
+        calender.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
 
         val format1 = SimpleDateFormat("yyyy-MM-dd")
         return format1.format(calender.time)
