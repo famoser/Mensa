@@ -8,7 +8,7 @@
         "mealTime": "11:00-14:30",
         "idSlugDe": 147,
         "idSlugEn": 505,
-        "infoUrlSlug": "mensa-uzh-zentrum"
+        "infoUrlSlug": "zentrum-mercato"
       },
       {
         "id": "7a05967f-9d99-40ca-9b4b-064a81261644",
@@ -16,23 +16,23 @@
         "mealTime": "17:00-19:00",
         "idSlugDe": 149,
         "idSlugEn": 506,
-        "infoUrlSlug": "mensa-uzh-zentrum"
+        "infoUrlSlug": "zentrum-mercato"
       },
       {
         "id": "2e02c699-d208-4845-8b3c-519bde6b9574",
-        "title": "Obere Mensa",
+        "title": "Obere Mensa Zentrum",
         "mealTime": "11:00-14:30",
         "idSlugDe": 148,
         "idSlugEn": 507,
-        "infoUrlSlug": "mensa-uzh-zentrum"
+        "infoUrlSlug": "zentrum-mensa"
       },
       {
         "id": "4bd02416-f190-4578-be30-b407fe8711cb",
-        "title": "Lichthof Rondell",
+        "title": "Lichthof Zentrum",
         "mealTime": "11:00-14:00",
         "idSlugDe": 150,
         "idSlugEn": 508,
-        "infoUrlSlug": "mensa-uzh-zentrum"
+        "infoUrlSlug": "lichthof-rondell"
       },
       {
         "id": "575bd916-b658-4a51-a323-f87d16bfcaa6",
@@ -49,6 +49,14 @@
         "idSlugDe": 143,
         "idSlugEn": 520,
         "infoUrlSlug": "platte-14"
+      },
+      {
+        "id": "db4c6c53-7d90-4aa5-a809-e3cd086e6513",
+        "title": "ZZM (Zentrum für Zahnmedizin) Mensa",
+        "mealTime": "11:00-13:45",
+        "idSlugDe": 151,
+        "idSlugEn": 517,
+        "infoUrlSlug": "cafeteria-zzm"
       }
     ]
   },
@@ -57,35 +65,27 @@
     "mensas": [
       {
         "id": "fd30cf8c-11e8-40c7-ac57-7fa6296187d9",
-        "title": "Irchel",
+        "title": "Mensa Irchel",
         "mealTime": "11:00-14:00",
         "idSlugDe": 142,
         "idSlugEn": 180,
         "infoUrlSlug": "mensa-uzh-irchel"
       },
       {
-        "id": "35c7d15e-890b-454f-bc7b-a29d24e4a7b2",
-        "title": "Cafeteria Irchel Atrium",
-        "mealTime": "11:00-14:00",
-        "idSlugDe": 176,
-        "idSlugEn": 512,
-        "infoUrlSlug": "mensa-uzh-irchel"
-      },
-      {
         "id": "c00789c1-d3a5-422f-91f3-9b12ca1c9d8c",
-        "title": "Cafeteria Irchel Seerose",
+        "title": "Seerose Irchel",
         "mealTime": "11:30-13:00",
         "idSlugDe": 241,
         "idSlugEn": 513,
-        "infoUrlSlug": "mensa-uzh-irchel"
+        "infoUrlSlug": "irchel-cafeteria-seerose"
       },
       {
         "id": "d1d6260e-d9ca-480b-929a-5ebcfe68bc03",
-        "title": "Cafeteria Irchel Seerose - Abendessen",
+        "title": "Seerose Irchel - Abendessen",
         "mealTime": "17:00-19:30",
         "idSlugDe": 256,
         "idSlugEn": 514,
-        "infoUrlSlug": "mensa-uzh-irchel"
+        "infoUrlSlug": "irchel-cafeteria-seerose"
       }
     ]
   },
@@ -94,7 +94,7 @@
     "mensas": [
       {
         "id": "50f4eedd-5c16-4677-b8a5-f9dab84b0b2e",
-        "title": "Binzmühle",
+        "title": "Mensa Oerlikon (Binzmühle)",
         "mealTime": "11:00-14:30",
         "idSlugDe": 184,
         "idSlugEn": 515,
@@ -102,23 +102,15 @@
       },
       {
         "id": "fbb986b1-36be-4fc7-b5be-4de5046a32b1",
-        "title": "Cafeteria Cityport",
-        "mealTime": "11:00-14:00",
+        "title": "Cityport Mensa",
+        "mealTime": "09:00-14:30",
         "idSlugDe": 391,
         "idSlugEn": 516,
-        "infoUrlSlug": "cafeteria-uzh-cityport"
-      },
-      {
-        "id": "db4c6c53-7d90-4aa5-a809-e3cd086e6513",
-        "title": "Cafeteria Zentrum für Zahnmedizin (ZZM)",
-        "mealTime": "11:00-13:45",
-        "idSlugDe": 151,
-        "idSlugEn": 517,
-        "infoUrlSlug": "cafeteria-uzh-zzm"
+        "infoUrlSlug": "mensa-uzh-cityport"
       },
       {
         "id": "edc3b2cb-004c-41fc-84d3-cd9ade4dff74",
-        "title": "Cafeteria Tierspital",
+        "title": "Tierspital Mensa",
         "mealTime": "06.30-16:30",
         "idSlugDe": 146,
         "idSlugEn": 518,
@@ -126,19 +118,11 @@
       },
       {
         "id": "7d9d696f-3c4e-4a2e-9b66-469d5d47eeea",
-        "title": "Cafeteria Botanischer Garten",
-        "mealTime": "09:00-16:00",
+        "title": "Botanischer Garten",
+        "mealTime": "08:00-15:30",
         "idSlugDe": 144,
         "idSlugEn": 519,
         "infoUrlSlug": "cafeteria-uzh-botgarten"
-      },
-      {
-        "id": "1200e7c2-e898-4e5b-917c-c98d4a239671",
-        "title": "Cafeteria Plattenstrasse",
-        "mealTime": "09:00-14:30",
-        "idSlugDe": 143,
-        "idSlugEn": 520,
-        "infoUrlSlug": "cafeteria-uzh-plattenstrasse"
       }
     ]
   }
