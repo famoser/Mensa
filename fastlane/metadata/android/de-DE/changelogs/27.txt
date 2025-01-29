@@ -1,0 +1,1 @@
+UZH Mensa API migriert, die Menus laden nun wieder
