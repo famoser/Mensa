@@ -11,6 +11,7 @@ import ch.famoser.mensa.services.*
 import ch.famoser.mensa.services.providers.AbstractMensaProvider
 import ch.famoser.mensa.services.providers.ETHMensaProvider2
 import ch.famoser.mensa.services.providers.UZHMensaProvider
+import ch.famoser.mensa.services.providers.UZHMensaProvider2
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -54,7 +55,7 @@ class LocationRepository internal constructor(
 
     private var uzhMensas: List<Mensa> = ArrayList()
     private val ethMensaProvider = ETHMensaProvider2(cacheService, assetService, serializationService)
-    private val uzhMensaProvider = UZHMensaProvider(cacheService, assetService, serializationService)
+    private val uzhMensaProvider = UZHMensaProvider2(cacheService, assetService, serializationService)
 
     fun isRefreshPending(): Boolean {
         val now = Date(System.currentTimeMillis());
@@ -115,15 +116,8 @@ class LocationRepository internal constructor(
         RefreshETHMensaTask(ethMensaProvider, today, language, ignoreCache)
             .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
 
-        val half = uzhMensas.size / 2
-        val batch1 = uzhMensas.subList(0, half)
-        val batch2 = uzhMensas.subList(half, uzhMensas.size)
-
-        RefreshUZHMensaTask(uzhMensaProvider, today, language, ignoreCache)
-            .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, *batch1.toTypedArray())
-
-        RefreshUZHMensaTask(uzhMensaProvider, today, language, ignoreCache)
-            .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, *batch2.toTypedArray())
+        RefreshUZHMensaTask(uzhMensaProvider, language, ignoreCache)
+            .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
