@@ -107,8 +107,8 @@ class LocationRepository internal constructor(
             refreshed = Date(System.currentTimeMillis())
 
             // how many tasks are launched
-            // 3 because one ETH and two UZH tasks
-            activeRefreshingTasks = 3
+            // 2 because one ETH and one UZH task
+            activeRefreshingTasks = 2
         }
 
         cacheService.startObserveCacheUsage()
