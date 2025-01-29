@@ -74,8 +74,6 @@ class UZHMensaProvider2(
 
             updateMensas
         } catch (ex: Exception) {
-            ex.printStackTrace()
-
             emptyList()
         }
     }
@@ -125,8 +123,8 @@ class UZHMensaProvider2(
             outputStream.close()
 
             return connection.inputStream.bufferedReader().use { it.readText() }
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (_: Exception) {
+            // do not care, likely because of network errors. in any case, cannot recover
         } finally {
             connection.disconnect()
         }
@@ -160,6 +158,10 @@ class UZHMensaProvider2(
                 }
 
                 val menu = Menu(title, description, price, allergens)
+                if (isNoMenuNotice(menu, language)) {
+                    continue;
+                }
+
                 parsedMenus.add(menu)
             }
 
@@ -169,19 +171,18 @@ class UZHMensaProvider2(
         return result
     }
 
-    private fun isNoMenuNotice(menu: Menu, language: String): Boolean {
+    private fun isNoMenuNotice(menu: Menu, language: Language): Boolean {
         when (language) {
-            "en" -> {
+            Language.English -> {
                 val invalidMenus = arrayOf("no dinner", "is closed")
                 return invalidMenus.any { menu.description.contains(it) }
             }
 
-            "de" -> {
+            Language.German -> {
                 val invalidMenus = arrayOf("kein Abendessen", "geschlossen")
                 return invalidMenus.any { menu.description.contains(it) }
             }
         }
-        return false
     }
 
     @Serializable
