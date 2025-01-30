@@ -6,8 +6,11 @@
     <string name="no_menus_loaded">Keine Internetverbindung oder keine Menus heute.</string>
     <string name="price">CHF %1$s</string>
     <string name="closed">geschlossen</string>
-    <string name="source">source code on
-        <a href="https://github.com/famoser/Mensa">github</a>
+    <string name="source">
+        see
+        <a href="https://github.com/famoser/Mensa/blob/main/PRIVACY.md">privacy policy</a>
+        and
+        <a href="https://github.com/famoser/Mensa">source code</a>
     </string>
     <string name="settings">Einstellungen</string>
     <string name="show_only_expanded">nur ausgeklappte Einträge</string>
