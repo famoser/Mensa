@@ -1,4 +1,4 @@
-# Privacy Policy ETH & UZH Mensa Zürich
+# Privacy Policy ETH & UZH Mensa Zürich by Florian Moser
 The App does not collect, store, or process any personal or non-personal information from its users. It does not connect to any third-party services, hence also no data is shared to third parties. 
 
 The App downloads and links to publicly available information from eth.ch, uzh.ch and food2050.ch. This process does not involve collecting or transmitting any personal or user-specific data. 
