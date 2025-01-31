@@ -10,6 +10,6 @@ We reserve the right to update or change our Privacy Policy at any time and you 
 ## Contact Us
 If you have any questions about this Privacy Policy, please open an issue in this repository.
 
-
+This policy is published on https://sites.google.com/view/privacypolicy-ethuzhmensaapp/, as linking to GitHub for the privacy policy is against google guidelines.
 
 
