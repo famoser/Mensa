@@ -153,8 +153,7 @@ class UZHMensaProvider2(
                 val description = descriptionText?.replaceFirst(",", "\n")?.replace("\n ", "\n")
 
                 val priceStrings = relevantMenu.recipe?.prices?.mapNotNull { it.amount }?.toTypedArray<String>() ?: emptyArray<String>()
-                val price = priceStrings.map { parseFloat(it) } .map { String.format("%.2f", it) }.toTypedArray()
-                price.sort()
+                val price = priceStrings.map { parseFloat(it) }.sorted() .map { String.format("%.2f", it) }.toTypedArray()
 
                 val allergens = relevantMenu.recipe?.allergensList?.joinToString(separator = ", ")
 
