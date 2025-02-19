@@ -1,0 +1,1 @@
+New (and faster!) UZH Mensa API
