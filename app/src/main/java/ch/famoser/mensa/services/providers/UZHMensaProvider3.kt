@@ -151,7 +151,7 @@ class UZHMensaProvider3(
                 val priceStrings = relevantMenu.prices?.mapNotNull { it.amount }?.toTypedArray<String>() ?: emptyArray<String>()
                 val price = priceStrings.map { parseFloat(it) }.sorted() .map { String.format("%.2f", it) }.toTypedArray()
 
-                val allergens = relevantMenu.dish?.allergens?.joinToString(separator = ", ")
+                val allergens = relevantMenu.dish?.allergens?.map { it.allergen?.name }?.filterNotNull()?.joinToString(separator = ", ")
 
                 if (title == null || description == null) {
                     continue;
@@ -232,9 +232,14 @@ class UZHMensaProvider3(
     @Serializable
     protected class Dish {
         var name_i18n: Array<i18nValue>? = null
-        var allergens: Array<Allergen>? = null
-
+        var allergens: Array<AllergenContainer>? = null
     }
+
+    @Serializable
+    protected class AllergenContainer {
+        var allergen: Allergen? = null
+    }
+
     @Serializable
     protected class Allergen {
         var name: String? = null
