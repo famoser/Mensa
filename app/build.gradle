@@ -14,6 +14,12 @@ android {
         versionCode 30
         versionName "1.9.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+            "String",
+            "ZFV_API_KEY",
+            "\"${project.findProperty("ZFV_API_KEY")}\""
+        )
     }
     packagingOptions {
         resources {
@@ -25,6 +31,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    buildFeatures {
+        buildConfig = true
     }
     namespace 'ch.famoser.mensa'
 }

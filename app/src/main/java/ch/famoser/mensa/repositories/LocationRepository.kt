@@ -10,8 +10,7 @@ import ch.famoser.mensa.repositories.tasks.RefreshUZHMensaTask
 import ch.famoser.mensa.services.*
 import ch.famoser.mensa.services.providers.AbstractMensaProvider
 import ch.famoser.mensa.services.providers.ETHMensaProvider2
-import ch.famoser.mensa.services.providers.UZHMensaProvider
-import ch.famoser.mensa.services.providers.UZHMensaProvider2
+import ch.famoser.mensa.services.providers.UZHMensaProvider3
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -53,9 +52,8 @@ class LocationRepository internal constructor(
     private var activeRefreshingTasks = 0
     private val locations: MutableList<Location> = LinkedList()
 
-    private var uzhMensas: List<Mensa> = ArrayList()
     private val ethMensaProvider = ETHMensaProvider2(cacheService, assetService, serializationService)
-    private val uzhMensaProvider = UZHMensaProvider2(cacheService, assetService, serializationService)
+    private val uzhMensaProvider = UZHMensaProvider3(cacheService, assetService, serializationService)
 
     fun isRefreshPending(): Boolean {
         val now = Date(System.currentTimeMillis());
@@ -73,7 +71,7 @@ class LocationRepository internal constructor(
             initialized = true
 
             loadLocations(ethMensaProvider)
-            uzhMensas = loadLocations(uzhMensaProvider)
+            loadLocations(uzhMensaProvider)
         }
 
         return locations
