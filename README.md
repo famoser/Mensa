@@ -36,16 +36,18 @@ The app is published in the [play store](https://play.google.com/store/apps/deta
 
 Has a new Mensa opened, or are the opening times no longer accurate? Feel free to directly submit a PR!
 
-For UZH, look in [uzh/locations_food2025.json](./app/src/main/assets/uzh/locations_food2025.json).The `infoUrlSlug` must match the homepage slug (e.g. `raemi59` for `https://www.mensa.uzh.ch/en/standorte/raemi59.html`). The `locationId` and `slug` must return something useful in the GraphQL endpoint of [Food 2050](https://api.app.food2050.ch/) (do a query on location and kitchen using these values). Note that there a multiple APIs (e.g. [mensaoffice](`https://api.mensaoffice.de/api/PDF/get/509`)); if you find one that needs fewer requests for all mensas, happy to hear about it!
+For UZH, look in [uzh/locations_zfv.json](./app/src/main/assets/uzh/locations_zfv.json).The `infoUrlSlug` must match the homepage slug (e.g. `raemi59` for `https://www.mensa.uzh.ch/en/standorte/raemi59.html`). The `slug` must match the slug used in the GraphQL endpoint of [ZFV](https://api.zfv.ch/graphql) (do a query on location and kitchen using these values). Note that this API needs an API key. There a multiple other APIs (e.g. [food2020](https://api.app.food2050.ch/), [mensaoffice](`https://api.mensaoffice.de/api/PDF/get/509`)); the chosen ZFV API needs just a single request, which is why it was chosen.
 
 For ETH, look in [eth/locations.json](./app/src/main/assets/eth/locations.json). The `infoUrlSlug` must match the hompage slug (e.g. `zentrum/clausiusbar` for `https://ethz.ch/de/campus/erleben/gastronomie-und-einkaufen/gastronomie/restaurants-und-cafeterias/zentrum/clausiusbar.html`). The `idSlug` must be the id of the menu plan (e.g. for Clasiusbar, the menu plan linked [here](https://ethz.ch/de/campus/erleben/gastronomie-und-einkaufen/gastronomie/menueplaene.html) has the URL `https://ethz.ch/de/campus/erleben/gastronomie-und-einkaufen/gastronomie/menueplaene/offerDay.html?language=de&date=2022-08-22&id=4`).
 
 For implementation details how the links are constructed (to try it out yourself), check out [ETHMensaProvider2.kt](./app/src/main/java/ch/famoser/mensa/services/providers/ETHMensaProvider2.kt) and [UZHMensaProvider2.kt](./app/src/main/java/ch/famoser/mensa/services/providers/UZHMensaProvider2.kt).
 
+
 ## Release Checklist
 
 Release checklist:
 
+- [ ] ensure there is a `.gradle/gradle.properties` file with content `ZFV_API_KEY=Y2...` (full key in Bitwarden)
 - [ ] increase the `versionCode` and adapt the `versionName` in `app/build.gradle`.
 - [ ] upload the signed abb to the play store (use `assets/keystore.jks` with strong PW)
 - [ ] generate a signed apk
@@ -55,6 +57,7 @@ Release checklist:
 
 The key store can be found in `assets/keystore.jks`, the name of the key is `upload`.  
 The password is the personal strong passord of the author.
+
 
 ## Development Status
 
