@@ -9,7 +9,7 @@ import org.junit.Test
 import java.util.*
 import kotlin.collections.HashMap
 
-class UZHZfvMensaProviderTest {
+class UZHZfvMensaProviderTest: BaseProviderTest() {
     private fun getUzhLocationsJson(): String {
         return """
         [
@@ -40,7 +40,8 @@ class UZHZfvMensaProviderTest {
 
         // act
         val locations = provider.getLocations()
-        val response = provider.getMenus(AbstractMensaProvider.Language.German, true)
+        val date = this.getNextWeekdayDate()
+        val response = provider.getMenus(AbstractMensaProvider.Language.German, date, true)
 
         // assert
         assertThat(locations).hasSize(1)
