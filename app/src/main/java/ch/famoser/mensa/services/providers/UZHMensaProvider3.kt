@@ -48,9 +48,9 @@ class UZHMensaProvider3(
 
     private val mensaMap: MutableMap<Mensa, UzhMensa> = HashMap()
 
-    fun getMenus(language: Language, ignoreCache: Boolean): List<Mensa> {
+    fun getMenus(language: Language, date: Date, ignoreCache: Boolean): List<Mensa> {
         return try {
-            val json = loadFromApi(ignoreCache) ?: return emptyList()
+            val json = loadFromApi(ignoreCache, date) ?: return emptyList()
 
             val apiRoot = serializationService.deserialize<ApiRoot>(json)
             val menuPerMensa = parseApiRoot(apiRoot, mensaMap.values.toList(), language)
@@ -73,9 +73,9 @@ class UZHMensaProvider3(
     }
 
     private fun loadFromApi(
-        ignoreCache: Boolean
+        ignoreCache: Boolean,
+        date: Date
     ): String? {
-        val date = Date()
         val cacheKey = CACHE_PROVIDER_PREFIX + getDateTimeString(date)
 
         if (!ignoreCache) {

@@ -15,10 +15,11 @@ class RefreshUZHMensaTask(
 
     @Deprecated("Deprecated in Java")
     override fun doInBackground(vararg args: String) {
-            val refreshedMensas = mensaProvider.getMenus(language, ignoreCache)
+        val date = Date()
+        val refreshedMensas = mensaProvider.getMenus(language, date, ignoreCache)
 
-            if (isCancelled) return
+        if (isCancelled) return
 
-            EventBus.getDefault().post(MensasUpdatedEvent(refreshedMensas))
+        EventBus.getDefault().post(MensasUpdatedEvent(refreshedMensas))
     }
 }
