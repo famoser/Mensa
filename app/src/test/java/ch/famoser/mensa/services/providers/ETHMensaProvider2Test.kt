@@ -5,9 +5,8 @@ import ch.famoser.mensa.testServices.InMemoryAssetService
 import ch.famoser.mensa.testServices.NoCacheService
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
-import java.util.*
 
-class ETHMensaProvider2Test {
+class ETHMensaProvider2Test: BaseProviderTest() {
     private fun getEthLocationsJson(): String {
         return """
         [
@@ -37,17 +36,10 @@ class ETHMensaProvider2Test {
         val serializationService = SerializationService()
         val provider = ETHMensaProvider2(cacheService, inMemoryAssetService, serializationService)
 
-        val c = Calendar.getInstance()
-        val dayOfWeek = c.get(Calendar.DAY_OF_WEEK)
-        if (dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY) {
-            c.add(Calendar.DAY_OF_WEEK, 2);
-        }
-
-        val nearestValidDate = Date.from(c.toInstant())
-
         // act
         val locations = provider.getLocations()
-        val response = provider.getMenus(nearestValidDate, AbstractMensaProvider.Language.German, true)
+        val date = this.getNextWeekdayDate()
+        val response = provider.getMenus(date, AbstractMensaProvider.Language.German, true)
 
         // assert
         val polymensa = locations.first().mensas.first()
