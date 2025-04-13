@@ -9,13 +9,13 @@ import java.util.*
 
 class RefreshUZHMensaTask(
     private val mensaProvider: UZHMensaProvider3,
+    private val date: Date,
     private val language: AbstractMensaProvider.Language,
     private val ignoreCache: Boolean
 ) : AbstractRefreshMensaTask<String>() {
 
     @Deprecated("Deprecated in Java")
     override fun doInBackground(vararg args: String) {
-        val date = Date()
         val refreshedMensas = mensaProvider.getMenus(language, date, ignoreCache)
 
         if (isCancelled) return
