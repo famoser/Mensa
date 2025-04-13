@@ -22,7 +22,10 @@ jobs:
           java-version: '17' 
           distribution: 'temurin'
 
-      - name: Run unit tests
-        run: ./gradlew testDebugUnitTest -DZFV_API_KEY=${{ env.ZFV_API_KEY }}
+      - name: Setup gradle env
+        run: echo ZFV_API_KEY=${{ secrets.ZFV_API_KEY }} >> gradle.properties
         env:
           ZFV_API_KEY: ${{ secrets.ZFV_API_KEY }}
+
+      - name: Run unit tests
+        run: ./gradlew testDebugUnitTest
