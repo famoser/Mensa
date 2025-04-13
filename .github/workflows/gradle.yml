@@ -24,3 +24,5 @@ jobs:
 
       - name: Run unit tests
         run: ./gradlew testDebugUnitTest
+        env:
+          ZFV_API_KEY: ${{ secrets.ZFV_API_KEY }}
