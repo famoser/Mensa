@@ -23,6 +23,6 @@ jobs:
           distribution: 'temurin'
 
       - name: Run unit tests
-        run: ./gradlew testDebugUnitTest
+        run: ./gradlew testDebugUnitTest -DZFV_API_KEY=${{ env.ZFV_API_KEY }}
         env:
           ZFV_API_KEY: ${{ secrets.ZFV_API_KEY }}
