@@ -9,7 +9,7 @@ import org.junit.Test
 import java.util.*
 import kotlin.collections.HashMap
 
-class UZHFood2025MensaProviderTest {
+class UZHFood2025MensaProviderTest: BaseProviderTest() {
     private fun getUzhLocationsJson(): String {
         return """
         [
@@ -33,6 +33,11 @@ class UZHFood2025MensaProviderTest {
 
     @Test
     fun locationsAndMenu_locationsAndMenuAreLoad() {
+        // on saturday / sunday no menus; cannot use other date than today with this provider.
+        if (!this.isWeekday()) {
+            return
+        }
+
         // arrange
         val cacheService = NoCacheService()
         val inMemoryAssetService = InMemoryAssetService(mapOf("uzh/locations_food2025.json" to getUzhLocationsJson()))
