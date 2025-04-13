@@ -15,8 +15,6 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 class LocationRepository internal constructor(
     private val cacheService: ICacheService,
@@ -96,7 +94,7 @@ class LocationRepository internal constructor(
         return mensas
     }
 
-    fun refresh(today: Date, language: AbstractMensaProvider.Language, ignoreCache: Boolean = false) {
+    fun refresh(date: Date, language: AbstractMensaProvider.Language, ignoreCache: Boolean = false) {
         synchronized(this) {
             if (activeRefreshingTasks > 0) {
                 return
@@ -111,10 +109,10 @@ class LocationRepository internal constructor(
 
         cacheService.startObserveCacheUsage()
 
-        RefreshETHMensaTask(ethMensaProvider, today, language, ignoreCache)
+        RefreshETHMensaTask(ethMensaProvider, date, language, ignoreCache)
             .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
 
-        RefreshUZHMensaTask(uzhMensaProvider, language, ignoreCache)
+        RefreshUZHMensaTask(uzhMensaProvider, date, language, ignoreCache)
             .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
     }
 
