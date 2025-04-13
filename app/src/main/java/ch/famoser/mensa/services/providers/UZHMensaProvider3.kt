@@ -131,16 +131,19 @@ class UZHMensaProvider3(
 
         for (mensa in mensas) {
             val outlet = root.data?.organisation?.outlets?.find { it.slug == mensa.slug }
-            val relevantMenuItems = outlet?.calendar?.day?.menuItems?.filter {
-                menuItem -> mensa.categoryPath == null || menuItem.category?.path?.contains(mensa.categoryPath) == true
-            }
-
-            if (relevantMenuItems == null) {
+            var menuItems = outlet?.calendar?.day?.menuItems
+            if (menuItems == null) {
                 continue;
             }
 
+            // filter by category if it exists and does not result in no entry
+            if (mensa.categoryPath != null) {
+                val relevantMenuItems = menuItems.filter { menuItem -> menuItem.category?.path?.contains(mensa.categoryPath) == true }
+                menuItems = relevantMenuItems.toTypedArray()
+            }
+
             val parsedMenus = ArrayList<Menu>()
-            for (relevantMenu in relevantMenuItems) {
+            for (relevantMenu in menuItems) {
                 val title = relevantMenu.category?.name
 
                 val deDescription = relevantMenu.dish?.name_i18n?.find { it.locale == "de" }?.label
@@ -151,7 +154,7 @@ class UZHMensaProvider3(
                 val priceStrings = relevantMenu.prices?.mapNotNull { it.amount }?.toTypedArray<String>() ?: emptyArray<String>()
                 val price = priceStrings.map { parseFloat(it) }.sorted() .map { String.format("%.2f", it) }.toTypedArray()
 
-                val allergens = relevantMenu.dish?.allergens?.map { it.allergen?.name }?.filterNotNull()?.joinToString(separator = ", ")
+                val allergens = relevantMenu.dish?.allergens?.mapNotNull { it.allergen?.name }?.joinToString(separator = ", ")
 
                 if (title == null || description == null) {
                     continue;
