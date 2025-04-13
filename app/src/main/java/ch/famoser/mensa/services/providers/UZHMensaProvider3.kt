@@ -138,7 +138,7 @@ class UZHMensaProvider3(
 
             // filter by category if it exists and does not result in no entry
             if (mensa.categoryPath != null) {
-                val relevantMenuItems = menuItems.filter { menuItem -> menuItem.category?.path?.contains(mensa.categoryPath) == true }
+                val relevantMenuItems = menuItems.filter { menuItem -> menuItem.category?.path?.any { p -> p.contains(mensa.categoryPath) } == true }
                 menuItems = relevantMenuItems.toTypedArray()
             }
 
