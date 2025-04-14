@@ -47,7 +47,6 @@ For implementation details how the links are constructed (to try it out yourself
 
 Release checklist:
 
-- [ ] ensure there is a `.gradle/gradle.properties` file with content `ZFV_API_KEY=Y2...` (full key in Bitwarden)
 - [ ] increase the `versionCode` and adapt the `versionName` in `app/build.gradle`.
 - [ ] upload the signed abb to the play store (use `assets/keystore.jks` with strong PW)
 - [ ] generate a signed apk
