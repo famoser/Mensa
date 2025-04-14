@@ -104,7 +104,10 @@ class UZHMensaProvider3(
             connection.doOutput = true
             connection.setRequestProperty("Accept", "*/*")
             connection.setRequestProperty("Content-Type", "application/json")
-            connection.setRequestProperty("api-key", BuildConfig.ZFV_API_KEY)
+
+            // API key included directly here to enable builds in fdroid
+            // in any case, the API keys would have also been found in the APK
+            connection.setRequestProperty("api-key", "Y203MHVwaXU0OWFyeXM2MHRscWUyZncwcTpTQTJRRy83eXE5NmEzczNyRS91TjhBaysrYWl4aCs5SGhRUE9xOTk3ZzdDa1ZpdFVvQkJhK3hHN0Yyd1lLaTNu")
 
             val isoFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
             val isoDateString = isoFormat.format(date);
