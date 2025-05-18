@@ -66,6 +66,7 @@ Technical improvements:
 - Update the technical foundations (dependencies, XML -> jetpack compose, resolve deprecation notices)
 - Remove remains of various API migrations (which happen every 2 years or so)
 - Refactor caches to minimize accesses which will further improve startup time
+- Support fallback to other language if menu not translated to target language (#51) 
 
 Functional improvements:
 - View menu for the whole week (usecase: plan ahead whether to prepare lunch for the next day)
