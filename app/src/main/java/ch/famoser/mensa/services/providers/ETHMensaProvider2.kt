@@ -126,10 +126,10 @@ class ETHMensaProvider2(
                     }
 
                     val time = parseMealTime(mealTime.name) ?: continue
-                    val menus = mealTime.lineArray
-                        .map { if (it.meal != null) parseApiLineArray(it.name, it.meal) else null }
-                        .filterNotNull()
-                        .filter { !isNoMenuNotice(it, language) }
+                    val menus =
+                        mealTime.lineArray
+                            .mapNotNull { parseApiLineArray(it.name, it.meal) }
+                            .filter { !isNoMenuNotice(it, language) }
 
                     menuByFacilityIds[weeklyRotaArray.facilityId.toString() + "_" + time] = menus
                 }
@@ -178,7 +178,11 @@ class ETHMensaProvider2(
     }
 
 
-    private fun parseApiLineArray(name: String, meal: ApiMeal): Menu {
+    private fun parseApiLineArray(name: String, meal: ApiMeal?): Menu? {
+        if (meal == null)  {
+            return null
+        }
+
         val description = meal.name.trim() + "\n" +
                 meal.description.replace("\\s+".toRegex(), " ")
 

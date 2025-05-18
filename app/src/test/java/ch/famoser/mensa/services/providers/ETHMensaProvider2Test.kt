@@ -5,6 +5,8 @@ import ch.famoser.mensa.testServices.InMemoryAssetService
 import ch.famoser.mensa.testServices.NoCacheService
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
+import java.time.Instant
+import java.util.Date
 
 class ETHMensaProvider2Test: BaseProviderTest() {
     private fun getEthLocationsJson(): String {
@@ -21,6 +23,15 @@ class ETHMensaProvider2Test: BaseProviderTest() {
                     "facilityId": 9,
                     "timeSlug": "lunch",
                     "infoUrlSlug": "zentrum/mensa-polyterrasse"
+                  },
+                  {
+                    "id": "67708910-6bab-4890-9c66-46cdc490dcbf",
+                    "title": "Archimedes",
+                    "mealTime": "11:00-14:00",
+                    "idSlug": 8,
+                    "facilityId": 8,
+                    "timeSlug": "lunch",
+                    "infoUrlSlug": "zentrum/archimedes"
                   }
                 ] 
             }
@@ -42,10 +53,10 @@ class ETHMensaProvider2Test: BaseProviderTest() {
         val response = provider.getMenus(date, AbstractMensaProvider.Language.German, true)
 
         // assert
-        val polymensa = locations.first().mensas.first()
-        assertThat(response).contains(polymensa)
         assertThat(locations).hasSize(1)
-        assertThat(locations.first().mensas).hasSize(1)
-        assertThat(locations.first().mensas.filter { it.menus.isNotEmpty() }).isNotEmpty()
+        for (mensa in locations.first().mensas) {
+            assertThat(response).contains(mensa)
+            assertThat(mensa.menus).isNotEmpty()
+        }
     }
 }
