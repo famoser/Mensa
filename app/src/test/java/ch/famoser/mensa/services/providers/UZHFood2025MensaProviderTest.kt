@@ -17,13 +17,12 @@ class UZHFood2025MensaProviderTest: BaseProviderTest() {
                 "title": "Zentrum (UZH)",
                 "mensas": [
                   {
-                    "id": "25588906-4759-4b54-9c0e-bf7b4fd158a4",
-                    "title": "Untere Mensa",
-                    "mealTime": "11:00-14:30",
-                    "infoUrlSlug": "zentrum-mercato",
+                    "id": "4bd02416-f190-4578-be30-b407fe8711cb",
+                    "title": "Lichthof Zentrum",
+                    "mealTime": "11:00-14:00",
+                    "infoUrlSlug": "lichthof-rondell",
                     "locationId": "e321519e-3f83-4a10-b6d8-22d395ebfc5d",
-                    "slug": "untere-mensa",
-                    "recipeSelector": "mittag"
+                    "slug": "lichthof"
                   }
                 ]
             }

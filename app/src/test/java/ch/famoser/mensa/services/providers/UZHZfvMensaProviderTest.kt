@@ -16,14 +16,13 @@ class UZHZfvMensaProviderTest: BaseProviderTest() {
             {
                 "title": "Zentrum (UZH)",
                 "mensas": [
-                  {
-                    "id": "25588906-4759-4b54-9c0e-bf7b4fd158a4",
-                    "title": "Untere Mensa",
-                    "mealTime": "11:00-14:30",
-                    "infoUrlSlug": "zentrum-mercato",
-                    "slug": "untere-mensa",
-                    "categoryPath": "mittag"
-                  }
+                      {
+                        "id": "4bd02416-f190-4578-be30-b407fe8711cb",
+                        "title": "Lichthof Zentrum",
+                        "mealTime": "11:00-14:00",
+                        "infoUrlSlug": "lichthof-rondell",
+                        "slug": "lichthof"
+                      }
                 ]
             }
         ]
