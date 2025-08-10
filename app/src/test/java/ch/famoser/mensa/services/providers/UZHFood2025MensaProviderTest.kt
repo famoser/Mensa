@@ -5,6 +5,7 @@ import ch.famoser.mensa.testServices.InMemoryAssetService
 import ch.famoser.mensa.testServices.NoCacheService
 import com.google.common.truth.Truth.assertThat
 import org.jsoup.Jsoup
+import org.junit.Ignore
 import org.junit.Test
 import java.util.*
 import kotlin.collections.HashMap
@@ -31,6 +32,7 @@ class UZHFood2025MensaProviderTest: BaseProviderTest() {
     }
 
     @Test
+    @Ignore("In use is the ZFV mensa provider at the moment.")
     fun locationsAndMenu_locationsAndMenuAreLoad() {
         // on saturday / sunday no menus; cannot use other date than today with this provider.
         if (!this.isWeekday()) {
