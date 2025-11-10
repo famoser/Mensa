@@ -1,4 +1,10 @@
 # Mensa
+
+> [!NOTE]
+> Since octobre 2025, this app has now a new maintainer. @fflopsi modernized the app from the ground up, and added many often requested features. The source code can now be found [here](https://github.com/fflopsi/mensa-zh).
+
+----
+
 ![API version](https://img.shields.io/badge/API-21-green.svg)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE) 
 
